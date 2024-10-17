@@ -410,23 +410,16 @@ def criar_jogos():
     ]
     rm.shuffle(confrontoss)
     todososjogos = []
-# Imprime os confrontos randomizados
     for confrontos in confrontoss:
      todososjogos.append(confrontos)
     return todososjogos
     
-    
-   
-    
-    
-    
-    confrontos = criar_jogos()
 confrontos = criar_jogos()     
 rodadas = total_rodadas
 rodada_atual = 0
 def tela_inicial():
-    global frame_times, labels_times, rodadas_label, rodada_atual, btn_simular, total_rodadas
-    
+    global frame_times, labels_times, rodadas_label, btn_simular, rodadas
+
     tela_inicial = tk.Tk()
     tela_inicial.configure(bg="black")
     tela_inicial.title("Simulator Brasileirão")
@@ -440,17 +433,12 @@ def tela_inicial():
 
     labels_times = {}
 
-    for time in times.keys():
-        label_time = tk.Label(frame_times, bg="black", fg="white", font=("Arial", 12))
-        label_time.pack(anchor="w")
-        labels_times[time] = label_time
-
     rodadas_label = tk.Label(tela_inicial, text=f"Rodadas restantes: {rodadas}", bg="black", fg="white", font=("Arial", 14))
     rodadas_label.pack(pady=20)
-    
+
     btn_simular = tk.Button(tela_inicial, text="Simular Próxima Rodada", command=simular_rodada, bg="white", fg="black", font=("Arial", 14))
     btn_simular.pack(pady=20)
-    
+
     tela_inicial.mainloop()
 
 def simular_rodada():
@@ -476,24 +464,20 @@ import random as rm
 def simular_rodada():
     global rodadas, rodada_atual
     if rodada_atual < total_rodadas:
-        # Escrever "Rodada X" uma vez antes de começar a simular os jogos da rodada
         with open("placares_jogos.txt", "a") as arquivo:
             arquivo.write(f"Rodada {rodada_atual + 1}\n")
         
-        # Simular os jogos da rodada
         for i in range(10): 
             index = rodada_atual * 10 + i
             if index < len(confrontos):
                 time1, time2 = confrontos[index]
                 simular_jogo(time1, time2)
 
-        # Atualizar a tabela e a rodada
         organizar_tabela()
         rodada_atual += 1
         rodadas -= 1
         rodadas_label.config(text=f"Rodadas restantes: {rodadas}")
         
-        # Verificar se o campeonato terminou
         if rodadas == 0:
             parabenizar_campeao()
     else:
@@ -534,21 +518,47 @@ def simular_jogo(time1, time2, nome_arquivo="placares_jogos.txt"):
     times[time1][8] += 1  
     times[time2][8] += 1  
 
-    # Escrever o placar do jogo
     with open(nome_arquivo, "a") as arquivo:
         arquivo.write(f"{time1} {gols_time1} x {gols_time2} {time2}\n")
 
 
 
 def organizar_tabela():
+    global frame_times
+
+    for widget in frame_times.winfo_children():
+        widget.destroy()
+
     sorted_times = sorted(times.items(), key=lambda x: (x[1][2], x[1][1] - x[1][0]), reverse=True)
 
     for posicao, (time, stats) in enumerate(sorted_times, start=1):
-        stats[4] = posicao
+        stats[4] = posicao  
         saldo_gols = stats[1] - stats[0]
-        labels_times[time].config(text=f"{posicao}º {time} | Jogos: {stats[8]} | Pontos: {stats[2]} | Vitorias: {stats[5]} | Empate: {stats[6]} | Derrota: {stats[7]} | Saldo: {saldo_gols} | Gols Feitos: {stats[1]} | Gols Tomados: {stats[0]} ")
+
+        if posicao == 1:
+            bg_color = "green" 
+        elif posicao == 2:
+            bg_color = "green"  
+        elif posicao == 3:
+            bg_color = "green"  
+        elif posicao == 4:
+            bg_color = "green"  
+        elif posicao == 17:
+            bg_color = "red" 
+        elif posicao == 18:
+            bg_color = "red"  
+        elif posicao == 19:
+            bg_color = "red"  
+        elif posicao == 20:
+            bg_color = "red"
+        else:
+            bg_color = "black"  
+
+        label_time = tk.Label(frame_times, text=f"{posicao}º {time} | Jogos: {stats[8]} | Pontos: {stats[2]} | Vitórias: {stats[5]} | Empates: {stats[6]} | Derrotas: {stats[7]} | Saldo: {saldo_gols} | Gols Feitos: {stats[1]} | Gols Tomados: {stats[0]}", bg=bg_color, fg="white", font=("Arial", 12))
+        label_time.pack(anchor="w")
+
 def parabenizar_campeao():
-    global btn_simular
+    global btn_simular 
     sorted_times = sorted(times.items(), key=lambda x: (x[1][2], x[1][1] - x[1][0]), reverse=True)
     
     for posicao, (time, stats) in enumerate(sorted_times, start=1):
@@ -567,6 +577,8 @@ def Informar():
     Golstomados = ""
     maior = -1  
     Artilheiro = ""
+    maiorsaldo = -1
+    saldoo = ""
     
     for posicao, (time, stats) in enumerate(sorted_times, start=1):
         if posicao == 1:
@@ -594,18 +606,21 @@ def Informar():
         elif posicao == 17: 
             labelG1 = tk.Label(tela_informativa, text=f"O time que caiu no G1 foi o {time} com {stats[2]} pontos", bg='red')
             labelG1.pack(pady=(10, 10))
-        
+        if stats[1] - stats[0] > maiorsaldo:
+            maiorsaldo = stats[1] - stats[0]
+            saldoo = time
         if stats[1] > maior: 
             maior = stats[1]
             Artilheiro = time  
-        if stats[2] > maiortomados: 
-            maiortomados = stats[1]
+        if stats[0] > maiortomados: 
+            maiortomados = stats[0]
             Golstomados = time  
     labelArtilheiro = tk.Label(tela_informativa, text=f"O artilheiro do campeonato foi {Artilheiro} com {maior} gols", bg='yellow')
     labelArtilheiro.pack(pady=(10, 10))
-    labelTomados = tk.Label(tela_informativa, text=f"O artilheiro do campeonato foi {Golstomados} com {maiortomados} gols", bg='orange')
+    labelTomados = tk.Label(tela_informativa, text=f"O time que tomou mais gols foi o {Golstomados} com {maiortomados} gols tomados", bg='orange')
     labelTomados.pack(pady=(10, 10))
-
+    labelSaldo = tk.Label(tela_informativa, text=f"O time com maior saldo de gols foi {saldoo} com {maiorsaldo} de salgo de gols", bg='purple')
+    labelSaldo.pack(pady=(10, 10))
     tela_informativa.mainloop()  
 
 
