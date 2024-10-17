@@ -410,7 +410,6 @@ def criar_jogos():
     ]
     rm.shuffle(confrontoss)
     todososjogos = []
-# Imprime os confrontos randomizados
     for confrontos in confrontoss:
      todososjogos.append(confrontos)
     return todososjogos
@@ -476,24 +475,20 @@ import random as rm
 def simular_rodada():
     global rodadas, rodada_atual
     if rodada_atual < total_rodadas:
-        # Escrever "Rodada X" uma vez antes de começar a simular os jogos da rodada
         with open("placares_jogos.txt", "a") as arquivo:
             arquivo.write(f"Rodada {rodada_atual + 1}\n")
         
-        # Simular os jogos da rodada
         for i in range(10): 
             index = rodada_atual * 10 + i
             if index < len(confrontos):
                 time1, time2 = confrontos[index]
                 simular_jogo(time1, time2)
 
-        # Atualizar a tabela e a rodada
         organizar_tabela()
         rodada_atual += 1
         rodadas -= 1
         rodadas_label.config(text=f"Rodadas restantes: {rodadas}")
         
-        # Verificar se o campeonato terminou
         if rodadas == 0:
             parabenizar_campeao()
     else:
@@ -534,7 +529,6 @@ def simular_jogo(time1, time2, nome_arquivo="placares_jogos.txt"):
     times[time1][8] += 1  
     times[time2][8] += 1  
 
-    # Escrever o placar do jogo
     with open(nome_arquivo, "a") as arquivo:
         arquivo.write(f"{time1} {gols_time1} x {gols_time2} {time2}\n")
 
