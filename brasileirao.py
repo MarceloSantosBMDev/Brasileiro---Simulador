@@ -1,7 +1,9 @@
 import tkinter as tk
 import random as rm
 from tkinter import messagebox
+import os
 
+#max gols = 7
 times = {
     "América-MG": [0, 0, 0, 2, 0, 0, 0 ,0 ,0],
     "Athletico-PR": [0, 0, 0, 3, 0, 0, 0, 0, 0],
@@ -459,8 +461,11 @@ def simular_rodada():
     else:
         messagebox.showinfo("Fim do Campeonato", "O campeonato chegou ao fim!")
 
-import random as rm
-
+def iniciar_simulacao(nome_arquivo="placares_jogos.txt"):
+    if os.path.exists(nome_arquivo):
+        os.remove(nome_arquivo)
+        print(f"Arquivo '{nome_arquivo}' excluído para nova simulação.")
+iniciar_simulacao()
 def simular_rodada():
     global rodadas, rodada_atual
     if rodada_atual < total_rodadas:
@@ -484,6 +489,9 @@ def simular_rodada():
         messagebox.showinfo("Fim do Campeonato", "O campeonato chegou ao fim!")
 
 def simular_jogo(time1, time2, nome_arquivo="placares_jogos.txt"):
+    
+
+
     chances_time1 = times[time1][3]  
     chances_time2 = times[time2][3]  
     gols_time1 = 0
@@ -536,13 +544,29 @@ def organizar_tabela():
         saldo_gols = stats[1] - stats[0]
 
         if posicao == 1:
-            bg_color = "green" 
+            bg_color = "blue" 
         elif posicao == 2:
-            bg_color = "green"  
+            bg_color = "blue"  
         elif posicao == 3:
-            bg_color = "green"  
+            bg_color = "blue"  
         elif posicao == 4:
-            bg_color = "green"  
+            bg_color = "blue"  
+        elif posicao == 5:
+            bg_color = "orange"
+        elif posicao == 6:
+            bg_color = "orange"
+        elif posicao == 7:
+            bg_color = "green"
+        elif posicao == 8:
+            bg_color = "green"
+        elif posicao == 9:
+            bg_color = "green"
+        elif posicao == 10:
+            bg_color = "green"
+        elif posicao == 11:
+            bg_color = "green"
+        elif posicao == 12:
+            bg_color = "green"
         elif posicao == 17:
             bg_color = "red" 
         elif posicao == 18:
@@ -619,9 +643,8 @@ def Informar():
     labelArtilheiro.pack(pady=(10, 10))
     labelTomados = tk.Label(tela_informativa, text=f"O time que tomou mais gols foi o {Golstomados} com {maiortomados} gols tomados", bg='orange')
     labelTomados.pack(pady=(10, 10))
-    labelSaldo = tk.Label(tela_informativa, text=f"O time com maior saldo de gols foi {saldoo} com {maiorsaldo} de salgo de gols", bg='purple')
+    labelSaldo = tk.Label(tela_informativa, text=f"O time com maior saldo de gols foi {saldoo} com {maiorsaldo} de saldo de gols", bg='purple')
     labelSaldo.pack(pady=(10, 10))
     tela_informativa.mainloop()  
-
 
 tela_inicial()
