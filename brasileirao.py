@@ -5,26 +5,26 @@ import os
 
 #max gols = 7
 times = {
-    "América-MG": [0, 0, 0, 2, 0, 0, 0 ,0 ,0],
-    "Athletico-PR": [0, 0, 0, 3, 0, 0, 0, 0, 0],
-    "Atlético-MG": [0, 0, 0, 3, 0, 0 , 0,0,0],
-    "Bahia": [0, 0, 0, 4, 0,0,0,0,0],
-    "Botafogo": [0, 0, 0, 6, 0,0,0,0,0],
-    "Corinthians": [0, 0, 0, 11, 0,0,0,0,0],
-    "Vitória": [0, 0, 0, 3, 0,0,0,0,0],
-    "Cruzeiro": [0, 0, 0, 3, 0,0,0,0,0],
-    "Cuiabá": [0, 0, 0, 2, 0,0,0,0,0],
-    "Flamengo": [0, 0, 0, 5, 0,0,0,0,0],
-    "Fluminense": [0, 0, 0, 3, 0,0,0,0,0],
-    "Fortaleza": [0, 0, 0, 4, 0,0,0,0,0],
-    "Juventude": [0, 0, 0, 4, 0,0,0,0,0],
-    "Grêmio": [0, 0, 0, 3, 0,0,0,0,0],
-    "Internacional": [0, 0, 0, 5, 0,0,0,0,0],
-    "Palmeiras": [0, 0, 0, 5, 0,0,0,0,0],
-    "RB Bragantino": [0, 0, 0, 3, 0,0,0,0,0],
-    "Criciúma": [0, 0, 0, 3, 0,0,0,0,0],
-    "São Paulo": [0, 0, 0, 4, 0,0,0,0,0],
-    "Vasco da Gama": [0, 0, 0, 4, 0,0,0,0,0]
+    "América-MG":  [0, 0, 0, 2, 0, 0, 0, 0, 0, 2],
+    "Athletico-PR": [0, 0, 0, 5, 0, 0, 0, 0, 0, 3],
+    "Atlético-MG":  [0, 0, 0, 7, 0, 0, 0, 0, 0, 3],
+    "Bahia":        [0, 0, 0, 6, 0, 0, 0, 0, 0, 4],
+    "Botafogo":     [0, 0, 0, 9, 0, 0, 0, 0, 0, 6],
+    "Corinthians": [0, 0, 0, 5, 0,0,0,0,0,3],
+    "Vitória": [0, 0, 0, 4, 0,0,0,0,0,2],
+    "Cruzeiro": [0, 0, 0, 5, 0,0,0,0,0,5],
+    "Cuiabá": [0, 0, 0, 2, 0,0,0,0,0,4],
+    "Flamengo": [0, 0, 0, 8, 0,0,0,0,0,5],
+    "Fluminense": [0, 0, 0, 2, 0,0,0,0,0,5],
+    "Fortaleza": [0, 0, 0, 6, 0,0,0,0,0,4],
+    "Juventude": [0, 0, 0, 5, 0,0,0,0,0,4],
+    "Grêmio": [0, 0, 0, 5, 0,0,0,0,0,4],
+    "Internacional": [0, 0, 0, 6, 0,0,0,0,0,6],
+    "Palmeiras": [0, 0, 0, 8, 0,0,0,0,0,7],
+    "RB Bragantino": [0, 0, 0, 5, 0,0,0,0,0,4],
+    "Criciúma": [0, 0, 0, 6, 0,0,0,0,0,2],
+    "São Paulo": [0, 0, 0, 7, 0,0,0,0,0,3],
+    "Vasco da Gama": [0, 0, 0, 4, 0,0,0,0,0,2]
 }
 total_rodadas = 38
 def criar_jogos():
@@ -491,16 +491,38 @@ def simular_rodada():
 def simular_jogo(time1, time2, nome_arquivo="placares_jogos.txt"):
     chances_time1 = times[time1][3]  
     chances_time2 = times[time2][3]  
+    gols_defendidos1 = times[time1][9]
+    gols_defendidos2 = times[time2][9]
+    
     gols_time1 = 0
     gols_time2 = 0
+    defesas1 = 0
+    defesas2 = 0
+
     for _ in range(chances_time1):
-        if rm.choices([True, False], weights=[0.3, 0.7])[0]:  
+        if rm.choices([True, False], weights=[0.25, 0.75])[0]:  
             gols_time1 += 1
 
     for _ in range(chances_time2):
-        if rm.choices([True, False], weights=[0.3, 0.7])[0]: 
+        if rm.choices([True, False], weights=[0.25, 0.75])[0]: 
             gols_time2 += 1
 
+    for _ in range(gols_defendidos1):
+        if rm.choices([True, False], weights=[0.05, 0.95])[0]:  
+            defesas1 += 1
+
+    for _ in range(gols_defendidos2):
+        if rm.choices([True, False], weights=[0.05, 0.95])[0]: 
+            defesas2 += 1
+
+    if gols_time1 == 0:
+        defesas2 = 0
+    if gols_time2 == 0:
+        defesas1 = 0
+
+    gols_time1 = max(0, gols_time1 - defesas2)
+    gols_time2 = max(0, gols_time2 - defesas1)
+    
     times[time1][1] += gols_time1  
     times[time1][0] += gols_time2  
     times[time2][1] += gols_time2  
@@ -519,13 +541,12 @@ def simular_jogo(time1, time2, nome_arquivo="placares_jogos.txt"):
         times[time2][2] += 1  
         times[time1][6] += 1  
         times[time2][6] += 1  
+
     times[time1][8] += 1  
     times[time2][8] += 1  
 
     with open(nome_arquivo, "a") as arquivo:
         arquivo.write(f"{time1} {gols_time1} x {gols_time2} {time2}\n")
-
-
 
 def organizar_tabela():
     global frame_times
