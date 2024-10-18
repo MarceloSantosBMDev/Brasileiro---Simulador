@@ -10,7 +10,7 @@ times = {
     "Atlético-MG": [0, 0, 0, 3, 0, 0 , 0,0,0],
     "Bahia": [0, 0, 0, 4, 0,0,0,0,0],
     "Botafogo": [0, 0, 0, 6, 0,0,0,0,0],
-    "Corinthians": [0, 0, 0, 3, 0,0,0,0,0],
+    "Corinthians": [0, 0, 0, 11, 0,0,0,0,0],
     "Vitória": [0, 0, 0, 3, 0,0,0,0,0],
     "Cruzeiro": [0, 0, 0, 3, 0,0,0,0,0],
     "Cuiabá": [0, 0, 0, 2, 0,0,0,0,0],
@@ -489,14 +489,10 @@ def simular_rodada():
         messagebox.showinfo("Fim do Campeonato", "O campeonato chegou ao fim!")
 
 def simular_jogo(time1, time2, nome_arquivo="placares_jogos.txt"):
-    
-
-
     chances_time1 = times[time1][3]  
     chances_time2 = times[time2][3]  
     gols_time1 = 0
     gols_time2 = 0
-
     for _ in range(chances_time1):
         if rm.choices([True, False], weights=[0.3, 0.7])[0]:  
             gols_time1 += 1
