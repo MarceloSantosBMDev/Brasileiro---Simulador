@@ -2,9 +2,6 @@ import tkinter as tk
 import random as rm
 from tkinter import messagebox
 import os
-
-
-#max gols = 7
 times = {
     "América-MG":  [0, 0, 0, 2, 0, 0, 0, 0, 0, 2],
     "Athletico-PR": [0, 0, 0, 4, 0, 0, 0, 0, 0, 3],
@@ -28,6 +25,64 @@ times = {
     "Vasco da Gama": [0, 0, 0, 4, 0,0,0,0,0,2]
 }
 total_rodadas = 38
+
+
+jogos_por_time = {time: [] for time in times.keys()}  
+def carregar_jogos(nome_arquivo="placares_jogos.txt"):
+  
+    global jogos_por_time
+    jogos_por_time = {time: [] for time in times.keys()} 
+
+    try:
+        with open(nome_arquivo, "r") as arquivo:
+            for linha in arquivo:
+                partes = linha.strip().split(" ")
+                if len(partes) == 5:
+                    time1, gols_time1, _, gols_time2, time2 = partes
+                    gols_time1 = int(gols_time1)
+                    gols_time2 = int(gols_time2)
+                    jogos_por_time[time1].append(f"{time1} {gols_time1} x {gols_time2} {time2}")
+                    jogos_por_time[time2].append(f"{time2} {gols_time2} x {gols_time1} {time1}")
+
+    except FileNotFoundError:
+        messagebox.showerror("Erro", "Arquivo de placares não encontrado!")
+    except Exception as e:
+        messagebox.showerror("Erro", str(e))
+
+def criar_tela_jogos():
+    tela_times = tk.Tk()
+    tela_times.title("Escolha um Time")
+    tela_times.geometry("400x750")
+    
+    for time in times.keys():
+        botao_time = tk.Button(tela_times, text=time, command=lambda t=time: mostrar_jogos(t))
+        botao_time.pack(pady=5)
+    
+    tela_times.mainloop()
+
+def mostrar_jogos(time):
+    tela_jogos = tk.Tk()
+    tela_jogos.title(f"Jogos de {time}")
+    tela_jogos.geometry("400x500")
+
+    jogos = jogos_por_time.get(time, [])
+    
+    max_jogos = 38
+    if jogos:
+        for i, jogo in enumerate(jogos[:max_jogos]):
+            label_jogo = tk.Label(tela_jogos, text=jogo, font=("Arial", 7))
+            label_jogo.pack(anchor="w")
+
+    if len(jogos) < max_jogos:
+        label_aviso = tk.Label(tela_jogos, text=f"Total de jogos: {len(jogos)} (Máximo: {max_jogos})", font=("Arial", 10), fg="red")
+        label_aviso.pack(pady=(10, 0))
+
+    if not jogos:
+        label_aviso = tk.Label(tela_jogos, text="Nenhum jogo encontrado.", font=("Arial", 10), fg="red")
+        label_aviso.pack(pady=(10, 0))
+
+    btn_fechar = tk.Button(tela_jogos, text="Fechar", command=tela_jogos.destroy)
+    btn_fechar.pack(pady=10)
 
 
 def criar_jogos():
@@ -430,7 +485,7 @@ def tela_inicial():
     tela_inicial.title("Simulator Brasileirão")
     tela_inicial.attributes("-fullscreen", True)
 
-    label_introducao = tk.Label(tela_inicial, text="Bem-vindo ao Simulador de Brasileirão", bg="black", fg="white", font=("Arial", 16))
+    label_introducao = tk.Label(tela_inicial, text="Bem-vindo ao Simulador de Brasileirão", bg="black", fg="white", font=("Comic Sans", 16))
     label_introducao.pack(pady=20)
 
     frame_times = tk.Frame(tela_inicial, bg="black")
@@ -444,25 +499,12 @@ def tela_inicial():
     btn_simular = tk.Button(tela_inicial, text="Simular Próxima Rodada", command=simular_rodada, bg="white", fg="black", font=("Arial", 14))
     btn_simular.pack(pady=20)
 
+    abrir_tela_jogos = tk.Button(tela_inicial, text="Abrir telas De Jogos", command=criar_tela_jogos, bg="orange", fg="black", font=("Arial", 14))
+    abrir_tela_jogos.pack(pady=20)
+    
     tela_inicial.mainloop()
 
-def simular_rodada():
-    global rodadas, rodada_atual
-    if rodada_atual < total_rodadas:
-        for i in range(10): 
-            index = rodada_atual * 10 + i
-            if index < len(confrontos):
-                time1, time2 = confrontos[index]
-                simular_jogo(time1, time2)
 
-        organizar_tabela()
-        rodada_atual += 1
-        rodadas -= 1
-        rodadas_label.config(text=f"Rodadas restantes: {rodadas}")
-        if rodadas == 0:
-            parabenizar_campeao()
-    else:
-        messagebox.showinfo("Fim do Campeonato", "O campeonato chegou ao fim!")
 
 def iniciar_simulacao(nome_arquivo="placares_jogos.txt"):
     if os.path.exists(nome_arquivo):
@@ -549,7 +591,13 @@ def simular_jogo(time1, time2, nome_arquivo="placares_jogos.txt"):
     times[time2][8] += 1  
 
     with open(nome_arquivo, "a") as arquivo:
-        arquivo.write(f"{time1} {gols_time1} x {gols_time2} {time2}\n")
+        resultado = f"{time1} {gols_time1} x {gols_time2} {time2}\n"
+        arquivo.write(resultado)
+
+    resultado_time1 = f"{time2} {gols_time2} x {gols_time1} {time1} (Fora)"
+    resultado_time2 = f"{time1} {gols_time1} x {gols_time2} {time2} (Casa)"
+    jogos_por_time[time2].append(resultado_time1)
+    jogos_por_time[time1].append(resultado_time2)
 
 def organizar_tabela():
     global frame_times
