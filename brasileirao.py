@@ -3,7 +3,7 @@ import random as rm
 from tkinter import messagebox
 import os
 times = {
-    "América-MG":  [0, 0, 0, 2, 0, 0, 0, 0, 0, 2],
+    "Atlético-GO":  [0, 0, 0, 2, 0, 0, 0, 0, 0, 2],
     "Athletico-PR": [0, 0, 0, 4, 0, 0, 0, 0, 0, 3],
     "Atlético-MG":  [0, 0, 0, 5, 0, 0, 0, 0, 0, 3],
     "Bahia":        [0, 0, 0, 5, 0, 0, 0, 0, 0, 4],
@@ -74,7 +74,7 @@ def mostrar_jogos(time):
             label_jogo.pack(anchor="w")
 
     if len(jogos) < max_jogos:
-        label_aviso = tk.Label(tela_jogos, text=f"Total de jogos: {len(jogos)} (Máximo: {max_jogos})", font=("Arial", 10), fg="red")
+        label_aviso = tk.Label(tela_jogos, text=f"Total de jogos: {len(jogos)} (Máximo: {max_jogos})\n Posição do time: {times[time][0]}", font=("Arial", 10), fg="red")
         label_aviso.pack(pady=(10, 0))
 
     if not jogos:
@@ -91,8 +91,8 @@ def criar_jogos():
 ("Palmeiras", "Corinthians"),
 ("Corinthians", "Vasco da Gama"),
 ("Vasco da Gama", "Corinthians"),
-("Corinthians", "América-MG"),
-("América-MG", "Corinthians"),
+("Corinthians", "Atlético-GO"),
+("Atlético-GO", "Corinthians"),
 ("Corinthians", "Athletico-PR"),
 ("Athletico-PR", "Corinthians"),
 ("Corinthians", "Atlético-MG"),
@@ -127,8 +127,8 @@ def criar_jogos():
 ("São Paulo", "Corinthians"),
 ("Palmeiras", "Vasco da Gama"),
 ("Vasco da Gama", "Palmeiras"),
-("Palmeiras", "América-MG"),
-("América-MG", "Palmeiras"),
+("Palmeiras", "Atlético-GO"),
+("Atlético-GO", "Palmeiras"),
 ("Palmeiras", "Athletico-PR"),
 ("Athletico-PR", "Palmeiras"),
 ("Palmeiras", "Atlético-MG"),
@@ -161,8 +161,8 @@ def criar_jogos():
 ("Criciúma", "Palmeiras"),
 ("Palmeiras", "São Paulo"),
 ("São Paulo", "Palmeiras"),
-("Vasco da Gama", "América-MG"),
-("América-MG", "Vasco da Gama"),
+("Vasco da Gama", "Atlético-GO"),
+("Atlético-GO", "Vasco da Gama"),
 ("Vasco da Gama", "Athletico-PR"),
 ("Athletico-PR", "Vasco da Gama"),
 ("Vasco da Gama", "Atlético-MG"),
@@ -195,38 +195,38 @@ def criar_jogos():
 ("Criciúma", "Vasco da Gama"),
 ("Vasco da Gama", "São Paulo"),
 ("São Paulo", "Vasco da Gama"),
-("América-MG", "Athletico-PR"),
-("Athletico-PR", "América-MG"),
-("América-MG", "Atlético-MG"),
-("Atlético-MG", "América-MG"),
-("América-MG", "Bahia"),
-("Bahia", "América-MG"),
-("América-MG", "Botafogo"),
-("Botafogo", "América-MG"),
-("América-MG", "Vitória"),
-("Vitória", "América-MG"),
-("América-MG", "Cruzeiro"),
-("Cruzeiro", "América-MG"),
-("América-MG", "Cuiabá"),
-("Cuiabá", "América-MG"),
-("América-MG", "Flamengo"),
-("Flamengo", "América-MG"),
-("América-MG", "Fluminense"),
-("Fluminense", "América-MG"),
-("América-MG", "Fortaleza"),
-("Fortaleza", "América-MG"),
-("América-MG", "Juventude"),
-("Juventude", "América-MG"),
-("América-MG", "Grêmio"),
-("Grêmio", "América-MG"),
-("América-MG", "Internacional"),
-("Internacional", "América-MG"),
-("América-MG", "RB Bragantino"),
-("RB Bragantino", "América-MG"),
-("América-MG", "Criciúma"),
-("Criciúma", "América-MG"),
-("América-MG", "São Paulo"),
-("São Paulo", "América-MG"),
+("Atlético-GO", "Athletico-PR"),
+("Athletico-PR", "Atlético-GO"),
+("Atlético-GO", "Atlético-MG"),
+("Atlético-MG", "Atlético-GO"),
+("Atlético-GO", "Bahia"),
+("Bahia", "Atlético-GO"),
+("Atlético-GO", "Botafogo"),
+("Botafogo", "Atlético-GO"),
+("Atlético-GO", "Vitória"),
+("Vitória", "Atlético-GO"),
+("Atlético-GO", "Cruzeiro"),
+("Cruzeiro", "Atlético-GO"),
+("Atlético-GO", "Cuiabá"),
+("Cuiabá", "Atlético-GO"),
+("Atlético-GO", "Flamengo"),
+("Flamengo", "Atlético-GO"),
+("Atlético-GO", "Fluminense"),
+("Fluminense", "Atlético-GO"),
+("Atlético-GO", "Fortaleza"),
+("Fortaleza", "Atlético-GO"),
+("Atlético-GO", "Juventude"),
+("Juventude", "Atlético-GO"),
+("Atlético-GO", "Grêmio"),
+("Grêmio", "Atlético-GO"),
+("Atlético-GO", "Internacional"),
+("Internacional", "Atlético-GO"),
+("Atlético-GO", "RB Bragantino"),
+("RB Bragantino", "Atlético-GO"),
+("Atlético-GO", "Criciúma"),
+("Criciúma", "Atlético-GO"),
+("Atlético-GO", "São Paulo"),
+("São Paulo", "Atlético-GO"),
 ("Athletico-PR", "Atlético-MG"),
 ("Atlético-MG", "Athletico-PR"),
 ("Athletico-PR", "Bahia"),
@@ -484,12 +484,13 @@ def tela_inicial():
     tela_inicial.configure(bg="black")
     tela_inicial.title("Simulator Brasileirão")
     tela_inicial.attributes("-fullscreen", True)
-
+    btn_fechar = tk.Button(tela_inicial, text="X", command=tela_inicial.destroy, bg ="white", fg = "black")
+    btn_fechar.pack(pady=20, padx=90)
     label_introducao = tk.Label(tela_inicial, text="Bem-vindo ao Simulador de Brasileirão", bg="black", fg="white", font=("Comic Sans", 16))
     label_introducao.pack(pady=20)
 
     frame_times = tk.Frame(tela_inicial, bg="black")
-    frame_times.pack(pady=20)
+   # frame_times.pack(pady=20)
 
     labels_times = {}
 
@@ -553,11 +554,11 @@ def simular_jogo(time1, time2, nome_arquivo="placares_jogos.txt"):
             gols_time2 += 1
 
     for _ in range(gols_defendidos1):
-        if rm.choices([True, False], weights=[0.2, 0.9])[0]:  
+        if rm.choices([True, False], weights=[0.2, 0.8])[0]:  
             defesas1 += 1
 
     for _ in range(gols_defendidos2):
-        if rm.choices([True, False], weights=[0.05, 0.95])[0]: 
+        if rm.choices([True, False], weights=[0.15, 0.85])[0]: 
             defesas2 += 1
 
     if gols_time1 == 0:
@@ -594,8 +595,8 @@ def simular_jogo(time1, time2, nome_arquivo="placares_jogos.txt"):
         resultado = f"{time1} {gols_time1} x {gols_time2} {time2}\n"
         arquivo.write(resultado)
 
-    resultado_time1 = f"{time2} {gols_time2} x {gols_time1} {time1} (Fora)"
-    resultado_time2 = f"{time1} {gols_time1} x {gols_time2} {time2} (Casa)"
+    resultado_time1 = f"{time1} {gols_time1} x {gols_time2} {time2}"
+    resultado_time2 = f"{time1} {gols_time1} x {gols_time2} {time2}"
     jogos_por_time[time2].append(resultado_time1)
     jogos_por_time[time1].append(resultado_time2)
 
