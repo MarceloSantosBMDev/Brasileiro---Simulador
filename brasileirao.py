@@ -2,31 +2,33 @@ import tkinter as tk
 import random as rm
 from tkinter import messagebox
 import os
+#vitorias em casa = 10
+#derrotas em casa = 11
+#vitorias como visitante = 12
+
 times = {
-    "Atlético-GO":  [0, 0, 0, 2, 0, 0, 0, 0, 0, 2],
-    "Athletico-PR": [0, 0, 0, 4, 0, 0, 0, 0, 0, 3],
-    "Atlético-MG":  [0, 0, 0, 5, 0, 0, 0, 0, 0, 3],
-    "Bahia":        [0, 0, 0, 5, 0, 0, 0, 0, 0, 4],
-    "Botafogo":     [0, 0, 0, 7, 0, 0, 0, 0, 0, 6],
-    "Corinthians": [0, 0, 0, 4, 0,0,0,0,0,3],
-    "Vitória": [0, 0, 0, 3, 0,0,0,0,0,2],
-    "Cruzeiro": [0, 0, 0, 4, 0,0,0,0,0,5],
-    "Cuiabá": [0, 0, 0, 2, 0,0,0,0,0,4],
-    "Flamengo": [0, 0, 0, 6, 0,0,0,0,0,5],
-    "Fluminense": [0, 0, 0, 3, 0,0,0,0,0,5],
-    "Fortaleza": [0, 0, 0, 5, 0,0,0,0,0,4],
-    "Juventude": [0, 0, 0, 4, 0,0,0,0,0,4],
-    "Grêmio": [0, 0, 0, 4, 0,0,0,0,0,4],
-    "Internacional": [0, 0, 0, 5, 0,0,0,0,0,6],
-    "Palmeiras": [0, 0, 0, 6, 0,0,0,0,0,7],
-    "RB Bragantino": [0, 0, 0, 4, 0,0,0,0,0,4],
-    "Criciúma": [0, 0, 0, 5, 0,0,0,0,0,2],
-    "São Paulo": [0, 0, 0, 5, 0,0,0,0,0,3],
-    "Vasco da Gama": [0, 0, 0, 4, 0,0,0,0,0,2]
+    "Atlético-GO":  [0, 0, 0, 2, 0, 0, 0, 0, 0, 2, 0, 0],
+    "Athletico-PR": [0, 0, 0, 4, 0, 0, 0, 0, 0, 3, 0, 0],
+    "Atlético-MG":  [0, 0, 0, 5, 0, 0, 0, 0, 0, 3, 0, 0],
+    "Bahia":        [0, 0, 0, 5, 0, 0, 0, 0, 0, 4, 0, 0],
+    "Botafogo":     [0, 0, 0, 7, 0, 0, 0, 0, 0, 6, 0, 0],
+    "Corinthians": [0, 0, 0, 4, 0,0,0,0,0,3, 0, 0],
+    "Vitória": [0, 0, 0, 3, 0,0,0,0,0,2, 0, 0],
+    "Cruzeiro": [0, 0, 0, 4, 0,0,0,0,0,5, 0, 0],
+    "Cuiabá": [0, 0, 0, 2, 0,0,0,0,0,4, 0, 0],
+    "Flamengo": [0, 0, 0, 6, 0,0,0,0,0,5, 0, 0],
+    "Fluminense": [0, 0, 0, 3, 0,0,0,0,0,5, 0, 0],
+    "Fortaleza": [0, 0, 0, 5, 0,0,0,0,0,4, 0, 0],
+    "Juventude": [0, 0, 0, 4, 0,0,0,0,0,4, 0, 0],
+    "Grêmio": [0, 0, 0, 4, 0,0,0,0,0,4, 0, 0],
+    "Internacional": [0, 0, 0, 5, 0,0,0,0,0,6, 0, 0],
+    "Palmeiras": [0, 0, 0, 6, 0,0,0,0,0,7, 0, 0],
+    "RB Bragantino": [0, 0, 0, 4, 0,0,0,0,0,4, 0, 0],
+    "Criciúma": [0, 0, 0, 5, 0,0,0,0,0,2, 0, 0],
+    "São Paulo": [0, 0, 0, 5, 0,0,0,0,0,3, 0, 0],
+    "Vasco da Gama": [0, 0, 0, 4, 0,0,0,0,0,2, 0, 0]
 }
 total_rodadas = 38
-
-
 jogos_por_time = {time: [] for time in times.keys()}  
 def carregar_jogos(nome_arquivo="placares_jogos.txt"):
   
@@ -68,18 +70,18 @@ def mostrar_jogos(time):
     jogos = jogos_por_time.get(time, [])
     
     max_jogos = 38
-    if jogos:
-        for i, jogo in enumerate(jogos[:max_jogos]):
-            label_jogo = tk.Label(tela_jogos, text=jogo, font=("Arial", 7))
-            label_jogo.pack(anchor="w")
+    label_aviso = tk.Label(tela_jogos, text=f"Total de jogos: {len(jogos)} (Máximo: {max_jogos})\n Posição do time: {times[time][0]}\n Vitorias em casa: {times[time][10]}\n Derrotas em casa: {times[time][11]}", font=("Arial", 10), fg="red")
+    label_aviso.pack(pady=(10, 0))
 
     if len(jogos) < max_jogos:
-        label_aviso = tk.Label(tela_jogos, text=f"Total de jogos: {len(jogos)} (Máximo: {max_jogos})\n Posição do time: {times[time][0]}", font=("Arial", 10), fg="red")
-        label_aviso.pack(pady=(10, 0))
-
+            label_aviso.config(text=f"Total de jogos: {len(jogos)} (Máximo: {max_jogos})\n Posição do time: {times[time][4]}\n Vitorias em casa: {times[time][10]}\n Derrotas em casa: {times[time][11]}", font=("Arial", 10), fg="red")
     if not jogos:
         label_aviso = tk.Label(tela_jogos, text="Nenhum jogo encontrado.", font=("Arial", 10), fg="red")
         label_aviso.pack(pady=(10, 0))
+    if jogos:
+        for i, jogo in enumerate(jogos[:max_jogos]):
+            label_jogo = tk.Label(tela_jogos, text=jogo, font=("Arial", 6))
+            label_jogo.pack(anchor="w")
 
     btn_fechar = tk.Button(tela_jogos, text="Fechar", command=tela_jogos.destroy)
     btn_fechar.pack(pady=10)
@@ -484,24 +486,24 @@ def tela_inicial():
     tela_inicial.configure(bg="black")
     tela_inicial.title("Simulator Brasileirão")
     tela_inicial.attributes("-fullscreen", True)
-    btn_fechar = tk.Button(tela_inicial, text="X", command=tela_inicial.destroy, bg ="white", fg = "black")
+    btn_fechar = tk.Button(tela_inicial, text="Fechar", command=tela_inicial.destroy, bg ="white", fg = "black")
     btn_fechar.pack(pady=20, padx=90)
     label_introducao = tk.Label(tela_inicial, text="Bem-vindo ao Simulador de Brasileirão", bg="black", fg="white", font=("Comic Sans", 16))
     label_introducao.pack(pady=20)
 
     frame_times = tk.Frame(tela_inicial, bg="black")
-   # frame_times.pack(pady=20)
+    frame_times.pack(pady=20)
 
     labels_times = {}
 
     rodadas_label = tk.Label(tela_inicial, text=f"Rodadas restantes: {rodadas}", bg="black", fg="white", font=("Arial", 14))
-    rodadas_label.pack(pady=20)
+    rodadas_label.pack(pady=10)
 
     btn_simular = tk.Button(tela_inicial, text="Simular Próxima Rodada", command=simular_rodada, bg="white", fg="black", font=("Arial", 14))
-    btn_simular.pack(pady=20)
+    btn_simular.pack(pady=10)
 
     abrir_tela_jogos = tk.Button(tela_inicial, text="Abrir telas De Jogos", command=criar_tela_jogos, bg="orange", fg="black", font=("Arial", 14))
-    abrir_tela_jogos.pack(pady=20)
+    abrir_tela_jogos.pack(pady=10)
     
     tela_inicial.mainloop()
 
@@ -575,10 +577,12 @@ def simular_jogo(time1, time2, nome_arquivo="placares_jogos.txt"):
     times[time2][0] += gols_time1  
 
     if gols_time1 > gols_time2:
+        times[time1][10] += 1
         times[time1][2] += 3  
         times[time1][5] += 1  
         times[time2][7] += 1  
     elif gols_time1 < gols_time2:
+        times[time1][11] += 1
         times[time2][2] += 3  
         times[time2][5] += 1  
         times[time1][7] += 1 
@@ -672,6 +676,8 @@ def Informar():
     Artilheiro = ""
     maiorsaldo = -1
     saldoo = ""
+    melhor_mandante = ""
+    maior_mandante = -1
     
     for posicao, (time, stats) in enumerate(sorted_times, start=1):
         if posicao == 1:
@@ -708,12 +714,18 @@ def Informar():
         if stats[0] > maiortomados: 
             maiortomados = stats[0]
             Golstomados = time  
+        if stats[10] > maior_mandante:
+            maior_mandante = stats[10]
+            melhor_mandante = time
+            
     labelArtilheiro = tk.Label(tela_informativa, text=f"O artilheiro do campeonato foi {Artilheiro} com {maior} gols", bg='yellow')
     labelArtilheiro.pack(pady=(10, 10))
     labelTomados = tk.Label(tela_informativa, text=f"O time que tomou mais gols foi o {Golstomados} com {maiortomados} gols tomados", bg='orange')
     labelTomados.pack(pady=(10, 10))
     labelSaldo = tk.Label(tela_informativa, text=f"O time com maior saldo de gols foi {saldoo} com {maiorsaldo} de saldo de gols", bg='purple')
     labelSaldo.pack(pady=(10, 10))
+    labelMandante = tk.Label(tela_informativa, text=f"O time que ficou como melhor mandante foi {melhor_mandante} com {maior_mandante} vitórias em casa", bg = "blue")
+    labelMandante.pack(pady=(10, 10))
     tela_informativa.mainloop()  
 
 tela_inicial()
