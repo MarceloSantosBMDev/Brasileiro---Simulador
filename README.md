@@ -24,21 +24,21 @@ I know, probaly the code have more problems, but I dont found. The frond-end is 
 
 # explanation of the code
 
-  def carregar_jogos(nome_arquivo="placares_jogos.txt"):
-      global jogos_por_time
-      jogos_por_time = {time: [] for time in times.keys()} 
-      try:
-          with open(nome_arquivo, "r") as arquivo:
-              for linha in arquivo:
-                partes = linha.strip().split(" ")
-                  if len(partes) == 5:
-                    time1, gols_time1, _, gols_time2, time2 = partes
-                    gols_time1 = int(gols_time1)
-                    gols_time2 = int(gols_time2)
-                    jogos_por_time[time1].append(f"{time1} {gols_time1} x {gols_time2} {time2}")
-                    jogos_por_time[time2].append(f"{time2} {gols_time2} x {gols_time1} {time1}")
-    except FileNotFoundError:
-        messagebox.showerror("Erro", "Arquivo de placares não encontrado!")
-    except Exception as e:
-        messagebox.showerror("Erro", str(e))
+      def carregar_jogos(nome_arquivo="placares_jogos.txt"):
+          global jogos_por_time
+          jogos_por_time = {time: [] for time in times.keys()} 
+          try:
+              with open(nome_arquivo, "r") as arquivo:
+                  for linha in arquivo:
+                    partes = linha.strip().split(" ")
+                      if len(partes) == 5:
+                        time1, gols_time1, _, gols_time2, time2 = partes
+                        gols_time1 = int(gols_time1)
+                        gols_time2 = int(gols_time2)
+                        jogos_por_time[time1].append(f"{time1} {gols_time1} x {gols_time2} {time2}")
+                        jogos_por_time[time2].append(f"{time2} {gols_time2} x {gols_time1} {time1}")
+        except FileNotFoundError:
+            messagebox.showerror("Erro", "Arquivo de placares não encontrado!")
+        except Exception as e:
+            messagebox.showerror("Erro", str(e))
 
