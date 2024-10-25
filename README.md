@@ -22,5 +22,23 @@ I know, probaly the code have more problems, but I dont found. The frond-end is 
 - In another commit I remember I talked about one system of defense of the team, I made this and now the teams have too one system of defense, I inspired of the real Brazil League and the most strong system defense of the teams are of 'Palmeiras', In real league is the team with less goals taked, actually, I try balanced the all teams, for all team have a real chance of win the League, but its not possible, we know that have stronger teams, like 'Palmeiras', 'Botafogo', 'Flamengo', 'Internacional', have too weaker teams like 'Atletico-GO', 'Vitoria', 'RB Bragantino', I referenced of the real league and is the more strongs and more weaks of the real league. But have one great point, the simulator is very similar of the real table, in this moment of I commited this the teams "Botafogo" is the first of league, if you simulate 3 times you will see the "Botafogo" will win one time, and the 'Palmeiras' and 'Flamengo' will be G4 almost ever time.
 - Now I put some sytem of the count of wins of the home wins of the teams, is will appared in infromation of league also the screen of teams matchs
 
+# explanation of the code
 
+  def carregar_jogos(nome_arquivo="placares_jogos.txt"):
+      global jogos_por_time
+      jogos_por_time = {time: [] for time in times.keys()} 
+      try:
+          with open(nome_arquivo, "r") as arquivo:
+              for linha in arquivo:
+                partes = linha.strip().split(" ")
+                  if len(partes) == 5:
+                    time1, gols_time1, _, gols_time2, time2 = partes
+                    gols_time1 = int(gols_time1)
+                    gols_time2 = int(gols_time2)
+                    jogos_por_time[time1].append(f"{time1} {gols_time1} x {gols_time2} {time2}")
+                    jogos_por_time[time2].append(f"{time2} {gols_time2} x {gols_time1} {time1}")
+    except FileNotFoundError:
+        messagebox.showerror("Erro", "Arquivo de placares não encontrado!")
+    except Exception as e:
+        messagebox.showerror("Erro", str(e))
 
