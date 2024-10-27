@@ -113,3 +113,10 @@ This function is for screen the matchs of each team, all times the user click in
         tela_inicial.mainloop()
 This function is the first screen that appear for the user, in this, is list all teams and they stats, the labels that have will be update all times the user click int he button "Simular Proxima Rodada", this screen have the close button too and the the button "Abrir telas De Jogos" this button open the screen of function "criar_telas_jogos".
 In this screen, if the user simulate all rounds, will go trade the button "Simular Proxima Rodada" for "Mostrar Informações do Campeonato", if the user click in this button, will appear the screen with the simulate informations.
+
+
+    def iniciar_simulacao(nome_arquivo="placares_jogos.txt"):
+        if os.path.exists(nome_arquivo):
+            os.remove(nome_arquivo)
+            print(f"Arquivo '{nome_arquivo}' excluído para nova simulação.")
+Here, is the function of the start of the simulation, actually, this don´t make much things for the simulate, just delete the arquive with the matchs, look, this function just make something if the file for the games already existing
