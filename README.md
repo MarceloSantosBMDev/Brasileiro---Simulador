@@ -18,9 +18,9 @@ I know, probaly the code have more problems, but I dont found. The frond-end is 
 
 # Changes I made (octuber)
 - In this month I did make some changes, for exemple, the exit button, I put one button in first screen for user can exit the app, actually, I made this after one friend report this for me, he talked "exit the aplication using alt + f4 is bad", this is simple function and I dont cast much time for make this HAHA
-- Another change I did make is the screen of all games of the selected team, the user can go in button write "Abrir tela de Jogos", after this, one screen with buttons white all teams going to appared, User click in one team and all matchs of the selected team will appared in him screen
+- Another change I did make is the screen of all games of the selected team, the user can go in button write "Abrir tela de Jogos", after this, one screen with buttons white all teams going to appared, User click in one team and all matchs of the selected team will appear in him screen
 - In another commit I remember I talked about one system of defense of the team, I made this and now the teams have too one system of defense, I inspired of the real Brazil League and the most strong system defense of the teams are of 'Palmeiras', In real league is the team with less goals taked, actually, I try balanced the all teams, for all team have a real chance of win the League, but its not possible, we know that have stronger teams, like 'Palmeiras', 'Botafogo', 'Flamengo', 'Internacional', have too weaker teams like 'Atletico-GO', 'Vitoria', 'RB Bragantino', I referenced of the real league and is the more strongs and more weaks of the real league. But have one great point, the simulator is very similar of the real table, in this moment of I commited this the teams "Botafogo" is the first of league, if you simulate 3 times you will see the "Botafogo" will win one time, and the 'Palmeiras' and 'Flamengo' will be G4 almost ever time.
-- Now I put some sytem of the count of wins of the home wins of the teams, is will appared in infromation of league also the screen of teams matchs
+- Now I put some sytem of the count of wins of the home wins of the teams, is will appear in infromation of league also the screen of teams matchs
 
 # code explanation
   # carregar_jogos
@@ -41,7 +41,7 @@ I know, probaly the code have more problems, but I dont found. The frond-end is 
             messagebox.showerror("Erro", "Arquivo de placares não encontrado!")
         except Exception as e:
             messagebox.showerror("Erro", str(e)) 
-  In this code part, I put the function for add the matchs of the teams, first have the global variable 'jogos_por_time' in this variable have the dictionary of the determined team, this dictionary is responsible for save all matchs of the teams, it appared in the function responsible for matchs simulate, is there that save the results.
+  In this code part, I put the function for add the matchs of the teams, first have the global variable 'jogos_por_time' in this variable have the dictionary of the determined team, this dictionary is responsible for save all matchs of the teams, it appear in the function responsible for matchs simulate, is there that save the results.
 
 # criar_telas_jogos
     def criar_tela_jogos():
@@ -82,3 +82,34 @@ Here, I put the function that make screen with buttons with all teams, have one 
 
 
 This function is for screen the matchs of each team, all times the user click in one button with team, this function start work, look, if the user click more times in button, this function screen the matchs screen very times, actually, I was thinking to make a way check if the screen of the one team already open, the other (if it had been opened, obviously) close, but I did´nt make this because I have laziness HAHA ^^
+
+# tela_inicial
+    def tela_inicial():
+        global frame_times, labels_times, rodadas_label, btn_simular, rodadas
+
+        tela_inicial = tk.Tk()
+        tela_inicial.configure(bg="black")
+        tela_inicial.title("Simulator Brasileirão")
+        tela_inicial.attributes("-fullscreen", True)
+        btn_fechar = tk.Button(tela_inicial, text=" X ", command=tela_inicial.destroy, bg="white", fg="black")
+        btn_fechar.place(relx=1.0, y=10, anchor='ne')
+        label_introducao = tk.Label(tela_inicial, text="Bem-vindo ao Simulador de Brasileirão", bg="black", fg="white", font=("Comic Sans", 16))
+        label_introducao.pack(pady=20)
+
+        frame_times = tk.Frame(tela_inicial, bg="black")
+        frame_times.pack(pady=20)
+
+        labels_times = {}
+
+        rodadas_label = tk.Label(tela_inicial, text=f"Rodadas restantes: {rodadas}", bg="black", fg="white", font=("Arial", 14))
+        rodadas_label.pack(pady=10)
+
+        btn_simular = tk.Button(tela_inicial, text="Simular Próxima Rodada", command=simular_rodada, bg="white", fg="black", font=("Arial", 14))
+        btn_simular.pack(pady=10)
+
+        abrir_tela_jogos = tk.Button(tela_inicial, text="Abrir telas De Jogos", command=criar_tela_jogos, bg="orange", fg="black", font=("Arial", 14))
+        abrir_tela_jogos.pack(pady=10)
+    
+        tela_inicial.mainloop()
+This function is the first screen that appear for the user, in this, is list all teams and they stats, the labels that have will be update all times the user click int he button "Simular Proxima Rodada", this screen have the close button too and the the button "Abrir telas De Jogos" this button open the screen of function "criar_telas_jogos".
+In this screen, if the user simulate all rounds, will go trade the button "Simular Proxima Rodada" for "Mostrar Informações do Campeonato", if the user click in this button, will appear the screen with the simulate informations.
