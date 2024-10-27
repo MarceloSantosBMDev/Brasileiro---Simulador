@@ -55,7 +55,7 @@ I know, probaly the code have more problems, but I dont found. The frond-end is 
       
       tela_times.mainloop()
 Here, I put the function that make screen with buttons with all teams, have one button of each team,, if you know about tk library, I have sure you know the command geomatry, title, tk, button and mainloop, the loop in 'for' is for creat one button for all teams.
-
+# mostrar_jogos
     def mostrar_jogos(time):
         tela_jogos = tk.Tk()
         tela_jogos.title(f"Jogos de {time}")
