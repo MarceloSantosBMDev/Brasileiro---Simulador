@@ -114,9 +114,103 @@ This function is for screen the matchs of each team, all times the user click in
 This function is the first screen that appear for the user, in this, is list all teams and they stats, the labels that have will be update all times the user click int he button "Simular Proxima Rodada", this screen have the close button too and the the button "Abrir telas De Jogos" this button open the screen of function "criar_telas_jogos".
 In this screen, if the user simulate all rounds, will go trade the button "Simular Proxima Rodada" for "Mostrar Informações do Campeonato", if the user click in this button, will appear the screen with the simulate informations.
 
-
+# iniciar_simulacao
     def iniciar_simulacao(nome_arquivo="placares_jogos.txt"):
         if os.path.exists(nome_arquivo):
             os.remove(nome_arquivo)
             print(f"Arquivo '{nome_arquivo}' excluído para nova simulação.")
 Here, is the function of the start of the simulation, actually, this don´t make much things for the simulate, just delete the arquive with the matchs, look, this function just make something if the file for the games already existing
+
+# simular_rodada
+    def simular_rodada():
+        global rodadas, rodada_atual
+        if rodada_atual < total_rodadas:
+            with open("placares_jogos.txt", "a") as arquivo:
+                arquivo.write(f"Rodada {rodada_atual + 1}\n")
+        
+            for i in range(10): 
+                index = rodada_atual * 10 + i
+                if index < len(confrontos):
+                    time1, time2 = confrontos[index]
+                    simular_jogo(time1, time2)
+
+            organizar_tabela()
+            rodada_atual += 1
+            rodadas -= 1
+            rodadas_label.config(text=f"Rodadas restantes: {rodadas}")
+        
+            if rodadas == 0:
+                parabenizar_campeao()
+        else:
+            messagebox.showinfo("Fim do Campeonato", "O campeonato chegou ao fim!")
+This function is for simulate the round, here the round is simulate, the function for tabble organization is called. If the variable that keeper the number of all round is arrive 0, the function call the function for send congratiluation for the champion team.
+# simular_jogo
+    def simular_jogo(time1, time2, nome_arquivo="placares_jogos.txt"):
+        chances_time1 = times[time1][3]  
+        chances_time2 = times[time2][3]  
+        gols_defendidos1 = times[time1][9]
+        gols_defendidos2 = times[time2][9]
+        
+        gols_time1 = 0
+        gols_time2 = 0
+        defesas1 = 0
+        defesas2 = 0
+    
+        for _ in range(chances_time1):
+            if rm.choices([True, False], weights=[0.35, 0.65])[0]:  
+                gols_time1 += 1
+    
+        for _ in range(chances_time2):
+            if rm.choices([True, False], weights=[0.30, 0.70])[0]: 
+                gols_time2 += 1
+    
+        for _ in range(gols_defendidos1):
+            if rm.choices([True, False], weights=[0.2, 0.8])[0]:  
+                defesas1 += 1
+    
+        for _ in range(gols_defendidos2):
+            if rm.choices([True, False], weights=[0.15, 0.85])[0]: 
+                defesas2 += 1
+    
+        if gols_time1 == 0:
+            defesas2 = 0
+        if gols_time2 == 0:
+            defesas1 = 0
+    
+        gols_time1 = max(0, gols_time1 - defesas2)
+        gols_time2 = max(0, gols_time2 - defesas1)
+        
+        times[time1][1] += gols_time1  
+        times[time1][0] += gols_time2  
+        times[time2][1] += gols_time2  
+        times[time2][0] += gols_time1  
+    
+        if gols_time1 > gols_time2:
+            times[time1][10] += 1
+            times[time1][2] += 3  
+            times[time1][5] += 1  
+            times[time2][7] += 1  
+        elif gols_time1 < gols_time2:
+            times[time1][11] += 1
+            times[time2][2] += 3  
+            times[time2][5] += 1  
+            times[time1][7] += 1 
+        else:
+            times[time1][2] += 1  
+            times[time2][2] += 1  
+            times[time1][6] += 1  
+            times[time2][6] += 1  
+    
+        times[time1][8] += 1  
+        times[time2][8] += 1  
+    
+        with open(nome_arquivo, "a") as arquivo:
+            resultado = f"{time1} {gols_time1} x {gols_time2} {time2}\n"
+            arquivo.write(resultado)
+    
+        resultado_time1 = f"{time1} {gols_time1} x {gols_time2} {time2}"
+        resultado_time2 = f"{time1} {gols_time1} x {gols_time2} {time2}"
+        jogos_por_time[time2].append(resultado_time1)
+        jogos_por_time[time1].append(resultado_time2)
+This function is the most complex of the code, here the system of the goal and defense start work, the system of home team too, some variable with the information of team are added, here determine what team win, if you wanna the simulate have more goals, you can change the chances of goal and defense, but look, I put this numbers because I think in this form the number of goals of the winner team is so realist, if you see the four last team, you can see they made so few goals, I was thinking one form to make they make more, I know this is desbalanced.
+
