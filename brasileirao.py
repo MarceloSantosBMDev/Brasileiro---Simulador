@@ -76,11 +76,11 @@ def mostrar_jogos(time):
     if len(jogos) < max_jogos:
             label_aviso.config(text=f"Total de jogos: {len(jogos)} (Máximo: {max_jogos})\n Posição do time: {times[time][4]}\n Vitorias em casa: {times[time][10]}\n Derrotas em casa: {times[time][11]}", font=("Arial", 10), fg="red")
     if not jogos:
-        label_aviso = tk.Label(tela_jogos, text="Nenhum jogo encontrado.", font=("Arial", 10), fg="red")
+        label_aviso = tk.Label(tela_jogos, text="Nenhum jogo encontrado.", font=("Arial", 9), fg="red")
         label_aviso.pack(pady=(10, 0))
     if jogos:
         for i, jogo in enumerate(jogos[:max_jogos]):
-            label_jogo = tk.Label(tela_jogos, text=jogo, font=("Arial", 6))
+            label_jogo = tk.Label(tela_jogos, text=jogo, font=("Arial", 8))
             label_jogo.pack(anchor="w")
 
     btn_fechar = tk.Button(tela_jogos, text="Fechar", command=tela_jogos.destroy)
@@ -486,8 +486,8 @@ def tela_inicial():
     tela_inicial.configure(bg="black")
     tela_inicial.title("Simulator Brasileirão")
     tela_inicial.attributes("-fullscreen", True)
-    btn_fechar = tk.Button(tela_inicial, text="Fechar", command=tela_inicial.destroy, bg ="white", fg = "black")
-    btn_fechar.pack(pady=20, padx=90)
+    btn_fechar = tk.Button(tela_inicial, text=" X ", command=tela_inicial.destroy, bg="white", fg="black")
+    btn_fechar.place(relx=1.0, y=10, anchor='ne')
     label_introducao = tk.Label(tela_inicial, text="Bem-vindo ao Simulador de Brasileirão", bg="black", fg="white", font=("Comic Sans", 16))
     label_introducao.pack(pady=20)
 
