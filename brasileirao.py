@@ -767,7 +767,7 @@ def Informar():
             label.pack(pady=(5, 5))
 
         if posicao >= 17:
-            label = tk.Label(tela_informativa, text=f"O time que caiu no G{(21 - posicao)} foi o {time} com {stats[2]} pontos", bg="#e74c3c", fg="white", font=('Arial', 12))
+            label = tk.Label(tela_informativa, text=f"O time que caiu no Z{(21 - posicao)} foi o {time} com {stats[2]} pontos", bg="#e74c3c", fg="white", font=('Arial', 12))
             label.pack(pady=(5, 5))
 
         if stats[1] - stats[0] > maiorsaldo:
@@ -876,7 +876,18 @@ def config_tela():
     
     btn_config_teams = tk.Button(tela_configuracao, text="Mudar status dos times", bg="#2980b9", fg="white", command=statsteams, font=("Arial", 14))
     btn_config_teams.pack(pady=20)
-
-    tela_configuracao.mainloop()
     
+    btn_colocar_time_5 = tk.Button(tela_configuracao, text="Status 5 em times", bg ="#2980b9", fg="white", command=stats5teams, font = ("Arial",14))
+    btn_colocar_time_5.pack(pady=20)
+    tela_configuracao.mainloop()
+
+def stats5teams():
+    global times
+    for team, stats in times.items():
+        stats[3] = 5  
+        stats[9] = 5 
+        print(f"{team} updated - Attack: {stats[3]}, Defense: {stats[9]}")
+
+
+
 tela_inicial()
