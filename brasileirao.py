@@ -3,12 +3,14 @@ import random as rm
 from tkinter import messagebox
 import os
 from tkinter import font as tkFont
-
+def select_edition(edition):
+    global edicao, times, confrontos, rodadas, rodada_atual, jogos_por_time
+    edicao = edition
 #vitorias em casa = 10
 #derrotas em casa = 11
 #vitorias como visitante = 12
-
-times = {
+    if edicao == 2024:
+      times = {
     "Atlético-GO":  [0, 0, 0, 2, 0, 0, 0, 0, 0, 2, 0, 0],
     "Athletico-PR": [0, 0, 0, 4, 0, 0, 0, 0, 0, 3, 0, 0],
     "Atlético-MG":  [0, 0, 0, 5, 0, 0, 0, 0, 0, 3, 0, 0],
@@ -30,8 +32,38 @@ times = {
     "São Paulo": [0, 0, 0, 5, 0,0,0,0,0,3, 0, 0],
     "Vasco da Gama": [0, 0, 0, 4, 0,0,0,0,0,2, 0, 0]
 }
+    elif edicao == 2025:
+        times = {
+    "Ceará-SC":  [0, 0, 0, 2, 0, 0, 0, 0, 0, 2, 0, 0],
+    "Sport-Recife": [0, 0, 0, 4, 0, 0, 0, 0, 0, 3, 0, 0],
+    "Atlético-MG":  [0, 0, 0, 5, 0, 0, 0, 0, 0, 3, 0, 0],
+    "Bahia":        [0, 0, 0, 5, 0, 0, 0, 0, 0, 4, 0, 0],
+    "Botafogo":     [0, 0, 0, 7, 0, 0, 0, 0, 0, 6, 0, 0],
+    "Corinthians": [0, 0, 0, 4, 0,0,0,0,0,3, 0, 0],
+    "Vitória": [0, 0, 0, 3, 0,0,0,0,0,2, 0, 0],
+    "Cruzeiro": [0, 0, 0, 4, 0,0,0,0,0,5, 0, 0],
+    "Mirassol": [0, 0, 0, 2, 0,0,0,0,0,4, 0, 0],
+    "Flamengo": [0, 0, 0, 6, 0,0,0,0,0,5, 0, 0],
+    "Fluminense": [0, 0, 0, 3, 0,0,0,0,0,5, 0, 0],
+    "Fortaleza": [0, 0, 0, 5, 0,0,0,0,0,4, 0, 0],
+    "Juventude": [0, 0, 0, 4, 0,0,0,0,0,4, 0, 0],
+    "Grêmio": [0, 0, 0, 4, 0,0,0,0,0,4, 0, 0],
+    "Internacional": [0, 0, 0, 5, 0,0,0,0,0,6, 0, 0],
+    "Palmeiras": [0, 0, 0, 6, 0,0,0,0,0,7, 0, 0],
+    "RB Bragantino": [0, 0, 0, 4, 0,0,0,0,0,4, 0, 0],
+    "Santos": [0, 0, 0, 5, 0,0,0,0,0,2, 0, 0],
+    "São Paulo": [0, 0, 0, 5, 0,0,0,0,0,3, 0, 0],
+    "Vasco da Gama": [0, 0, 0, 4, 0,0,0,0,0,2, 0, 0]
+}    
+    jogos_por_time = {time: [] for time in times.keys()} 
+    confrontos = criar_jogos()     
+    rodadas = total_rodadas
+    rodada_atual = 0 
+    root.destroy()
+    start_simulation() 
+    
+     
 total_rodadas = 38
-jogos_por_time = {time: [] for time in times.keys()}  
 def carregar_jogos(nome_arquivo="placares_jogos.txt"):
   
     global jogos_por_time
@@ -79,12 +111,6 @@ def criar_tela_jogos():
         botao_time.pack(pady=5, padx=10)
 
     tela_times.mainloop()
-
-import tkinter as tk
-
-import tkinter as tk
-
-import tkinter as tk
 
 def mostrar_jogos(time):
     tela_jogos = tk.Tk()
@@ -157,7 +183,9 @@ def mostrar_jogos(time):
 
 
 def criar_jogos():
-    confrontoss = [
+    global edicao
+    if edicao == 2024:
+        confrontoss = [
 ("Corinthians", "Palmeiras"),
 ("Palmeiras", "Corinthians"),
 ("Corinthians", "Vasco da Gama"),
@@ -539,15 +567,401 @@ def criar_jogos():
 ("Criciúma", "São Paulo"),
 ("São Paulo", "Criciúma"),
     ]
+    elif edicao == 2025:
+        confrontoss=[
+            ('Mirassol', 'Vasco da Gama') ,
+('Ceará-SC', 'São Paulo') ,
+('Atlético-MG', 'Sport-Recife') ,
+('Bahia', 'RB Bragantino') ,
+('Botafogo', 'Palmeiras') ,
+('Corinthians', 'Internacional') ,
+('Vitória', 'Grêmio') ,
+('Cruzeiro', 'Juventude') ,
+('Santos', 'Fortaleza') ,
+('Flamengo', 'Fluminense') ,
+('Mirassol', 'São Paulo') ,
+('Vasco da Gama', 'Sport-Recife') ,
+('Ceará-SC', 'RB Bragantino') ,
+('Atlético-MG', 'Palmeiras') ,
+('Bahia', 'Internacional') ,
+('Botafogo', 'Grêmio') ,
+('Corinthians', 'Juventude') ,
+('Vitória', 'Fortaleza') ,
+('Cruzeiro', 'Fluminense') ,
+('Santos', 'Flamengo') ,
+('Mirassol', 'Sport-Recife') ,
+('São Paulo', 'RB Bragantino') ,
+('Vasco da Gama', 'Palmeiras') ,
+('Ceará-SC', 'Internacional') ,
+('Atlético-MG', 'Grêmio') ,
+('Bahia', 'Juventude') ,
+('Botafogo', 'Fortaleza') ,
+('Corinthians', 'Fluminense') ,
+('Vitória', 'Flamengo') ,
+('Cruzeiro', 'Santos') ,
+('Mirassol', 'RB Bragantino') ,
+('Sport-Recife', 'Palmeiras') ,
+('São Paulo', 'Internacional') ,
+('Vasco da Gama', 'Grêmio') ,
+('Ceará-SC', 'Juventude') ,
+('Atlético-MG', 'Fortaleza') ,
+('Bahia', 'Fluminense') ,
+('Botafogo', 'Flamengo') ,
+('Corinthians', 'Santos') ,
+('Vitória', 'Cruzeiro') ,
+('Mirassol', 'Palmeiras') ,
+('RB Bragantino', 'Internacional') ,
+('Sport-Recife', 'Grêmio') ,
+('São Paulo', 'Juventude') ,
+('Vasco da Gama', 'Fortaleza') ,
+('Ceará-SC', 'Fluminense') ,
+('Atlético-MG', 'Flamengo') ,
+('Bahia', 'Santos') ,
+('Botafogo', 'Cruzeiro') ,
+('Corinthians', 'Vitória') ,
+('Mirassol', 'Internacional') ,
+('Palmeiras', 'Grêmio') ,
+('RB Bragantino', 'Juventude') ,
+('Sport-Recife', 'Fortaleza') ,
+('São Paulo', 'Fluminense') ,
+('Vasco da Gama', 'Flamengo') ,
+('Ceará-SC', 'Santos') ,
+('Atlético-MG', 'Cruzeiro') ,
+('Bahia', 'Vitória') ,
+('Botafogo', 'Corinthians') ,
+('Mirassol', 'Grêmio') ,
+('Internacional', 'Juventude') ,
+('Palmeiras', 'Fortaleza') ,
+('RB Bragantino', 'Fluminense') ,
+('Sport-Recife', 'Flamengo') ,
+('São Paulo', 'Santos') ,
+('Vasco da Gama', 'Cruzeiro') ,
+('Ceará-SC', 'Vitória') ,
+('Atlético-MG', 'Corinthians') ,
+('Bahia', 'Botafogo') ,
+('Mirassol', 'Juventude') ,
+('Grêmio', 'Fortaleza') ,
+('Internacional', 'Fluminense') ,
+('Palmeiras', 'Flamengo') ,
+('RB Bragantino', 'Santos') ,
+('Sport-Recife', 'Cruzeiro') ,
+('São Paulo', 'Vitória') ,
+('Vasco da Gama', 'Corinthians') ,
+('Ceará-SC', 'Botafogo') ,
+('Atlético-MG', 'Bahia') ,
+('Mirassol', 'Fortaleza') ,
+('Juventude', 'Fluminense') ,
+('Grêmio', 'Flamengo') ,
+('Internacional', 'Santos') ,
+('Palmeiras', 'Cruzeiro') ,
+('RB Bragantino', 'Vitória') ,
+('Sport-Recife', 'Corinthians') ,
+('São Paulo', 'Botafogo') ,
+('Vasco da Gama', 'Bahia') ,
+('Ceará-SC', 'Atlético-MG') ,
+('Mirassol', 'Fluminense') ,
+('Fortaleza', 'Flamengo') ,
+('Juventude', 'Santos') ,
+('Grêmio', 'Cruzeiro') ,
+('Internacional', 'Vitória') ,
+('Palmeiras', 'Corinthians') ,
+('RB Bragantino', 'Botafogo') ,
+('Sport-Recife', 'Bahia') ,
+('São Paulo', 'Atlético-MG') ,
+('Vasco da Gama', 'Ceará-SC') ,
+('Mirassol', 'Flamengo') ,
+('Fluminense', 'Santos') ,
+('Fortaleza', 'Cruzeiro') ,
+('Juventude', 'Vitória') ,
+('Grêmio', 'Corinthians') ,
+('Internacional', 'Botafogo') ,
+('Palmeiras', 'Bahia') ,
+('RB Bragantino', 'Atlético-MG') ,
+('Sport-Recife', 'Ceará-SC') ,
+('São Paulo', 'Vasco da Gama') ,
+('Mirassol', 'Santos') ,
+('Flamengo', 'Cruzeiro') ,
+('Fluminense', 'Vitória') ,
+('Fortaleza', 'Corinthians') ,
+('Juventude', 'Botafogo') ,
+('Grêmio', 'Bahia') ,
+('Internacional', 'Atlético-MG') ,
+('Palmeiras', 'Ceará-SC') ,
+('RB Bragantino', 'Vasco da Gama') ,
+('Sport-Recife', 'São Paulo') ,
+('Mirassol', 'Cruzeiro') ,
+('Santos', 'Vitória') ,
+('Flamengo', 'Corinthians') ,
+('Fluminense', 'Botafogo') ,
+('Fortaleza', 'Bahia') ,
+('Juventude', 'Atlético-MG') ,
+('Grêmio', 'Ceará-SC') ,
+('Internacional', 'Vasco da Gama') ,
+('Palmeiras', 'São Paulo') ,
+('RB Bragantino', 'Sport-Recife') ,
+('Mirassol', 'Vitória') ,
+('Cruzeiro', 'Corinthians') ,
+('Santos', 'Botafogo') ,
+('Flamengo', 'Bahia') ,
+('Fluminense', 'Atlético-MG') ,
+('Fortaleza', 'Ceará-SC') ,
+('Juventude', 'Vasco da Gama') ,
+('Grêmio', 'São Paulo') ,
+('Internacional', 'Sport-Recife') ,
+('Palmeiras', 'RB Bragantino') ,
+('Mirassol', 'Corinthians') ,
+('Vitória', 'Botafogo') ,
+('Cruzeiro', 'Bahia') ,
+('Santos', 'Atlético-MG') ,
+('Flamengo', 'Ceará-SC') ,
+('Fluminense', 'Vasco da Gama') ,
+('Fortaleza', 'São Paulo') ,
+('Juventude', 'Sport-Recife') ,
+('Grêmio', 'RB Bragantino') ,
+('Internacional', 'Palmeiras') ,
+('Mirassol', 'Botafogo') ,
+('Corinthians', 'Bahia') ,
+('Vitória', 'Atlético-MG') ,
+('Cruzeiro', 'Ceará-SC') ,
+('Santos', 'Vasco da Gama') ,
+('Flamengo', 'São Paulo') ,
+('Fluminense', 'Sport-Recife') ,
+('Fortaleza', 'RB Bragantino') ,
+('Juventude', 'Palmeiras') ,
+('Grêmio', 'Internacional') ,
+('Mirassol', 'Bahia') ,
+('Botafogo', 'Atlético-MG') ,
+('Corinthians', 'Ceará-SC') ,
+('Vitória', 'Vasco da Gama') ,
+('Cruzeiro', 'São Paulo') ,
+('Santos', 'Sport-Recife') ,
+('Flamengo', 'RB Bragantino') ,
+('Fluminense', 'Palmeiras') ,
+('Fortaleza', 'Internacional') ,
+('Juventude', 'Grêmio') ,
+('Mirassol', 'Atlético-MG') ,
+('Bahia', 'Ceará-SC') ,
+('Botafogo', 'Vasco da Gama') ,
+('Corinthians', 'São Paulo') ,
+('Vitória', 'Sport-Recife') ,
+('Cruzeiro', 'RB Bragantino') ,
+('Santos', 'Palmeiras') ,
+('Flamengo', 'Internacional') ,
+('Fluminense', 'Grêmio') ,
+('Fortaleza', 'Juventude') ,
+('Mirassol', 'Ceará-SC') ,
+('Atlético-MG', 'Vasco da Gama') ,
+('Bahia', 'São Paulo') ,
+('Botafogo', 'Sport-Recife') ,
+('Corinthians', 'RB Bragantino') ,
+('Vitória', 'Palmeiras') ,
+('Cruzeiro', 'Internacional') ,
+('Santos', 'Grêmio') ,
+('Flamengo', 'Juventude') ,
+('Fluminense', 'Fortaleza') ,
+('Vasco da Gama', 'Mirassol') ,
+('São Paulo', 'Ceará-SC') ,
+('Sport-Recife', 'Atlético-MG') ,
+('RB Bragantino', 'Bahia') ,
+('Palmeiras', 'Botafogo') ,
+('Internacional', 'Corinthians') ,
+('Grêmio', 'Vitória') ,
+('Juventude', 'Cruzeiro') ,
+('Fortaleza', 'Santos') ,
+('Fluminense', 'Flamengo') ,
+('São Paulo', 'Mirassol') ,
+('Sport-Recife', 'Vasco da Gama') ,
+('RB Bragantino', 'Ceará-SC') ,
+('Palmeiras', 'Atlético-MG') ,
+('Internacional', 'Bahia') ,
+('Grêmio', 'Botafogo') ,
+('Juventude', 'Corinthians') ,
+('Fortaleza', 'Vitória') ,
+('Fluminense', 'Cruzeiro') ,
+('Flamengo', 'Santos') ,
+('Sport-Recife', 'Mirassol') ,
+('RB Bragantino', 'São Paulo') ,
+('Palmeiras', 'Vasco da Gama') ,
+('Internacional', 'Ceará-SC') ,
+('Grêmio', 'Atlético-MG') ,
+('Juventude', 'Bahia') ,
+('Fortaleza', 'Botafogo') ,
+('Fluminense', 'Corinthians') ,
+('Flamengo', 'Vitória') ,
+('Santos', 'Cruzeiro') ,
+('RB Bragantino', 'Mirassol') ,
+('Palmeiras', 'Sport-Recife') ,
+('Internacional', 'São Paulo') ,
+('Grêmio', 'Vasco da Gama') ,
+('Juventude', 'Ceará-SC') ,
+('Fortaleza', 'Atlético-MG') ,
+('Fluminense', 'Bahia') ,
+('Flamengo', 'Botafogo') ,
+('Santos', 'Corinthians') ,
+('Cruzeiro', 'Vitória') ,
+('Palmeiras', 'Mirassol') ,
+('Internacional', 'RB Bragantino') ,
+('Grêmio', 'Sport-Recife') ,
+('Juventude', 'São Paulo') ,
+('Fortaleza', 'Vasco da Gama') ,
+('Fluminense', 'Ceará-SC') ,
+('Flamengo', 'Atlético-MG') ,
+('Santos', 'Bahia') ,
+('Cruzeiro', 'Botafogo') ,
+('Vitória', 'Corinthians') ,
+('Internacional', 'Mirassol') ,
+('Grêmio', 'Palmeiras') ,
+('Juventude', 'RB Bragantino') ,
+('Fortaleza', 'Sport-Recife') ,
+('Fluminense', 'São Paulo') ,
+('Flamengo', 'Vasco da Gama') ,
+('Santos', 'Ceará-SC') ,
+('Cruzeiro', 'Atlético-MG') ,
+('Vitória', 'Bahia') ,
+('Corinthians', 'Botafogo') ,
+('Grêmio', 'Mirassol') ,
+('Juventude', 'Internacional') ,
+('Fortaleza', 'Palmeiras') ,
+('Fluminense', 'RB Bragantino') ,
+('Flamengo', 'Sport-Recife') ,
+('Santos', 'São Paulo') ,
+('Cruzeiro', 'Vasco da Gama') ,
+('Vitória', 'Ceará-SC') ,
+('Corinthians', 'Atlético-MG') ,
+('Botafogo', 'Bahia') ,
+('Juventude', 'Mirassol') ,
+('Fortaleza', 'Grêmio') ,
+('Fluminense', 'Internacional') ,
+('Flamengo', 'Palmeiras') ,
+('Santos', 'RB Bragantino') ,
+('Cruzeiro', 'Sport-Recife') ,
+('Vitória', 'São Paulo') ,
+('Corinthians', 'Vasco da Gama') ,
+('Botafogo', 'Ceará-SC') ,
+('Bahia', 'Atlético-MG') ,
+('Fortaleza', 'Mirassol') ,
+('Fluminense', 'Juventude') ,
+('Flamengo', 'Grêmio') ,
+('Santos', 'Internacional') ,
+('Cruzeiro', 'Palmeiras') ,
+('Vitória', 'RB Bragantino') ,
+('Corinthians', 'Sport-Recife') ,
+('Botafogo', 'São Paulo') ,
+('Bahia', 'Vasco da Gama') ,
+('Atlético-MG', 'Ceará-SC') ,
+('Fluminense', 'Mirassol') ,
+('Flamengo', 'Fortaleza') ,
+('Santos', 'Juventude') ,
+('Cruzeiro', 'Grêmio') ,
+('Vitória', 'Internacional') ,
+('Corinthians', 'Palmeiras') ,
+('Botafogo', 'RB Bragantino') ,
+('Bahia', 'Sport-Recife') ,
+('Atlético-MG', 'São Paulo') ,
+('Ceará-SC', 'Vasco da Gama') ,
+('Flamengo', 'Mirassol') ,
+('Santos', 'Fluminense') ,
+('Cruzeiro', 'Fortaleza') ,
+('Vitória', 'Juventude') ,
+('Corinthians', 'Grêmio') ,
+('Botafogo', 'Internacional') ,
+('Bahia', 'Palmeiras') ,
+('Atlético-MG', 'RB Bragantino') ,
+('Ceará-SC', 'Sport-Recife') ,
+('Vasco da Gama', 'São Paulo') ,
+('Santos', 'Mirassol') ,
+('Cruzeiro', 'Flamengo') ,
+('Vitória', 'Fluminense') ,
+('Corinthians', 'Fortaleza') ,
+('Botafogo', 'Juventude') ,
+('Bahia', 'Grêmio') ,
+('Atlético-MG', 'Internacional') ,
+('Ceará-SC', 'Palmeiras') ,
+('Vasco da Gama', 'RB Bragantino') ,
+('São Paulo', 'Sport-Recife') ,
+('Cruzeiro', 'Mirassol') ,
+('Vitória', 'Santos') ,
+('Corinthians', 'Flamengo') ,
+('Botafogo', 'Fluminense') ,
+('Bahia', 'Fortaleza') ,
+('Atlético-MG', 'Juventude') ,
+('Ceará-SC', 'Grêmio') ,
+('Vasco da Gama', 'Internacional') ,
+('São Paulo', 'Palmeiras') ,
+('Sport-Recife', 'RB Bragantino') ,
+('Vitória', 'Mirassol') ,
+('Corinthians', 'Cruzeiro') ,
+('Botafogo', 'Santos') ,
+('Bahia', 'Flamengo') ,
+('Atlético-MG', 'Fluminense') ,
+('Ceará-SC', 'Fortaleza') ,
+('Vasco da Gama', 'Juventude') ,
+('São Paulo', 'Grêmio') ,
+('Sport-Recife', 'Internacional') ,
+('RB Bragantino', 'Palmeiras') ,
+('Corinthians', 'Mirassol') ,
+('Botafogo', 'Vitória') ,
+('Bahia', 'Cruzeiro') ,
+('Atlético-MG', 'Santos') ,
+('Ceará-SC', 'Flamengo') ,
+('Vasco da Gama', 'Fluminense') ,
+('São Paulo', 'Fortaleza') ,
+('Sport-Recife', 'Juventude') ,
+('RB Bragantino', 'Grêmio') ,
+('Palmeiras', 'Internacional') ,
+('Botafogo', 'Mirassol') ,
+('Bahia', 'Corinthians') ,
+('Atlético-MG', 'Vitória') ,
+('Ceará-SC', 'Cruzeiro') ,
+('Vasco da Gama', 'Santos') ,
+('São Paulo', 'Flamengo') ,
+('Sport-Recife', 'Fluminense') ,
+('RB Bragantino', 'Fortaleza') ,
+('Palmeiras', 'Juventude') ,
+('Internacional', 'Grêmio') ,
+('Bahia', 'Mirassol') ,
+('Atlético-MG', 'Botafogo') ,
+('Ceará-SC', 'Corinthians') ,
+('Vasco da Gama', 'Vitória') ,
+('São Paulo', 'Cruzeiro') ,
+('Sport-Recife', 'Santos') ,
+('RB Bragantino', 'Flamengo') ,
+('Palmeiras', 'Fluminense') ,
+('Internacional', 'Fortaleza') ,
+('Grêmio', 'Juventude') ,
+('Atlético-MG', 'Mirassol') ,
+('Ceará-SC', 'Bahia') ,
+('Vasco da Gama', 'Botafogo') ,
+('São Paulo', 'Corinthians') ,
+('Sport-Recife', 'Vitória') ,
+('RB Bragantino', 'Cruzeiro') ,
+('Palmeiras', 'Santos') ,
+('Internacional', 'Flamengo') ,
+('Grêmio', 'Fluminense') ,
+('Juventude', 'Fortaleza') ,
+('Ceará-SC', 'Mirassol') ,
+('Vasco da Gama', 'Atlético-MG') ,
+('São Paulo', 'Bahia') ,
+('Sport-Recife', 'Botafogo') ,
+('RB Bragantino', 'Corinthians') ,
+('Palmeiras', 'Vitória') ,
+('Internacional', 'Cruzeiro') ,
+('Grêmio', 'Santos') ,
+('Juventude', 'Flamengo') ,
+('Fortaleza', 'Fluminense'),
+        ]
+        
+        
+        
+        
+        
     rm.shuffle(confrontoss)
     todososjogos = []
     for confrontos in confrontoss:
      todososjogos.append(confrontos)
     return todososjogos
     
-confrontos = criar_jogos()     
-rodadas = total_rodadas
-rodada_atual = 0
+
 
 
 def tela_inicial():
@@ -767,7 +1181,7 @@ def Informar():
             label.pack(pady=(5, 5))
 
         if posicao >= 17:
-            label = tk.Label(tela_informativa, text=f"O time que caiu no G{(21 - posicao)} foi o {time} com {stats[2]} pontos", bg="#e74c3c", fg="white", font=('Arial', 12))
+            label = tk.Label(tela_informativa, text=f"O time que caiu no Z{(21 - posicao)} foi o {time} com {stats[2]} pontos", bg="#e74c3c", fg="white", font=('Arial', 12))
             label.pack(pady=(5, 5))
 
         if stats[1] - stats[0] > maiorsaldo:
@@ -876,7 +1290,40 @@ def config_tela():
     
     btn_config_teams = tk.Button(tela_configuracao, text="Mudar status dos times", bg="#2980b9", fg="white", command=statsteams, font=("Arial", 14))
     btn_config_teams.pack(pady=20)
-
-    tela_configuracao.mainloop()
     
-tela_inicial()
+    btn_colocar_time_5 = tk.Button(tela_configuracao, text="Status 5 em times", bg ="#2980b9", fg="white", command=stats5teams, font = ("Arial",14))
+    btn_colocar_time_5.pack(pady=20)
+    tela_configuracao.mainloop()
+
+def stats5teams():
+    global times
+    for team, stats in times.items():
+        stats[3] = 5  
+        stats[9] = 5 
+        print(f"{team} updated - Attack: {stats[3]}, Defense: {stats[9]}")
+
+import tkinter as tk
+from tkinter import messagebox
+
+def start_simulation():
+    tela_inicial()
+
+# Create selection window
+root = tk.Tk()
+root.title("Select Championship Edition")
+root.geometry("300x200")
+
+tk.Label(root, text="Choose the Championship Edition:", font=("Arial", 12, "bold")).pack(pady=10)
+
+btn_2024 = tk.Button(root, text="2024", font=("Arial", 12, "bold"), bg="#27AE60", fg="white", width=10, command=lambda: select_edition(2024))
+btn_2024.pack(pady=5)
+
+btn_2025 = tk.Button(root, text="2025", font=("Arial", 12, "bold"), bg="#E74C3C", fg="white", width=10, command=lambda: select_edition(2025))
+btn_2025.pack(pady=5)
+
+root.mainloop()
+
+
+
+
+
