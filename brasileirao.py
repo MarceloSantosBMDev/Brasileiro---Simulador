@@ -1,5 +1,6 @@
 import tkinter as tk
 import random as rm
+import random
 from tkinter import messagebox
 import os
 from tkinter import font as tkFont
@@ -34,26 +35,26 @@ def select_edition(edition):
 }
     elif edicao == 2025:
         times = {
-    "Ceará-SC":  [0, 0, 0, 2, 0, 0, 0, 0, 0, 2, 0, 0],
+    "Ceará-SC":  [0, 0, 0, 2, 0, 0, 0, 0, 0, 3, 0, 0],
     "Sport-Recife": [0, 0, 0, 4, 0, 0, 0, 0, 0, 3, 0, 0],
-    "Atlético-MG":  [0, 0, 0, 5, 0, 0, 0, 0, 0, 3, 0, 0],
+    "Atlético-MG":  [0, 0, 0, 5, 0, 0, 0, 0, 0, 4, 0, 0],
     "Bahia":        [0, 0, 0, 5, 0, 0, 0, 0, 0, 4, 0, 0],
-    "Botafogo":     [0, 0, 0, 7, 0, 0, 0, 0, 0, 6, 0, 0],
-    "Corinthians": [0, 0, 0, 4, 0,0,0,0,0,3, 0, 0],
-    "Vitória": [0, 0, 0, 3, 0,0,0,0,0,2, 0, 0],
-    "Cruzeiro": [0, 0, 0, 4, 0,0,0,0,0,5, 0, 0],
-    "Mirassol": [0, 0, 0, 2, 0,0,0,0,0,4, 0, 0],
-    "Flamengo": [0, 0, 0, 6, 0,0,0,0,0,5, 0, 0],
-    "Fluminense": [0, 0, 0, 3, 0,0,0,0,0,5, 0, 0],
+    "Botafogo":     [0, 0, 0, 6, 0, 0, 0, 0, 0, 5, 0, 0],
+    "Corinthians": [0, 0, 0, 6, 0,0,0,0,0,4, 0, 0],
+    "Vitória": [0, 0, 0, 4, 0,0,0,0,0,2, 0, 0],
+    "Cruzeiro": [0, 0, 0, 5, 0,0,0,0,0,3, 0, 0],
+    "Mirassol": [0, 0, 0, 5, 0,0,0,0,0,4, 0, 0],
+    "Flamengo": [0, 0, 0, 7, 0,0,0,0,0,5, 0, 0],
+    "Fluminense": [0, 0, 0, 4, 0,0,0,0,0,5, 0, 0],
     "Fortaleza": [0, 0, 0, 5, 0,0,0,0,0,4, 0, 0],
-    "Juventude": [0, 0, 0, 4, 0,0,0,0,0,4, 0, 0],
-    "Grêmio": [0, 0, 0, 4, 0,0,0,0,0,4, 0, 0],
-    "Internacional": [0, 0, 0, 5, 0,0,0,0,0,6, 0, 0],
-    "Palmeiras": [0, 0, 0, 6, 0,0,0,0,0,7, 0, 0],
-    "RB Bragantino": [0, 0, 0, 4, 0,0,0,0,0,4, 0, 0],
-    "Santos": [0, 0, 0, 5, 0,0,0,0,0,2, 0, 0],
-    "São Paulo": [0, 0, 0, 5, 0,0,0,0,0,3, 0, 0],
-    "Vasco da Gama": [0, 0, 0, 4, 0,0,0,0,0,2, 0, 0]
+    "Juventude": [0, 0, 0, 3, 0,0,0,0,0,4, 0, 0],
+    "Grêmio": [0, 0, 0, 5, 0,0,0,0,0,4, 0, 0],
+    "Internacional": [0, 0, 0, 5, 0,0,0,0,0,5, 0, 0],
+    "Palmeiras": [0, 0, 0, 5, 0,0,0,0,0,7, 0, 0],
+    "RB Bragantino": [0, 0, 0, 3, 0,0,0,0,0,3, 0, 0],
+    "Santos": [0, 0, 0, 5, 0,0,0,0,0,3, 0, 0],
+    "São Paulo": [0, 0, 0, 5, 0,0,0,0,0,5, 0, 0],
+    "Vasco da Gama": [0, 0, 0, 4, 0,0,0,0,0,3, 0, 0]
 }    
     jogos_por_time = {time: [] for time in times.keys()} 
     confrontos = criar_jogos()     
@@ -1220,6 +1221,18 @@ def Informar():
 
 
 
+
+
+
+
+
+
+
+
+
+
+
+
 def statsteams():
     tela_times = tk.Toplevel()
     tela_times.title("Status dos Times")
@@ -1293,7 +1306,21 @@ def config_tela():
     
     btn_colocar_time_5 = tk.Button(tela_configuracao, text="Status 5 em times", bg ="#2980b9", fg="white", command=stats5teams, font = ("Arial",14))
     btn_colocar_time_5.pack(pady=20)
+    
+    btn_colocar_time_6 = tk.Button(tela_configuracao, text="Randomizar Status", bg ="#2980b9", fg="white", command=randomizestats, font = ("Arial",14))
+    btn_colocar_time_6.pack(pady=20)
+    
+    btn_colocar_time_7 = tk.Button(tela_configuracao, text="Linguagem", bg ="#2980b9", fg="white", command=randomizestats, font = ("Arial",14))
+    btn_colocar_time_7.pack(pady=20)
     tela_configuracao.mainloop()
+
+def randomizestats():
+    global times
+    for team, stats in times.items():
+        stats[3] = random.randint(1, 10)
+        stats[9] = random.randint(1, 10)
+        print(f"{team} updated - Attack: {stats[3]}, Defense: {stats[9]}")
+
 
 def stats5teams():
     global times
@@ -1307,6 +1334,17 @@ from tkinter import messagebox
 
 def start_simulation():
     tela_inicial()
+
+
+
+
+
+
+
+
+
+
+
 
 # Create selection window
 root = tk.Tk()
