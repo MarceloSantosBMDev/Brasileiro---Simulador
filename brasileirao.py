@@ -4,6 +4,8 @@ import random
 from tkinter import messagebox
 import os
 from tkinter import font as tkFont
+idioma_selecionado = 'Português'
+
 def select_edition(edition):
     global edicao, times, confrontos, rodadas, rodada_atual, jogos_por_time
     edicao = edition
@@ -43,14 +45,14 @@ def select_edition(edition):
     "Corinthians": [0, 0, 0, 6, 0,0,0,0,0,4, 0, 0],
     "Vitória": [0, 0, 0, 4, 0,0,0,0,0,2, 0, 0],
     "Cruzeiro": [0, 0, 0, 5, 0,0,0,0,0,3, 0, 0],
-    "Mirassol": [0, 0, 0, 5, 0,0,0,0,0,4, 0, 0],
-    "Flamengo": [0, 0, 0, 7, 0,0,0,0,0,5, 0, 0],
+    "Mirassol": [0, 0, 0, 4, 0,0,0,0,0,3, 0, 0],
+    "Flamengo": [0, 0, 0, 6, 0,0,0,0,0,5, 0, 0],
     "Fluminense": [0, 0, 0, 4, 0,0,0,0,0,5, 0, 0],
     "Fortaleza": [0, 0, 0, 5, 0,0,0,0,0,4, 0, 0],
     "Juventude": [0, 0, 0, 3, 0,0,0,0,0,4, 0, 0],
     "Grêmio": [0, 0, 0, 5, 0,0,0,0,0,4, 0, 0],
     "Internacional": [0, 0, 0, 5, 0,0,0,0,0,5, 0, 0],
-    "Palmeiras": [0, 0, 0, 5, 0,0,0,0,0,7, 0, 0],
+    "Palmeiras": [0, 0, 0, 5, 0,0,0,0,0,6, 0, 0],
     "RB Bragantino": [0, 0, 0, 3, 0,0,0,0,0,3, 0, 0],
     "Santos": [0, 0, 0, 5, 0,0,0,0,0,3, 0, 0],
     "São Paulo": [0, 0, 0, 5, 0,0,0,0,0,5, 0, 0],
@@ -63,7 +65,6 @@ def select_edition(edition):
     root.destroy()
     start_simulation() 
     
-     
 total_rodadas = 38
 def carregar_jogos(nome_arquivo="placares_jogos.txt"):
   
@@ -114,6 +115,7 @@ def criar_tela_jogos():
     tela_times.mainloop()
 
 def mostrar_jogos(time):
+    global label_aviso, times, jogos, max_jogos
     tela_jogos = tk.Tk()
     tela_jogos.title(f"Jogos de {time}")
     tela_jogos.geometry("500x600")
@@ -136,14 +138,33 @@ def mostrar_jogos(time):
 
     canvas.create_window((0, 0), window=scrollable_frame, anchor="nw")
     canvas.configure(yscrollcommand=scrollbar.set)
-
-    label_aviso = tk.Label(
+    if idioma_selecionado == "Português":
+         label_aviso = tk.Label(
+            tela_jogos,
+           text=f"Total de jogos: {len(jogos)} (Máximo: {max_jogos})\n Posição do time: {times[time][4]}\n Vitorias em casa: {times[time][10]}\n Derrotas em casa: {times[time][11]}",
+           font=("Helvetica", 10, "bold"),
+        fg="#ecf0f1",
+        bg="#2c3e50"
+    )
+    elif idioma_selecionado == "Inglês":
+             label_aviso = tk.Label(
+            tela_jogos,
+           text=f"Total of games: {len(jogos)} (Max: {max_jogos})\n Team position: {times[time][4]}\n Wins in house: {times[time][10]}\n Loses in house: {times[time][11]}",
+           font=("Helvetica", 10, "bold"),
+        fg="#ecf0f1",
+        bg="#2c3e50"
+    )
+    
+    elif idioma_selecionado == "Alemão":
+      label_aviso = tk.Label(
         tela_jogos,
-        text=f"Total de jogos: {len(jogos)} (Máximo: {max_jogos})\n Posição do time: {times[time][4]}\n Vitorias em casa: {times[time][10]}\n Derrotas em casa: {times[time][11]}",
+        text=f"Gesamtzahl der Spiele: {len(jogos)} (Maximal: {max_jogos})\n Teamposition: {times[time][4]}\n Heimsiege: {times[time][10]}\n Heimniederlagen: {times[time][11]}",
         font=("Helvetica", 10, "bold"),
         fg="#ecf0f1",
         bg="#2c3e50"
     )
+    
+    
     label_aviso.pack(pady=(20, 10))
 
     if not jogos:
@@ -179,9 +200,6 @@ def mostrar_jogos(time):
     btn_fechar.pack(pady=20)
 
     tela_jogos.mainloop()
-
-
-
 
 def criar_jogos():
     global edicao
@@ -962,11 +980,8 @@ def criar_jogos():
      todososjogos.append(confrontos)
     return todososjogos
     
-
-
-
 def tela_inicial():
-    global frame_times, labels_times, rodadas_label, btn_simular, rodadas
+    global frame_times, labels_times, rodadas_label, btn_simular, rodadas, abrir_tela_jogos, label_introducao, rodadas_label, btn_simular
 
     tela_inicial = tk.Tk()
     tela_inicial.configure(bg="#1c1c1c")  
@@ -980,7 +995,7 @@ def tela_inicial():
     btn_fechar = tk.Button(tela_inicial, text=" X ", command=tela_inicial.destroy, bg="#ff5c5c", fg="white", font=font_btn, relief="flat")
     btn_fechar.place(relx=1.0, y=10, anchor='ne')
 
-    btn_config = tk.Button(tela_inicial, text=" ⚙️ ", command=config_tela, bg="#ffba08", fg="black", font=font_btn, relief="flat")
+    btn_config = tk.Button(tela_inicial, text="⚙️", command=config_tela, bg="#ffba08", fg="black", font=font_btn, relief="flat")
     btn_config.place(relx=0.97, y=10, anchor='ne')
 
     label_introducao = tk.Label(tela_inicial, text="Bem-vindo ao Simulador de Brasileirão", bg="#1c1c1c", fg="white", font=font_titulo)
@@ -1002,8 +1017,6 @@ def tela_inicial():
     
     tela_inicial.mainloop()
 
-
-
 def iniciar_simulacao(nome_arquivo="placares_jogos.txt"):
     if os.path.exists(nome_arquivo):
         os.remove(nome_arquivo)
@@ -1024,8 +1037,12 @@ def simular_rodada():
         organizar_tabela()
         rodada_atual += 1
         rodadas -= 1
-        rodadas_label.config(text=f"Rodadas restantes: {rodadas}")
-        
+        if idioma_selecionado == 'Português':
+         rodadas_label.config(text=f"Rodadas restantes: {rodadas}")
+        elif idioma_selecionado == 'Inglês':
+         rodadas_label.config(text=f"Rounds remaining: {rodadas}")
+        elif idioma_selecionado == 'Alemão':
+         rodadas_label.config(text=f"verbleibende Runden: {rodadas}")
         if rodadas == 0:
             parabenizar_campeao()
     else:
@@ -1100,17 +1117,21 @@ def simular_jogo(time1, time2, nome_arquivo="placares_jogos.txt"):
     jogos_por_time[time1].append(resultado_time2)
 
 def organizar_tabela():
-    global frame_times
-
+    global frame_times, label_time
+ 
+   
     for widget in frame_times.winfo_children():
         widget.destroy()
 
+    
     sorted_times = sorted(times.items(), key=lambda x: (x[1][2], x[1][1] - x[1][0]), reverse=True)
 
+   
     for posicao, (time, stats) in enumerate(sorted_times, start=1):
         stats[4] = posicao  
-        saldo_gols = stats[1] - stats[0]
+        saldo_gols = stats[1] - stats[0] 
 
+       
         if posicao <= 4:
             bg_color = "#2980b9"  
         elif posicao <= 6:
@@ -1118,28 +1139,44 @@ def organizar_tabela():
         elif posicao <= 12:
             bg_color = "#27ae60"  
         elif posicao < 17:
-            bg_color = "#1c1c1c"
+            bg_color = "#1c1c1c"  
         else:
             bg_color = "#c0392b"  
+
+        
+        texto_base = f"{posicao}º {time} | Jogos: {stats[8]} | Pontos: {stats[2]} | Vitórias: {stats[5]} | Empates: {stats[6]} | Derrotas: {stats[7]} | Saldo: {saldo_gols} | Gols Feitos: {stats[1]} | Gols Tomados: {stats[0]}"
+
+       
+        if idioma_selecionado == 'Inglês':
+            texto_base = f"{posicao}º {time} | Games: {stats[8]} | Points: {stats[2]} | Wins: {stats[5]} | Draws: {stats[6]} | Loses: {stats[7]} | Goal difference: {saldo_gols} | Goals For: {stats[1]} | Goals Against: {stats[0]}"
+        elif idioma_selecionado == 'Alemão':
+            texto_base = f"{posicao}º {time} | Spiele: {stats[8]} | Punkte: {stats[2]} | Siege: {stats[5]} | Unentschieden: {stats[6]} | Niederlagen: {stats[7]} | Tordifferenz: {saldo_gols} | Tore: {stats[1]} | Gegentore: {stats[0]}"
+
+       
         label_time = tk.Label(
             frame_times,
-            text=f"{posicao}º {time} | Jogos: {stats[8]} | Pontos: {stats[2]} | Vitórias: {stats[5]} | Empates: {stats[6]} | Derrotas: {stats[7]} | Saldo: {saldo_gols} | Gols Feitos: {stats[1]} | Gols Tomados: {stats[0]}",
+            text=texto_base,
             bg=bg_color,
-            fg="#ecf0f1",  
+            fg="#ecf0f1", 
             font=("Helvetica", 10, "bold"),  
             padx=5,
-            pady=2,  
-            relief="flat"  
+            pady=2,
+            relief="flat"
         )
-        label_time.pack(anchor="w", fill="x", padx=5, pady=1) 
+        label_time.pack(anchor="w", fill="x", padx=5, pady=1)
 
-        label_time.config(borderwidth=1, highlightbackground="#34495e", highlightcolor="#34495e", highlightthickness=1)
-
-
+        label_time.config(
+            borderwidth=1,
+            highlightbackground="#34495e",
+            highlightcolor="#34495e",
+            highlightthickness=1
+        )
+            
 def parabenizar_campeao():
     global btn_simular
     sorted_times = sorted(times.items(), key=lambda x: (x[1][2], x[1][1] - x[1][0]), reverse=True)
-    for posicao, (time, stats) in enumerate(sorted_times, start=1):
+    if idioma_selecionado == 'Português':
+      for posicao, (time, stats) in enumerate(sorted_times, start=1):
         stats[4] = posicao
         if posicao == 1:
             messagebox.showinfo(
@@ -1147,15 +1184,45 @@ def parabenizar_campeao():
                 message=f"🎉 Parabéns! O campeão foi **{time}**! 🎉",
                 icon='info'
             )
-    btn_simular.config(
+        btn_simular.config(
         text="Informações do campeonato",
         command=lambda: Informar(),
         bg='red',
         fg='white',  
         font=('Arial', 12, 'bold')
     )
-
-
+    elif idioma_selecionado == 'Inglês':
+      for posicao, (time, stats) in enumerate(sorted_times, start=1):
+        stats[4] = posicao
+        if posicao == 1:
+            messagebox.showinfo(
+                title="Champion decided",
+                message=f"🎉 Congratiulation! The Champion is **{time}**! 🎉",
+                icon='info'
+            )
+        btn_simular.config(
+        text="Champioship infomations",
+        command=lambda: Informar(),
+        bg='red',
+        fg='white',  
+        font=('Arial', 12, 'bold')
+    )
+    elif idioma_selecionado == 'Alemão':
+     for posicao, (time, stats) in enumerate(sorted_times, start=1):
+        stats[4] = posicao
+        if posicao == 1:
+            messagebox.showinfo(
+                title="Meister entschieden",
+                message=f"🎉 Glückwunsch! Der Meister ist **{time}**! 🎉",
+                icon='info'
+            )
+        btn_simular.config(
+        text="Meisterschaftsinformationen",
+        command=lambda: Informar(),
+        bg='red',
+        fg='white',  
+        font=('Arial', 12, 'bold')
+    )
 
 def Informar():
     tela_informativa = tk.Tk()
@@ -1175,16 +1242,7 @@ def Informar():
     saldoo = ""
     melhor_mandante = ""
     maior_mandante = -1
-
     for posicao, (time, stats) in enumerate(sorted_times, start=1):
-        if posicao <= 4:
-            label = tk.Label(tela_informativa, text=f"{posicao}° lugar: {time} com {stats[2]} pontos", bg="#27ae60", fg="white", font=('Arial', 12))
-            label.pack(pady=(5, 5))
-
-        if posicao >= 17:
-            label = tk.Label(tela_informativa, text=f"O time que caiu no Z{(21 - posicao)} foi o {time} com {stats[2]} pontos", bg="#e74c3c", fg="white", font=('Arial', 12))
-            label.pack(pady=(5, 5))
-
         if stats[1] - stats[0] > maiorsaldo:
             maiorsaldo = stats[1] - stats[0]
             saldoo = time
@@ -1197,43 +1255,98 @@ def Informar():
         if stats[10] > maior_mandante:
             maior_mandante = stats[10]
             melhor_mandante = time
-
-    stats_title = tk.Label(tela_informativa, text="Estatísticas Finais", bg="#34495e", fg="#ecf0f1", font=('Arial', 16, 'underline'))
-    stats_title.pack(pady=(20, 10))
-
-    labelArtilheiro = tk.Label(tela_informativa, text=f"O artilheiro do campeonato foi {Artilheiro} com {maior} gols", bg="#f39c12", fg="white", font=('Arial', 12))
-    labelArtilheiro.pack(pady=(5, 5))
+    if idioma_selecionado == 'Português':
+      for posicao, (time, stats) in enumerate(sorted_times, start=1):
+        if posicao <= 4:
+            label = tk.Label(tela_informativa, text=f"{posicao}° lugar: {time} com {stats[2]} pontos", bg="#27ae60", fg="white", font=('Arial', 12))
+            label.pack(pady=(5, 5))
+        if posicao >= 17:
+            label = tk.Label(tela_informativa, text=f"O time que caiu no Z{(21 - posicao)} foi o {time} com {stats[2]} pontos", bg="#e74c3c", fg="white", font=('Arial', 12))
+            label.pack(pady=(5, 5))
+            
+        
+      stats_title = tk.Label(tela_informativa, text="Estatísticas Finais", bg="#34495e", fg="#ecf0f1", font=('Arial', 16, 'underline'))
+      stats_title.pack(pady=(20, 10))
+      
+      labelArtilheiro = tk.Label(tela_informativa, text=f"O artilheiro do campeonato foi {Artilheiro} com {maior} gols", bg="#f39c12", fg="white", font=('Arial', 12))
+      labelArtilheiro.pack(pady=(5, 5))
     
-    labelTomados = tk.Label(tela_informativa, text=f"O time que tomou mais gols foi o {Golstomados} com {maiortomados} gols tomados", bg="#e67e22", fg="white", font=('Arial', 12))
-    labelTomados.pack(pady=(5, 5))
+      labelTomados = tk.Label(tela_informativa, text=f"O time que tomou mais gols foi o {Golstomados} com {maiortomados} gols tomados", bg="#e67e22", fg="white", font=('Arial', 12))
+      labelTomados.pack(pady=(5, 5))
     
-    labelSaldo = tk.Label(tela_informativa, text=f"O time com maior saldo de gols foi {saldoo} com {maiorsaldo} de saldo de gols", bg="#8e44ad", fg="white", font=('Arial', 12))
-    labelSaldo.pack(pady=(5, 5))
+      labelSaldo = tk.Label(tela_informativa, text=f"O time com maior saldo de gols foi {saldoo} com {maiorsaldo} de saldo de gols", bg="#8e44ad", fg="white", font=('Arial', 12))
+      labelSaldo.pack(pady=(5, 5))
     
-    labelMandante = tk.Label(tela_informativa, text=f"O time que ficou como melhor mandante foi {melhor_mandante} com {maior_mandante} vitórias em casa", bg="#2980b9", fg="white", font=('Arial', 12))
-    labelMandante.pack(pady=(5, 5))
+      labelMandante = tk.Label(tela_informativa, text=f"O time que ficou como melhor mandante foi {melhor_mandante} com {maior_mandante} vitórias em casa", bg="#2980b9", fg="white", font=('Arial', 12))
+      labelMandante.pack(pady=(5, 5))
 
-    fechar_btn = tk.Button(tela_informativa, text="Fechar", command=tela_informativa.destroy, bg="#c0392b", fg="white", font=('Arial', 12, 'bold'))
-    fechar_btn.pack(pady=(20, 10))
+      fechar_btn = tk.Button(tela_informativa, text="Fechar", command=tela_informativa.destroy, bg="#c0392b", fg="white", font=('Arial', 12, 'bold'))
+      fechar_btn.pack(pady=(20, 10))
 
-    tela_informativa.mainloop()
+      tela_informativa.mainloop()
+    elif idioma_selecionado == 'Inglês':
+        for posicao, (time, stats) in enumerate(sorted_times, start=1):
+         if posicao <= 4:
+            label = tk.Label(tela_informativa, text=f"{posicao}° place: {time} with {stats[2]} points", bg="#27ae60", fg="white", font=('Arial', 12))
+            label.pack(pady=(5, 5))
+         if posicao >= 17:
+           label = tk.Label(tela_informativa, text=f"The team that was relegated to Z{(21 - posicao)} was {time} with {stats[2]} points", bg="#e74c3c", fg="white", font=('Arial', 12))
+           label.pack(pady=(5, 5))
+        
 
+        stats_title = tk.Label(tela_informativa, text="Final Statistics", bg="#34495e", fg="#ecf0f1", font=('Arial', 16, 'underline'))
+        stats_title.pack(pady=(20, 10))
 
+        labelArtilheiro = tk.Label(tela_informativa, text=f"The top scorer of the championship was {Artilheiro} with {maior} goals", bg="#f39c12", fg="white", font=('Arial', 12))
+        labelArtilheiro.pack(pady=(5, 5))
 
+        labelTomados = tk.Label(tela_informativa, text=f"The team that conceded the most goals was {Golstomados} with {maiortomados} goals conceded", bg="#e67e22", fg="white", font=('Arial', 12))
+        labelTomados.pack(pady=(5, 5))
 
+        labelSaldo = tk.Label(tela_informativa, text=f"The team with the best goal difference was {saldoo} with {maiorsaldo} goal difference", bg="#8e44ad", fg="white", font=('Arial', 12))
+        labelSaldo.pack(pady=(5, 5))
 
+        labelMandante = tk.Label(tela_informativa, text=f"The best home team was {melhor_mandante} with {maior_mandante} home wins", bg="#2980b9", fg="white", font=('Arial', 12))
+        labelMandante.pack(pady=(5, 5))
 
+        fechar_btn = tk.Button(tela_informativa, text="Close", command=tela_informativa.destroy, bg="#c0392b", fg="white", font=('Arial', 12, 'bold'))
+        fechar_btn.pack(pady=(20, 10))
 
+        tela_informativa.mainloop()
 
+      
+    if idioma_selecionado == 'Alemão':
+          for posicao, (time, stats) in enumerate(sorted_times, start=1):
+           if posicao <= 4:
+            label = tk.Label(tela_informativa, text=f"{posicao}. Platz: {time} mit {stats[2]} Punkten", bg="#27ae60", fg="white", font=('Arial', 12))
+            label.pack(pady=(5, 5))
 
+           if posicao >= 17:
+            label = tk.Label(tela_informativa, text=f"Das Team, das in die Z{(21 - posicao)} abgestiegen ist, war {time} mit {stats[2]} Punkten", bg="#e74c3c", fg="white", font=('Arial', 12))
+            label.pack(pady=(5, 5))
+    
+          stats_title = tk.Label(tela_informativa, text="Endstatistiken", bg="#34495e", fg="#ecf0f1", font=('Arial', 16, 'underline'))
+          stats_title.pack(pady=(20, 10))
 
+          labelArtilheiro = tk.Label(tela_informativa, text=f"Der Torschützenkönig des Turniers war {Artilheiro} mit {maior} Toren", bg="#f39c12", fg="white", font=('Arial', 12))
+          labelArtilheiro.pack(pady=(5, 5))
+    
+          labelTomados = tk.Label(tela_informativa, text=f"Das Team, das die meisten Gegentore kassiert hat, war {Golstomados} mit {maiortomados} Gegentoren", bg="#e67e22", fg="white", font=('Arial', 12))
+          labelTomados.pack(pady=(5, 5))
+    
+          labelSaldo = tk.Label(tela_informativa, text=f"Das Team mit der besten Tordifferenz war {saldoo} mit {maiorsaldo} Toren", bg="#8e44ad", fg="white", font=('Arial', 12))
+          labelSaldo.pack(pady=(5, 5))
+    
+          labelMandante = tk.Label(tela_informativa, text=f"Das beste Heimteam war {melhor_mandante} mit {maior_mandante} Heimsiegen", bg="#2980b9", fg="white", font=('Arial', 12))
+          labelMandante.pack(pady=(5, 5))
 
+          fechar_btn = tk.Button(tela_informativa, text="Schließen", command=tela_informativa.destroy, bg="#c0392b", fg="white", font=('Arial', 12, 'bold'))
+          fechar_btn.pack(pady=(20, 10))
 
-
-
-
+          tela_informativa.mainloop()
 
 def statsteams():
+    global tela_times
     tela_times = tk.Toplevel()
     tela_times.title("Status dos Times")
     tela_times.configure(bg="#2c3e50")  
@@ -1243,6 +1356,7 @@ def statsteams():
     pagina_atual = [0]
 
     def exibir_times():
+        global btn_anterior, btn_atualizar, btn_proximo
         for widget in tela_times.winfo_children():
             widget.destroy()
 
@@ -1255,35 +1369,81 @@ def statsteams():
             frame_time.pack(pady=5, padx=10, fill="x")
 
             tk.Label(frame_time, text=nome_time, bg="#34495e", fg="#ecf0f1", font=("Arial", 14, 'bold')).grid(row=0, column=0, sticky="w")
+            if idioma_selecionado == "Português":
+             tk.Label(frame_time, text="Ataque:", bg="#34495e", fg="white").grid(row=1, column=0, sticky="w")
+             ataque = tk.Entry(frame_time, width=5)
+             ataque.insert(0, stats[3])
+             ataque.grid(row=1, column=1)
 
-            tk.Label(frame_time, text="Ataque:", bg="#34495e", fg="white").grid(row=1, column=0, sticky="w")
-            ataque = tk.Entry(frame_time, width=5)
-            ataque.insert(0, stats[3])
-            ataque.grid(row=1, column=1)
+             tk.Label(frame_time, text="Defesa:", bg="#34495e", fg="white").grid(row=2, column=0, sticky="w")
+             defesa = tk.Entry(frame_time, width=5)
+             defesa.insert(0, stats[9])
+             defesa.grid(row=2, column=1)
 
-            tk.Label(frame_time, text="Defesa:", bg="#34495e", fg="white").grid(row=2, column=0, sticky="w")
-            defesa = tk.Entry(frame_time, width=5)
-            defesa.insert(0, stats[9])
-            defesa.grid(row=2, column=1)
+            elif idioma_selecionado == "Inglês":
+                 tk.Label(frame_time, text="Attack:", bg="#34495e", fg="white").grid(row=1, column=0, sticky="w")
+                 ataque = tk.Entry(frame_time, width=5)
+                 ataque.insert(0, stats[3])
+                 ataque.grid(row=1, column=1)
 
+                 tk.Label(frame_time, text="Defense:", bg="#34495e", fg="white").grid(row=2, column=0, sticky="w")
+                 defesa = tk.Entry(frame_time, width=5)
+                 defesa.insert(0, stats[9])
+                 defesa.grid(row=2, column=1)
+
+            elif idioma_selecionado == "Alemão":
+                 tk.Label(frame_time, text="Angriff:", bg="#34495e", fg="white").grid(row=1, column=0, sticky="w")
+                 ataque = tk.Entry(frame_time, width=5)
+                 ataque.insert(0, stats[3])
+                 ataque.grid(row=1, column=1)
+
+                 tk.Label(frame_time, text="Verteidigung:", bg="#34495e", fg="white").grid(row=2, column=0, sticky="w")
+                 defesa = tk.Entry(frame_time, width=5)
+                 defesa.insert(0, stats[9])
+                 defesa.grid(row=2, column=1)
+
+            global textt
             def atualizar_stats(nome=nome_time, atk_entry=ataque, def_entry=defesa):
                 times[nome][3] = int(atk_entry.get())
                 times[nome][9] = int(def_entry.get())
-                print(f"Time {nome}: Ataque = {times[nome][3]}, Defesa = {times[nome][9]}")
-
-            btn_atualizar = tk.Button(frame_time, text="Atualizar", command=atualizar_stats, bg="#f39c12", fg="black", font=("Arial", 10))
+                if idioma_selecionado == 'Português':
+                  print(f"Time {nome}: Ataque = {times[nome][3]}, Defesa = {times[nome][9]}")
+                elif idioma_selecionado == 'Inglês':
+                  print(f"Time {nome}: Attack = {times[nome][3]}, Defense = {times[nome][9]}")
+                elif idioma_selecionado == "Alemão":
+                  print(f"Mannschaft {nome}: Angriff = {times[nome][3]}, Verteidigung = {times[nome][9]}")
+            btn_atualizar = tk.Button(frame_time, text=f"{textt}", command=atualizar_stats, bg="#f39c12", fg="black", font=("Arial", 10))
             btn_atualizar.grid(row=3, column=0, columnspan=2, pady=(5, 0))
 
         btn_frame = tk.Frame(tela_times, bg="#2c3e50")
         btn_frame.pack(pady=10)
-
-        if pagina_atual[0] > 0:
+        if idioma_selecionado == "Português":
+          if pagina_atual[0] > 0:
             btn_anterior = tk.Button(btn_frame, text="Anterior", command=lambda: mudar_pagina(-1), bg="#2980b9", fg="white", font=("Arial", 12))
             btn_anterior.pack(side="left", padx=20)
 
-        if fim < len(times):
+          if fim < len(times):
             btn_proximo = tk.Button(btn_frame, text="Próximo", command=lambda: mudar_pagina(1), bg="#2980b9", fg="white", font=("Arial", 12))
             btn_proximo.pack(side="right", padx=20)
+            
+        if idioma_selecionado == "Inglês":
+          if pagina_atual[0] > 0:
+            btn_anterior = tk.Button(btn_frame, text="Previous", command=lambda: mudar_pagina(-1), bg="#2980b9", fg="white", font=("Arial", 12))
+            btn_anterior.pack(side="left", padx=20)
+
+          if fim < len(times):
+            btn_proximo = tk.Button(btn_frame, text="Next", command=lambda: mudar_pagina(1), bg="#2980b9", fg="white", font=("Arial", 12))
+            btn_proximo.pack(side="right", padx=20)
+            
+                   
+        if idioma_selecionado == "Alemão":
+          if pagina_atual[0] > 0:
+           btn_anterior = tk.Button(btn_frame, text="Zurück", command=lambda: mudar_pagina(-1), bg="#2980b9", fg="white", font=("Arial", 12))
+           btn_anterior.pack(side="left", padx=20)
+
+          if fim < len(times):
+              btn_proximo = tk.Button(btn_frame, text="Weiter", command=lambda: mudar_pagina(1), bg="#2980b9", fg="white", font=("Arial", 12))
+              btn_proximo.pack(side="right", padx=20)
 
     def mudar_pagina(direcao):
         pagina_atual[0] += direcao
@@ -1291,8 +1451,78 @@ def statsteams():
 
     exibir_times()
 
+def selecionar_linguagem():
+    global idioma_selecionado
+    
+    tela_linguagem = tk.Toplevel()
+    tela_linguagem.title("Seleção de Idioma")
+    tela_linguagem.geometry("400x300")
+    tela_linguagem.configure(bg="#2c3e50")
+    
+    lbl_instrucao = tk.Label(tela_linguagem, text="Escolha um idioma:", font=("Arial", 16), bg="#2c3e50", fg="#ecf0f1")
+    lbl_instrucao.pack(pady=20)
+   #  label_aviso = tk.Label(
+     #   tela_jogos,
+      #  text=f"Total de jogos: {len(jogos)} (Máximo: {max_jogos})\n Posição do time: {times[time][4]}\n Vitorias em casa: {times[time][10]}\n Derrotas em casa: {times[time][11]}"
+    def definir_idioma(idioma):
+        global idioma_selecionado
+        idioma_selecionado = idioma
+        if idioma == "Inglês":
+            btn_config_teams.config(text="Change team status")
+            btn_colocar_time_5.config(text="Status 5 in teams")
+            btn_colocar_time_6.config(text="Randomize Status")
+            btn_colocar_time_7.config(text="Language")
+            labelconfig1.config(text="Settings")
+            label_introducao.config(text="Welcome to Brasileirão Simulator")
+            if rodada_atual == 38:
+               btn_simular.config(text="Championship Information")
+            else:
+               btn_simular.config(text="Simulate next round")
+            abrir_tela_jogos.config(text="Open match history screen")
+            rodadas_label.config(text=f"Rounds remaining: {rodadas}")
+
+        elif idioma == "Alemão":
+            btn_config_teams.config(text="Team-Status ändern")
+            btn_colocar_time_5.config(text="Status 5 in Teams")
+            btn_colocar_time_6.config(text="Status randomisieren")
+            btn_colocar_time_7.config(text="Sprache")
+            labelconfig1.config(text="Einstellungen")
+            label_introducao.config(text="Willkommen im Brasileirão-Simulator")
+            if rodada_atual == 38:
+              btn_simular.config(text="Meisterschaftsinformationen")
+            else:
+              btn_simular.config(text="Nächste Runde simulieren")
+            abrir_tela_jogos.config(text="Öffnen Sie die Spielbildschirme")
+            rodadas_label.config(text=f"verbleibende Runden: {rodadas}")
+        elif idioma == "Português":
+            btn_config_teams.config(text="Mudar status dos times")
+            btn_colocar_time_5.config(text="Status 5 em times")
+            btn_colocar_time_6.config(text="Randomizar Status")
+            btn_colocar_time_7.config(text="Linguagem")
+            labelconfig1.config(text="Configurações")
+            label_introducao.config(text="Bem-vindo ao Simulador de Brasileirão")
+            if rodada_atual == 38:
+               btn_simular.config(text="Informações do campeonato")
+            else:
+               btn_simular.config(text="Simular proxima rodada")
+            abrir_tela_jogos.config(text="Abrir telas De Jogos")
+            rodadas_label.config(text=f"Rodadas restantes: {rodadas}")
+        tela_linguagem.destroy()
+        fechar_tela_times()
+        
+        
+    idiomas = ["Inglês", "Português", "Alemão"]
+    for idioma in idiomas:
+        btn = tk.Button(tela_linguagem, text=idioma, command=lambda i=idioma: [definir_idioma(i), organizar_tabela()],
+                        bg="#2980b9", fg="white", font=("Arial", 14), relief="solid", bd=2)
+        btn.pack(pady=10, fill="x", padx=40)
+        
+
 def config_tela():
-    global tela_configuracao
+    global tela_configuracao, btn_config_teams, labelconfig1, btn_colocar_time_5, btn_colocar_time_6, btn_colocar_time_7
+
+        
+        
     tela_configuracao = tk.Toplevel()
     tela_configuracao.configure(bg="#2c3e50")  
     tela_configuracao.title("Configurações")
@@ -1301,17 +1531,53 @@ def config_tela():
     labelconfig1 = tk.Label(tela_configuracao, text="Configurações", bg="#2c3e50", fg="#ecf0f1", font=("Arial", 24, 'bold'))
     labelconfig1.pack(pady=20)
     
-    btn_config_teams = tk.Button(tela_configuracao, text="Mudar status dos times", bg="#2980b9", fg="white", command=statsteams, font=("Arial", 14))
+    btn_config_teams = tk.Button(tela_configuracao, text="Mudar status dos times", bg="#2980b9", fg="white", font=("Arial", 14), command=statsteams)
     btn_config_teams.pack(pady=20)
     
-    btn_colocar_time_5 = tk.Button(tela_configuracao, text="Status 5 em times", bg ="#2980b9", fg="white", command=stats5teams, font = ("Arial",14))
+    btn_colocar_time_5 = tk.Button(tela_configuracao, text="Status 5 em times", bg="#2980b9", fg="white", font=("Arial", 14), command=stats5teams)
     btn_colocar_time_5.pack(pady=20)
     
-    btn_colocar_time_6 = tk.Button(tela_configuracao, text="Randomizar Status", bg ="#2980b9", fg="white", command=randomizestats, font = ("Arial",14))
+    btn_colocar_time_6 = tk.Button(tela_configuracao, text="Randomizar Status", bg="#2980b9", fg="white", font=("Arial", 14), command=randomizestats)
     btn_colocar_time_6.pack(pady=20)
     
-    btn_colocar_time_7 = tk.Button(tela_configuracao, text="Linguagem", bg ="#2980b9", fg="white", command=randomizestats, font = ("Arial",14))
+    btn_colocar_time_7 = tk.Button(tela_configuracao, text="Linguagem", bg="#2980b9", fg="white", command=selecionar_linguagem, font=("Arial", 14))
     btn_colocar_time_7.pack(pady=20)
+    if idioma_selecionado == "Inglês":
+         btn_config_teams.config(text="Change team status")
+         btn_colocar_time_5.config(text="Status 5 in teams")
+         btn_colocar_time_6.config(text="Randomize Status")
+         btn_colocar_time_7.config(text="Language")
+         labelconfig1.config(text="Settings")
+         label_introducao.config(text="Welcome to Brasileirão Simulator")
+         if rodada_atual == 38:
+          btn_simular.config(text="Championship Information")
+         else:
+          btn_simular.config(text="Simulate next round")
+         abrir_tela_jogos.config(text="Open match history screen")
+         rodadas_label.config(text=f"Rounds remaining: {rodadas}")
+    elif idioma_selecionado == "Alemão":
+        btn_config_teams.config(text="Team-Status ändern")
+        btn_colocar_time_5.config(text="Status 5 in Teams")
+        btn_colocar_time_6.config(text="Status randomisieren")
+        btn_colocar_time_7.config(text="Sprache")
+        labelconfig1.config(text="Einstellungen")
+        label_introducao.config(text="Willkommen im Brasileirão-Simulator")
+        if rodada_atual == 38:
+              btn_simular.config(text="Meisterschaftsinformationen")
+        else:
+              btn_simular.config(text="Nächste Runde simulieren")
+        abrir_tela_jogos.config(text="Öffnen Sie die Spielbildschirme")
+        rodadas_label.config(text=f"verbleibende Runden: {rodadas}")
+    elif idioma_selecionado == "Português":
+        btn_colocar_time_5.config(text="Status 5 em times")
+        btn_colocar_time_6.config(text="Randomizar Status")
+        btn_colocar_time_7.config(text="Linguagem")
+        labelconfig1.config(text="Configurações")
+        label_introducao.config(text="Bem-vindo ao Simulador de Brasileirão")
+        btn_simular.config(text="Simular Proxima Rodada")
+        abrir_tela_jogos.config(text="Abrir telas De Jogos")
+        rodadas_label.config(text=f"Rodadas restantes: {rodadas}")
+
     tela_configuracao.mainloop()
 
 def randomizestats():
@@ -1321,7 +1587,6 @@ def randomizestats():
         stats[9] = random.randint(1, 10)
         print(f"{team} updated - Attack: {stats[3]}, Defense: {stats[9]}")
 
-
 def stats5teams():
     global times
     for team, stats in times.items():
@@ -1329,12 +1594,14 @@ def stats5teams():
         stats[9] = 5 
         print(f"{team} updated - Attack: {stats[3]}, Defense: {stats[9]}")
 
-import tkinter as tk
-from tkinter import messagebox
-
 def start_simulation():
     tela_inicial()
 
+def fechar_tela_times():
+    global tela_times
+    if tela_times is not None and tela_times.winfo_exists():  # Verifica se a janela existe
+        tela_times.destroy()  # Fecha a janela
+        tela_times = None  # Reseta a variável para evitar referências inválidas
 
 
 
@@ -1342,12 +1609,9 @@ def start_simulation():
 
 
 
-
-
-
-
-# Create selection window
+global Label_escolha_edicao
 root = tk.Tk()
+
 root.title("Select Championship Edition")
 root.geometry("300x200")
 
@@ -1360,8 +1624,3 @@ btn_2025 = tk.Button(root, text="2025", font=("Arial", 12, "bold"), bg="#E74C3C"
 btn_2025.pack(pady=5)
 
 root.mainloop()
-
-
-
-
-
