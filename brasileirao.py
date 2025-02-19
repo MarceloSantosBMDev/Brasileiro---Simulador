@@ -1407,14 +1407,25 @@ def statsteams():
                 times[nome][3] = int(atk_entry.get())
                 times[nome][9] = int(def_entry.get())
                 if idioma_selecionado == 'Português':
+                  times[nome][3] = int(atk_entry.get())
+                  times[nome][9] = int(def_entry.get())
                   print(f"Time {nome}: Ataque = {times[nome][3]}, Defesa = {times[nome][9]}")
                 elif idioma_selecionado == 'Inglês':
+                  times[nome][3] = int(atk_entry.get())
+                  times[nome][9] = int(def_entry.get())
                   print(f"Time {nome}: Attack = {times[nome][3]}, Defense = {times[nome][9]}")
                 elif idioma_selecionado == "Alemão":
                   print(f"Mannschaft {nome}: Angriff = {times[nome][3]}, Verteidigung = {times[nome][9]}")
-            btn_atualizar = tk.Button(frame_time, text=f"{textt}", command=atualizar_stats, bg="#f39c12", fg="black", font=("Arial", 10))
-            btn_atualizar.grid(row=3, column=0, columnspan=2, pady=(5, 0))
-
+            if idioma_selecionado == 'Português':
+             btn_atualizar = tk.Button(frame_time, text=f"Atualizar", command=atualizar_stats, bg="#f39c12", fg="black", font=("Arial", 10))
+             btn_atualizar.grid(row=3, column=0, columnspan=2, pady=(5, 0))
+            elif idioma_selecionado == 'Inglês':
+             btn_atualizar = tk.Button(frame_time, text=f"Update", command=atualizar_stats, bg="#f39c12", fg="black", font=("Arial", 10))
+             btn_atualizar.grid(row=3, column=0, columnspan=2, pady=(5, 0))  
+            elif idioma_selecionado == "Alemão":
+             btn_atualizar = tk.Button(frame_time, text=f"Aktualisieren", command=atualizar_stats, bg="#f39c12", fg="black", font=("Arial", 10))
+             btn_atualizar.grid(row=3, column=0, columnspan=2, pady=(5, 0))    
+                
         btn_frame = tk.Frame(tela_times, bg="#2c3e50")
         btn_frame.pack(pady=10)
         if idioma_selecionado == "Português":
