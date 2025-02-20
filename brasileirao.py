@@ -1144,14 +1144,15 @@ def organizar_tabela():
             bg_color = "#c0392b"  
 
         
-        texto_base = f"{posicao}º {time} | Jogos: {stats[8]} | Pontos: {stats[2]} | Vitórias: {stats[5]} | Empates: {stats[6]} | Derrotas: {stats[7]} | Saldo: {saldo_gols} | Gols Feitos: {stats[1]} | Gols Tomados: {stats[0]}"
+        
 
        
         if idioma_selecionado == 'Inglês':
             texto_base = f"{posicao}º {time} | Games: {stats[8]} | Points: {stats[2]} | Wins: {stats[5]} | Draws: {stats[6]} | Loses: {stats[7]} | Goal difference: {saldo_gols} | Goals For: {stats[1]} | Goals Against: {stats[0]}"
         elif idioma_selecionado == 'Alemão':
             texto_base = f"{posicao}º {time} | Spiele: {stats[8]} | Punkte: {stats[2]} | Siege: {stats[5]} | Unentschieden: {stats[6]} | Niederlagen: {stats[7]} | Tordifferenz: {saldo_gols} | Tore: {stats[1]} | Gegentore: {stats[0]}"
-
+        elif idioma_selecionado == 'Português':
+            texto_base = f"{posicao}º {time} | Jogos: {stats[8]} | Pontos: {stats[2]} | Vitórias: {stats[5]} | Empates: {stats[6]} | Derrotas: {stats[7]} | Saldo: {saldo_gols} | Gols Feitos: {stats[1]} | Gols Tomados: {stats[0]}"
        
         label_time = tk.Label(
             frame_times,
@@ -1491,7 +1492,7 @@ def selecionar_linguagem():
                btn_simular.config(text="Simulate next round")
             abrir_tela_jogos.config(text="Open match history screen")
             rodadas_label.config(text=f"Rounds remaining: {rodadas}")
-
+            organizar_tabela()
         elif idioma == "Alemão":
             btn_config_teams.config(text="Team-Status ändern")
             btn_colocar_time_5.config(text="Status 5 in Teams")
@@ -1505,6 +1506,7 @@ def selecionar_linguagem():
               btn_simular.config(text="Nächste Runde simulieren")
             abrir_tela_jogos.config(text="Öffnen Sie die Spielbildschirme")
             rodadas_label.config(text=f"verbleibende Runden: {rodadas}")
+            organizar_tabela()
         elif idioma == "Português":
             btn_config_teams.config(text="Mudar status dos times")
             btn_colocar_time_5.config(text="Status 5 em times")
@@ -1518,6 +1520,7 @@ def selecionar_linguagem():
                btn_simular.config(text="Simular proxima rodada")
             abrir_tela_jogos.config(text="Abrir telas De Jogos")
             rodadas_label.config(text=f"Rodadas restantes: {rodadas}")
+            organizar_tabela()
         tela_linguagem.destroy()
         fechar_tela_times()
         
