@@ -4,8 +4,9 @@ import random
 from tkinter import messagebox
 import os
 from tkinter import font as tkFont
-idioma_selecionado = 'Português'
 
+idioma_selecionado = 'Português'
+bet_mode = 0
 def select_edition(edition):
     global edicao, times, confrontos, rodadas, rodada_atual, jogos_por_time
     edicao = edition
@@ -1534,7 +1535,7 @@ def selecionar_linguagem():
 
 def config_tela():
     global tela_configuracao, btn_config_teams, labelconfig1, btn_colocar_time_5, btn_colocar_time_6, btn_colocar_time_7
-
+    font_btn = tkFont.Font(family="Arial", size=14, weight="bold")
         
         
     tela_configuracao = tk.Toplevel()
@@ -1591,6 +1592,10 @@ def config_tela():
         btn_simular.config(text="Simular Proxima Rodada")
         abrir_tela_jogos.config(text="Abrir telas De Jogos")
         rodadas_label.config(text=f"Rodadas restantes: {rodadas}")
+        
+        
+    btn_modo_aposta = tk.Button(tela_configuracao, text="Modo Aposta", bg="#2980b9", fg="white", command=toggle_bet_mode, font=("Arial", 14))
+    btn_modo_aposta.pack(pady=20)
 
     tela_configuracao.mainloop()
 
@@ -1617,7 +1622,10 @@ def fechar_tela_times():
         tela_times.destroy()  # Fecha a janela
         tela_times = None  # Reseta a variável para evitar referências inválidas
 
-
+def toggle_bet_mode():
+    global bet_mode, btn_modo_aposta
+    bet_mode = 1 if bet_mode == 0 else 0
+    btn_modo_aposta.config(text="Modo Aposta: ATIVADO" if bet_mode else "Modo Aposta: DESATIVADO")
 
 
 
