@@ -7,6 +7,33 @@ from tkinter import font as tkFont
 
 idioma_selecionado = 'Português'
 bet_mode = 0
+
+def redefinindo_stats_times(ano):
+    global times
+    if ano == 2025:
+        stats_iniciais = {
+            "Ceará-SC": [2, 3], "Sport-Recife": [4, 3], "Atlético-MG": [5, 4], "Bahia": [5, 4],
+            "Botafogo": [6, 5], "Corinthians": [6, 4], "Vitória": [4, 2], "Cruzeiro": [5, 3],
+            "Mirassol": [4, 3], "Flamengo": [6, 5], "Fluminense": [4, 5], "Fortaleza": [5, 4],
+            "Juventude": [3, 4], "Grêmio": [5, 4], "Internacional": [5, 5], "Palmeiras": [5, 6],
+            "RB Bragantino": [3, 3], "Santos": [5, 3], "São Paulo": [5, 5], "Vasco da Gama": [4, 3]
+        }
+    else:
+        stats_iniciais = {
+            "Atlético-GO": [2, 2], "Athletico-PR": [4, 3], "Atlético-MG": [5, 3], "Bahia": [5, 4],
+            "Botafogo": [7, 6], "Corinthians": [4, 3], "Vitória": [3, 2], "Cruzeiro": [4, 5],
+            "Cuiabá": [2, 4], "Flamengo": [6, 5], "Fluminense": [3, 5], "Fortaleza": [5, 4],
+            "Juventude": [4, 4], "Grêmio": [4, 4], "Internacional": [5, 6], "Palmeiras": [6, 7],
+            "RB Bragantino": [4, 4], "Criciúma": [5, 2], "São Paulo": [5, 3], "Vasco da Gama": [4, 2]
+        }
+    
+    for time, stats in times.items():
+        if time in stats_iniciais:
+            stats[3] = stats_iniciais[time][0]  # Redefine o status de ataque
+            stats[9] = stats_iniciais[time][1]  # Redefine o status de defesa
+
+
+
 def select_edition(edition):
     global edicao, times, confrontos, rodadas, rodada_atual, jogos_por_time
     edicao = edition
@@ -65,6 +92,7 @@ def select_edition(edition):
     rodada_atual = 0 
     root.destroy()
     start_simulation() 
+    
     
 total_rodadas = 38
 def carregar_jogos(nome_arquivo="placares_jogos.txt"):
@@ -982,7 +1010,7 @@ def criar_jogos():
     return todososjogos
     
 def tela_inicial():
-    global frame_times, labels_times, rodadas_label, btn_simular, rodadas, abrir_tela_jogos, label_introducao, rodadas_label, btn_simular
+    global frame_times, labels_times, rodadas_label, btn_simular, rodadas, abrir_tela_jogos, label_introducao, rodadas_label, btn_simular, label_bet_mode
 
     tela_inicial = tk.Tk()
     tela_inicial.configure(bg="#1c1c1c")  
@@ -1006,9 +1034,15 @@ def tela_inicial():
     frame_times.pack(pady=20, padx=50, fill="x")
 
     labels_times = {}
-
-    rodadas_label = tk.Label(tela_inicial, text=f"Rodadas restantes: {rodadas}", bg="#1c1c1c", fg="#d3d3d3", font=font_texto)
-    rodadas_label.pack(pady=10)
+    
+    frame_info = tk.Frame(tela_inicial, bg="#1c1c1c")
+    frame_info.pack(pady=10)
+    
+    label_bet_mode = tk.Label(frame_info, text=f"Modo aposta: {bet_mode}", bg="#1c1c1c", fg="#d3d3d3", font=font_texto)
+    label_bet_mode.pack(side="left", padx=10)
+    
+    rodadas_label = tk.Label(frame_info, text=f"Rodadas restantes: {rodadas}", bg="#1c1c1c", fg="#d3d3d3", font=font_texto)
+    rodadas_label.pack(side="left", padx=10)
 
     btn_simular = tk.Button(tela_inicial, text="Simular Próxima Rodada", command=simular_rodada, bg="#00aaff", fg="white", font=font_btn, bd=0, padx=20, pady=5)
     btn_simular.pack(pady=10)
@@ -1017,6 +1051,7 @@ def tela_inicial():
     abrir_tela_jogos.pack(pady=10)
     
     tela_inicial.mainloop()
+
 
 def iniciar_simulacao(nome_arquivo="placares_jogos.txt"):
     if os.path.exists(nome_arquivo):
@@ -1348,6 +1383,7 @@ def Informar():
           tela_informativa.mainloop()
 
 def statsteams():
+  if bet_mode == 0:
     global tela_times
     tela_times = tk.Toplevel()
     tela_times.title("Status dos Times")
@@ -1463,7 +1499,13 @@ def statsteams():
         exibir_times()
 
     exibir_times()
-
+  else: 
+    messagebox.showinfo(
+                title="Impossivel alterar status",
+                message=f"Impossivel alterar os status dos times com o modo aposta ativo",
+                icon='info'
+            )
+    
 def selecionar_linguagem():
     global idioma_selecionado
     
@@ -1535,7 +1577,6 @@ def selecionar_linguagem():
 
 def config_tela():
     global tela_configuracao, btn_config_teams, labelconfig1, btn_colocar_time_5, btn_colocar_time_6, btn_colocar_time_7
-    font_btn = tkFont.Font(family="Arial", size=14, weight="bold")
         
         
     tela_configuracao = tk.Toplevel()
@@ -1593,9 +1634,6 @@ def config_tela():
         abrir_tela_jogos.config(text="Abrir telas De Jogos")
         rodadas_label.config(text=f"Rodadas restantes: {rodadas}")
         
-        
-    btn_modo_aposta = tk.Button(tela_configuracao, text="Modo Aposta", bg="#2980b9", fg="white", command=toggle_bet_mode, font=("Arial", 14))
-    btn_modo_aposta.pack(pady=20)
 
     tela_configuracao.mainloop()
 
@@ -1613,36 +1651,128 @@ def stats5teams():
         stats[9] = 5 
         print(f"{team} updated - Attack: {stats[3]}, Defense: {stats[9]}")
 
+
 def start_simulation():
-    tela_inicial()
+    if bet_mode == 1: 
+        tela_login()  
+    else:
+        tela_inicial() 
 
 def fechar_tela_times():
     global tela_times
-    if tela_times is not None and tela_times.winfo_exists():  # Verifica se a janela existe
-        tela_times.destroy()  # Fecha a janela
-        tela_times = None  # Reseta a variável para evitar referências inválidas
+    if tela_times is not None and tela_times.winfo_exists(): 
+        tela_times.destroy()  
+        tela_times = None 
 
 def toggle_bet_mode():
-    global bet_mode, btn_modo_aposta
+    global bet_mode
     bet_mode = 1 if bet_mode == 0 else 0
     btn_modo_aposta.config(text="Modo Aposta: ATIVADO" if bet_mode else "Modo Aposta: DESATIVADO")
+    redefinindo_stats_times(edicao)
+
 
 
 
 
 
 global Label_escolha_edicao
-root = tk.Tk()
+def tela_selecao_edicao():
+    global root, btn_modo_aposta
 
-root.title("Select Championship Edition")
-root.geometry("300x200")
+    root = tk.Tk()
+    root.title("Seleção de Edição")
+    root.geometry("500x350")
+    root.configure(bg="#2c3e50")
 
-tk.Label(root, text="Choose the Championship Edition:", font=("Arial", 12, "bold")).pack(pady=10)
+    font_titulo = tkFont.Font(family="Arial", size=18, weight="bold")
+    font_btn = tkFont.Font(family="Arial", size=14, weight="bold")
 
-btn_2024 = tk.Button(root, text="2024", font=("Arial", 12, "bold"), bg="#27AE60", fg="white", width=10, command=lambda: select_edition(2024))
-btn_2024.pack(pady=5)
+    tk.Label(root, text="Escolha a Edição do Campeonato:", bg="#2c3e50", fg="#ecf0f1", font=font_titulo).pack(pady=20)
 
-btn_2025 = tk.Button(root, text="2025", font=("Arial", 12, "bold"), bg="#E74C3C", fg="white", width=10, command=lambda: select_edition(2025))
-btn_2025.pack(pady=5)
+    btn_2024 = tk.Button(root, text="2024", font=font_btn, bg="#27AE60", fg="white", width=15, command=lambda: select_edition(2024))
+    btn_2024.pack(pady=10)
 
-root.mainloop()
+    btn_2025 = tk.Button(root, text="2025", font=font_btn, bg="#E74C3C", fg="white", width=15, command=lambda: select_edition(2025))
+    btn_2025.pack(pady=10)
+
+    btn_modo_aposta = tk.Button(root, text="Modo Aposta: DESATIVADO", font=font_btn, bg="#2980b9", fg="white", width=25, command=toggle_bet_mode)
+    btn_modo_aposta.pack(pady=20)
+
+
+    root.mainloop()
+
+
+
+
+#parte referente ao login
+def verificar_usuario_existe(nome):
+    if not os.path.exists("usuarios.txt"):
+        return False
+    with open("usuarios.txt", "r") as arquivo:
+        for linha in arquivo:
+            if linha.split(":")[0] == nome:
+                return True
+    return False
+
+
+def cadastrar_usuario(nome, senha):
+    with open("usuarios.txt", "a") as arquivo:
+        arquivo.write(f"{nome}:{senha}:100\n")  
+
+def fazer_login():
+    nome = entry_nome.get()
+    senha = entry_senha.get()
+
+    if not nome or not senha:
+        messagebox.showwarning("Erro", "Por favor, preencha todos os campos.")
+        return
+
+    if verificar_usuario_existe(nome):
+        with open("usuarios.txt", "r") as arquivo:
+            for linha in arquivo:
+                dados = linha.strip().split(":")
+                if dados[0] == nome and dados[1] == senha:
+                    messagebox.showinfo("Sucesso", f"Bem-vindo de volta, {nome}!")
+                    tela_login.destroy()
+                    tela_inicial()
+                    return
+            messagebox.showerror("Erro", "Senha incorreta.")
+    else:
+        cadastrar_usuario(nome, senha)
+        messagebox.showinfo("Sucesso", f"Usuário {nome} cadastrado com sucesso! Você recebeu 100 fichas.")
+        tela_login.destroy() 
+        tela_inicial() 
+
+def tela_login():
+    global tela_login, entry_nome, entry_senha
+
+    tela_login = tk.Tk()
+    tela_login.title("Login")
+    tela_login.geometry("400x300")
+    tela_login.configure(bg="#2c3e50")
+
+    font_titulo = tkFont.Font(family="Arial", size=18, weight="bold")
+    font_label = tkFont.Font(family="Arial", size=12)
+    font_entry = tkFont.Font(family="Arial", size=12)
+
+    tk.Label(tela_login, text="Login", bg="#2c3e50", fg="#ecf0f1", font=font_titulo).pack(pady=20)
+
+    tk.Label(tela_login, text="Nome:", bg="#2c3e50", fg="#ecf0f1", font=font_label).pack()
+    entry_nome = tk.Entry(tela_login, font=font_entry)
+    entry_nome.pack(pady=5)
+
+    tk.Label(tela_login, text="Senha:", bg="#2c3e50", fg="#ecf0f1", font=font_label).pack()
+    entry_senha = tk.Entry(tela_login, show="*", font=font_entry)
+    entry_senha.pack(pady=5)
+
+    btn_login = tk.Button(tela_login, text="Login", bg="#2980b9", fg="white", font=font_label, command=fazer_login)
+    btn_login.pack(pady=20)
+
+    tela_login.mainloop()
+    
+#fim da parte do login
+
+
+tela_selecao_edicao()
+  
+    
