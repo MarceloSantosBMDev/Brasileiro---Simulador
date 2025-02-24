@@ -5,3 +5,9 @@ I think in this manner, all time when this user run the code, earn 100 points, t
 
 # Login 
 Now, if the user select bet mode, you make login for use the app. The user will put a name and a password, each user need have a different name, if two user with the same name login in software, the software will recognize just one. All registrations begin with 100 tickets for bets.
+
+# Bet mode
+The bet mode is already work, but with some errors, like, if you bet in much games, probaly, the bet mode will stop, my tip is, if you want test the beta update, bet one game per round, it will work and the code don´t will stop, the simulation without bet mode have some errors too, but it going to be repair.
+
+# New interface
+If you test the code, you probalby saw the new interface, now it is more beutiful and interative, probably when the v1.0.5 is released, all the interface will have the same model of the initial screen.
