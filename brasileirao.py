@@ -51,7 +51,7 @@ def select_edition(edition):
     "Atlético-MG":  [0, 0, 0, 5, 0, 0, 0, 0, 0, 4, 0, 0, 2],
     "Bahia":        [0, 0, 0, 5, 0, 0, 0, 0, 0, 4, 0, 0, 2],
     "Botafogo":     [0, 0, 0, 6, 0, 0, 0, 0, 0, 5, 0, 0, 2],
-    "Corinthians": [0, 0, 0, 6, 0,0,0,0,0,4, 0, 0, 2],
+    "Corinthians": [0, 0, 0, 20, 0,0,0,0,0,4, 0, 0, 2],
     "Vitória": [0, 0, 0, 4, 0,0,0,0,0,2, 0, 0, 2],
     "Cruzeiro": [0, 0, 0, 5, 0,0,0,0,0,3, 0, 0, 2],
     "Mirassol": [0, 0, 0, 4, 0,0,0,0,0,3, 0, 0, 2],
@@ -105,26 +105,39 @@ def criar_tela_jogos():
     tela_times.geometry("600x600")
     tela_times.configure(bg="#2c3e50")  
 
-    canvas = tk.Canvas(tela_times, width=580, height=580, bg="#2c3e50", highlightthickness=0)
+    frame_principal = tk.Frame(tela_times, bg="#2c3e50")
+    frame_principal.pack(fill="both", expand=True, padx=10, pady=10)
+
+    canvas = tk.Canvas(frame_principal, width=560, height=560, bg="#2c3e50", highlightthickness=0)
     canvas.pack(side="left", fill="both", expand=True)
 
-    scrollbar = tk.Scrollbar(tela_times, orient="vertical", command=canvas.yview, troughcolor="#34495e",
-                             bg="#2980b9", activebackground="#3498db")
+    scrollbar = tk.Scrollbar(frame_principal, orient="vertical", command=canvas.yview, 
+                             troughcolor="#34495e", bg="#2980b9", activebackground="#3498db")
     scrollbar.pack(side="right", fill="y")
 
     frame_times = tk.Frame(canvas, bg="#2c3e50")
-    frame_times.bind("<Configure>", lambda e: canvas.configure(scrollregion=canvas.bbox("all")))
-
-    canvas.create_window((0, 0), window=frame_times, anchor="nw")
-    canvas.configure(yscrollcommand=scrollbar.set)
+    canvas.create_window((0, 0), window=frame_times, anchor="nw", width=540)
     
+    frame_times.bind("<Configure>", lambda e: canvas.configure(scrollregion=canvas.bbox("all")))
+    canvas.configure(yscrollcommand=scrollbar.set)
+
+    def on_enter(e):
+        e.widget["bg"] = "#2980b9"
+
+    def on_leave(e):
+        e.widget["bg"] = "#3498db"
+
     for time in times.keys():
         botao_time = tk.Button(frame_times, text=time, command=lambda t=time: mostrar_jogos(t),
                                width=40, bg="#3498db", fg="white", font=("Helvetica", 12, "bold"),
-                               relief="flat", overrelief="raised", bd=0, activebackground="#2980b9")
-        botao_time.pack(pady=5, padx=10)
+                               relief="flat", overrelief="raised", bd=0, activebackground="#2980b9",
+                               cursor="hand2", pady=5)
+        botao_time.pack(pady=5, padx=10, fill="x")
+        botao_time.bind("<Enter>", on_enter)
+        botao_time.bind("<Leave>", on_leave)
 
     tela_times.mainloop()
+
 
 def mostrar_jogos(time):
     global label_aviso, times, jogos, max_jogos
@@ -1635,7 +1648,6 @@ def tela_selecao_edicao():
 
 
 def simular_jogo(time1, time2, nome_arquivo="placares_jogos.txt"):
-    """Simula um jogo e retorna os gols de cada time."""
     chances_time1 = times[time1][3]  
     chances_time2 = times[time2][3]  
     gols_defendidos1 = times[time1][9]
@@ -1703,7 +1715,62 @@ def simular_jogo(time1, time2, nome_arquivo="placares_jogos.txt"):
     jogos_por_time[time2].append(resultado_time1)
     jogos_por_time[time1].append(resultado_time2)
 
-    return gols_time1, gols_time2
+def organizar_tabela():
+    global frame_times, label_time
+ 
+   
+    for widget in frame_times.winfo_children():
+        widget.destroy()
+
+    
+    sorted_times = sorted(times.items(), key=lambda x: (x[1][2], x[1][1] - x[1][0]), reverse=True)
+
+   
+    for posicao, (time, stats) in enumerate(sorted_times, start=1):
+        stats[4] = posicao  
+        saldo_gols = stats[1] - stats[0] 
+
+       
+        if posicao <= 4:
+            bg_color = "#2980b9"  
+        elif posicao <= 6:
+            bg_color = "#f39c12"  
+        elif posicao <= 12:
+            bg_color = "#27ae60"  
+        elif posicao < 17:
+            bg_color = "#1c1c1c"  
+        else:
+            bg_color = "#c0392b"  
+
+        
+        
+
+       
+        if idioma_selecionado == 'Inglês':
+            texto_base = f"{posicao}º {time} | Games: {stats[8]} | Points: {stats[2]} | Wins: {stats[5]} | Draws: {stats[6]} | Loses: {stats[7]} | Goal difference: {saldo_gols} | Goals For: {stats[1]} | Goals Against: {stats[0]}"
+        elif idioma_selecionado == 'Alemão':
+            texto_base = f"{posicao}º {time} | Spiele: {stats[8]} | Punkte: {stats[2]} | Siege: {stats[5]} | Unentschieden: {stats[6]} | Niederlagen: {stats[7]} | Tordifferenz: {saldo_gols} | Tore: {stats[1]} | Gegentore: {stats[0]}"
+        elif idioma_selecionado == 'Português':
+            texto_base = f"{posicao}º {time} | Jogos: {stats[8]} | Pontos: {stats[2]} | Vitórias: {stats[5]} | Empates: {stats[6]} | Derrotas: {stats[7]} | Saldo: {saldo_gols} | Gols Feitos: {stats[1]} | Gols Tomados: {stats[0]}"
+       
+        label_time = tk.Label(
+            frame_times,
+            text=texto_base,
+            bg=bg_color,
+            fg="#ecf0f1", 
+            font=("Helvetica", 10, "bold"),  
+            padx=5,
+            pady=2,
+            relief="flat"
+        )
+        label_time.pack(anchor="w", fill="x", padx=5, pady=1)
+
+        label_time.config(
+            borderwidth=1,
+            highlightbackground="#34495e",
+            highlightcolor="#34495e",
+            highlightthickness=1
+        )
 
 
 def atualizar_fichas_usuario(nome, novas_fichas):
@@ -1727,43 +1794,54 @@ def comparar_apostas_com_resultados():
 
     # Ler os resultados reais do arquivo placares_jogos.txt
     with open("placares_jogos.txt", "r") as arquivo:
-        linhas = arquivo.readlines()
+        linhas = [linha.strip() for linha in arquivo.readlines()]
+
+    # Criar um dicionário para facilitar a busca pelos resultados
+    resultados_dict = {}
+    for linha in linhas:
+        # Verifica se a linha contém um placar (formato: "time1 X time2")
+        if "x" in linha.lower():  # Verifica se há um "x" na linha (case insensitive)
+            partes = linha.split()
+            try:
+                # Encontra o índice do "x" para separar os times e os gols
+                indice_x = partes.index("x") if "x" in partes else partes.index("X")
+                time1 = " ".join(partes[:indice_x - 1]).strip()  # Nome do time 1
+                gols_time1 = int(partes[indice_x - 1])           # Gols do time 1
+                gols_time2 = int(partes[indice_x + 1])           # Gols do time 2
+                time2 = " ".join(partes[indice_x + 2:]).strip()  # Nome do time 2
+
+                # Armazena os resultados no dicionário
+                resultados_dict[(time1, time2)] = (gols_time1, gols_time2)
+                resultados_dict[(time2, time1)] = (gols_time2, gols_time1)  # Inverte para facilitar a busca
+            except (ValueError, IndexError):
+                continue  # Ignora linhas mal formatadas
 
     # Comparar cada aposta com os resultados reais
     for aposta in apostas_usuario:
-        time1 = aposta["time1"]
-        time2 = aposta["time2"]
-        aposta_escolhida = aposta["aposta"]
-        fichas_apostadas = aposta["fichas"]
+        time1, time2, aposta_escolhida, fichas_apostadas = aposta["time1"], aposta["time2"], aposta["aposta"], aposta["fichas"]
 
-        # Procurar o resultado do jogo no arquivo
-        for linha in linhas:
-            if time1 in linha and time2 in linha:
-                partes = linha.strip().split(" ")
-                gols_time1 = int(partes[1])
-                gols_time2 = int(partes[3])
+        if (time1, time2) in resultados_dict:
+            gols_time1, gols_time2 = resultados_dict[(time1, time2)]
 
-                # Determinar se o usuário ganhou ou perdeu
-                if (gols_time1 > gols_time2 and aposta_escolhida == time1) or \
-                   (gols_time2 > gols_time1 and aposta_escolhida == time2) or \
-                   (gols_time1 == gols_time2 and aposta_escolhida == "empate"):
-                    resultado = "ganhou"
-                    fichas_usuario += fichas_apostadas  # Usuário ganha a aposta
-                else:
-                    resultado = "perdeu"
-                    fichas_usuario -= fichas_apostadas  # Usuário perde a aposta
+            if (gols_time1 > gols_time2 and aposta_escolhida == time1) or \
+               (gols_time2 > gols_time1 and aposta_escolhida == time2) or \
+               (gols_time1 == gols_time2 and aposta_escolhida == "empate"):
+                resultado = "ganhou"
+                fichas_usuario += fichas_apostadas  # Usuário ganha a aposta
+            else:
+                resultado = "perdeu"
+                fichas_usuario -= fichas_apostadas  # Usuário perde a aposta
 
-                resultados.append(f"{time1} {gols_time1} x {gols_time2} {time2} - Você {resultado} {fichas_apostadas} fichas.")
-                break
+            resultados.append(f"{time1} {gols_time1} x {gols_time2} {time2} - Você {resultado} {fichas_apostadas} fichas.")
+        else:
+            resultados.append(f"{time1} x {time2} - Resultado não encontrado.")
 
     # Mostrar os resultados
-    if resultados:
-        messagebox.showinfo("Resultados das Apostas", "\n".join(resultados))
-    else:
-        messagebox.showinfo("Resultados das Apostas", "Nenhuma aposta foi processada.")
+    messagebox.showinfo("Resultados das Apostas", "\n".join(resultados) if resultados else "Nenhuma aposta foi processada.")
 
     # Atualizar as fichas do usuário no arquivo
     atualizar_fichas_usuario(usuario_logado, fichas_usuario)
+    label_pontos.config(text=f"Fichas de {usuario_logado}: {fichas_usuario}")
 
     # Limpar a lista de apostas
     apostas_usuario.clear()
@@ -1781,27 +1859,25 @@ def simular_rodada():
         with open("placares_jogos.txt", "a") as arquivo:
             arquivo.write(f"Rodada {rodada_atual + 1}\n")
         
-        # Mostrar a tela de apostas se o modo aposta estiver ativo
-
-
         # Simular os jogos
         for i in range(10): 
             index = rodada_atual * 10 + i
             if index < len(confrontos):
                 time1, time2 = confrontos[index]
                 simular_jogo(time1, time2)
-
+        
         organizar_tabela()
         rodada_atual += 1
         rodadas -= 1
         label_pontos.config(text=f"Fichas de {usuario_logado}: {fichas_usuario}")
-        
+
         if idioma_selecionado == 'Português':
             rodadas_label.config(text=f"Rodadas restantes: {rodadas}")
         elif idioma_selecionado == 'Inglês':
             rodadas_label.config(text=f"Rounds remaining: {rodadas}")
         elif idioma_selecionado == 'Alemão':
             rodadas_label.config(text=f"verbleibende Runden: {rodadas}")
+        
         if rodadas == 0:
             parabenizar_campeao()
 
@@ -1864,6 +1940,8 @@ def confirmar_selecao(selecoes, tela_escolha):
 
     tela_escolha.destroy()
     tela_apostas_rodada()  # Abre a tela de apostas
+
+
 
 def tela_apostas_rodada():
     """Tela para o usuário fazer as apostas nos jogos selecionados."""
@@ -1978,10 +2056,6 @@ def processar_apostas(apostas, tela_apostas):
     # Mostrar mensagem de sucesso
     messagebox.showinfo("Sucesso", f"Apostas realizadas com sucesso! Total apostado: {total_apostado} fichas.")
 
-
-if bet_mode == 1:
-    usuario_logado = None  # Armazena o nome do usuário logado
-
 #parte referente ao login
 def verificar_usuario_existe(nome):
     if not os.path.exists("usuarios.txt"):
@@ -2012,7 +2086,6 @@ def fazer_login():
                 if dados[0] == nome and dados[1] == senha:
                     usuario_logado = nome  # Armazena o nome do usuário logado
                     fichas_usuario = int(dados[2])  # Recupera as fichas do usuário
-                    messagebox.showinfo("Sucesso", f"Bem-vindo de volta, {nome}!")
                     tela_login.destroy()
                     tela_inicial()
                     return
