@@ -8,6 +8,8 @@ Now, if the user select bet mode, you make login for use the app. The user will 
 
 # Bet mode
 The bet mode is already work, but with some errors, like, if you bet in much games, probaly, the bet mode will stop, my tip is, if you want test the beta update, bet one game per round, it will work and the code don´t will stop, the simulation without bet mode have some errors too, but it going to be repair.
+The user can bet in how many games he want, if you lose will appaer in screen the info of the game, this will occur if win too
 
 # New interface
 If you test the code, you probalby saw the new interface, now it is more beutiful and interative, probably when the v1.0.5 is released, all the interface will have the same model of the initial screen.
+
