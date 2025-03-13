@@ -1,60 +1,52 @@
-# code explanation
-  # carregar_jogos
-      def carregar_jogos(nome_arquivo="placares_jogos.txt"):
-          global jogos_por_time
-          jogos_por_time = {time: [] for time in times.keys()} 
-          try:
-              with open(nome_arquivo, "r") as arquivo:
-                  for linha in arquivo:
-                    partes = linha.strip().split(" ")
-                      if len(partes) == 5:
-                        time1, gols_time1, _, gols_time2, time2 = partes
-                        gols_time1 = int(gols_time1)
-                        gols_time2 = int(gols_time2)
-                        jogos_por_time[time1].append(f"{time1} {gols_time1} x {gols_time2} {time2}")
-                        jogos_por_time[time2].append(f"{time2} {gols_time2} x {gols_time1} {time1}")
-        except FileNotFoundError:
-            messagebox.showerror("Erro", "Arquivo de placares não encontrado!")
-        except Exception as e:
-            messagebox.showerror("Erro", str(e)) 
-  In this code part, I put the function for add the matchs of the teams, first have the global variable 'jogos_por_time' in this variable have the dictionary of the determined team, this dictionary is responsible for save all matchs of the teams, it appared in the function responsible for matchs simulate, is there that save the results.
+Here, I will write about the code and the functions of it, I will try explain how the code work exactly, I will go write in the code in the screen appear order.
 
-# criar_telas_jogos
-    def criar_tela_jogos():
-      tela_times = tk.Tk()
-      tela_times.title("Escolha um Time")
-      tela_times.geometry("400x750")
-    
-      for time in times.keys():
-          botao_time = tk.Button(tela_times, text=time, command=lambda t=time: mostrar_jogos(t))
-          botao_time.pack(pady=5)
-      
-      tela_times.mainloop()
-Here, I put the function that make screen with buttons with all teams, have one button of each team,, if you know about tk library, I have sure you know the command geomatry, title, tk, button and mainloop, the loop in 'for' is for creat one button for all teams.
-# mostrar_jogos
-    def mostrar_jogos(time):
-        tela_jogos = tk.Tk()
-        tela_jogos.title(f"Jogos de {time}")
-        tela_jogos.geometry("400x500")
+# Bet mode and edition selector
+The first thing that you go see in the code is the screen of edition selector, over there, you can select the year of the championchip that you want simulate and turn on or turn down the bet mode
 
-        jogos = jogos_por_time.get(time, [])
-    
-        max_jogos = 38
-        label_aviso = tk.Label(tela_jogos, text=f"Total de jogos: {len(jogos)} (Máximo: {max_jogos})\n Posição do time: {times[time][0]}\n Vitorias em casa: {times[time][10]}\n Derrotas em casa: {times[time]      [11]}", font=("Arial", 10), fg="red")
-        label_aviso.pack(pady=(10, 0))
+![image](https://github.com/user-attachments/assets/cf9ffe4e-7934-4b59-adf1-67bdc0d01243) 
 
-        if len(jogos) < max_jogos:
-                label_aviso.config(text=f"Total de jogos: {len(jogos)} (Máximo: {max_jogos})\n Posição do time: {times[time][4]}\n Vitorias em casa: {times[time][10]}\n Derrotas em casa: {times[time][11]}", font=("Arial", 10), fg="red")
-        if not jogos:
-            label_aviso = tk.Label(tela_jogos, text="Nenhum jogo encontrado.", font=("Arial", 10), fg="red")
-            label_aviso.pack(pady=(10, 0))
-        if jogos:
-            for i, jogo in enumerate(jogos[:max_jogos]):
-                label_jogo = tk.Label(tela_jogos, text=jogo, font=("Arial", 6))
-                label_jogo.pack(anchor="w")
+- Check it, this is the first screen of the software, you can click in the year which you want, until now, have only 2 years, 2024 and 2025.
+  
+- In this screen you can turn on the bet mode, just click and the bet mode will go turn on, if you change your mind and turn down this, just click again.
+  
+  tela_selecao_edicao
+  ---
+		def tela_selecao_edicao():
+		    global root, btn_modo_aposta
+		
+		    root = tk.Tk()
+		    root.title("Seleção de Edição")
+		    root.geometry("500x400")
+		    root.configure(bg="#2c3e50")
+		
+		    font_titulo = tkFont.Font(family="Arial", size=18, weight="bold")
+		    font_btn = tkFont.Font(family="Arial", size=14, weight="bold")
+		
+		    frame_central = tk.Frame(root, bg="#2c3e50")
+		    frame_central.pack(expand=True, pady=20)
+		
+		    tk.Label(frame_central, text="Escolha a Edição do Campeonato:", bg="#2c3e50", fg="#ecf0f1", font=font_titulo).pack(pady=20)
+		
+		    btn_2024 = tk.Button(frame_central, text="2024", font=font_btn, bg="#27AE60", fg="white", width=15, bd=0, relief="flat", command=lambda: select_edition(2024))
+		    btn_2024.pack(pady=10, ipady=5)
+		    btn_2024.config(highlightbackground="#27AE60", highlightthickness=2, highlightcolor="#27AE60", bd=0)
+		
+		    btn_2025 = tk.Button(frame_central, text="2025", font=font_btn, bg="#E74C3C", fg="white", width=15, bd=0, relief="flat", command=lambda: select_edition(2025))
+		    btn_2025.pack(pady=10, ipady=5)
+		    btn_2025.config(highlightbackground="#E74C3C", highlightthickness=2, highlightcolor="#E74C3C", bd=0)
+		
+		    btn_modo_aposta = tk.Button(frame_central, text="Modo Aposta: DESATIVADO", font=font_btn, bg="#2980b9", fg="white", width=25, bd=0, relief="flat", command=toggle_bet_mode)
+		    btn_modo_aposta.pack(pady=20, ipady=5)
+		    btn_modo_aposta.config(highlightbackground="#2980b9", highlightthickness=2, highlightcolor="#2980b9", bd=0)
+		
+		    canvas = tk.Canvas(root, width=500, height=400, bg="#2c3e50", highlightthickness=0)
+  
+		    canvas.create_rectangle(0, 0, 500, 400, fill="#2c3e50", outline="#2c3e50")
+		    canvas.create_rectangle(0, 0, 500, 200, fill="#34495e", outline="#34495e")
+		    canvas.pack()
+		
+		    root.mainloop()
 
-        btn_fechar = tk.Button(tela_jogos, text="Fechar", command=tela_jogos.destroy)
-        btn_fechar.pack(pady=10)
+This function is responsible to open the first screen of the code, actually, this function start the work of code. with this functions work, the user can choose which year want simulate and if the user want or no the bet mode turned on, actually this function is very simple and after it call the function select_edition, this function must recive a parameter, about the year of the edition, if the user click in 2024, the parameter will be 2024, if click in 2025, parameter will be 2025.
+This function also is responsible to turn on the bet mode, look the variable 'btn_modo_aposta' in the code, this variable talk about the bet mode, if the user click, the function 'toggle_bet_mode' will turn on, if the user click again, the function will change the boolan number of bet mode, after I say more about this function.
 
-
-This function is for screen the matchs of each team, all times the user click in one button with team, this function start work, look, if the user click more times in button, this function screen the matchs screen very times, actually, I was thinking to make a way check if the screen of the one team already open, the other (if it had been opened, obviously) close, but I did´nt make this because I have laziness HAHA ^^
