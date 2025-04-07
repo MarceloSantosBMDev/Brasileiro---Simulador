@@ -46,9 +46,65 @@ The first thing that you go see in the code is the screen of edition selector, o
 		    canvas.pack()
 		
 		    root.mainloop()
-  # If the bet mode is activated
-  After the user turn on the bet mode, will appaer a login screen, the user need make the login
 
 This function is responsible to open the first screen of the code, actually, this function start the work of code. with this functions work, the user can choose which year want simulate and if the user want or no the bet mode turned on, actually this function is very simple and after it call the function select_edition, this function must recive a parameter, about the year of the edition, if the user click in 2024, the parameter will be 2024, if click in 2025, parameter will be 2025.
 This function also is responsible to turn on the bet mode, look the variable 'btn_modo_aposta' in the code, this variable talk about the bet mode, if the user click, the function 'toggle_bet_mode' will turn on, if the user click again, the function will change the boolan number of bet mode, after I say more about this function.
 
+
+  # If the bet mode is activated
+  After the user turn on the bet mode, will appaer a login screen, the user need make the login with name and password, if this account don´t exist, this account will be created, earn 100 tickets to make bets, this screen is
+  
+  ![image](https://github.com/user-attachments/assets/c09e8be9-3b29-41d9-9294-f58bdce599a3)
+
+look if the account exist, the user only go to initial screen, or the account exist and the password is not the same of the first time, the software will return that the password is incorrect.
+the code of this screen:
+	
+ 	def tela_login():
+   	  global tela_login, entry_nome, entry_senha
+
+  	  tela_login = tk.Tk()
+  	  tela_login.title("Login")
+    	  tela_login.geometry("300x200")
+   	  tela_login.configure(bg="#2c3e50")
+
+    	  tk.Label(tela_login, text="Nome:", bg="#2c3e50", fg="white").pack(pady=5)
+  	  entry_nome = tk.Entry(tela_login)
+ 	  entry_nome.pack(pady=5)
+
+ 	  tk.Label(tela_login, text="Senha:", bg="#2c3e50", fg="white").pack(pady=5)
+	  entry_senha = tk.Entry(tela_login, show="*")
+  	  entry_senha.pack(pady=5)
+
+ 	  btn_login = tk.Button(tela_login, text="Login", command=fazer_login, bg="#2980b9", fg="white")
+   	  btn_login.pack(pady=10)
+
+    	  tela_login.mainloop()
+
+and the backend of this login method is 
+
+   	def fazer_login():
+  	  global usuario_logado, fichas_usuario
+  	  nome = entry_nome.get()
+ 	  senha = entry_senha.get()
+
+  	 if not nome or not senha:
+  	      messagebox.showwarning("Erro", "Por favor, preencha todos os campos.")
+  	      return
+
+ 	   usuario = Usuario.buscar_por_nome(nome)
+  	  if usuario:
+            if usuario.senha == senha:
+            usuario_logado = usuario
+            fichas_usuario = usuario.fichas
+            tela_login.destroy()
+            tela_inicial()
+           else:
+            messagebox.showerror("Erro", "Senha incorreta.")
+          else:
+      	  usuario = cadastrar_usuario(nome, senha)
+      	  usuario_logado = usuario
+     	  fichas_usuario = usuario.fichas
+          messagebox.showinfo("Sucesso", f"Usuário {nome} cadastrado com sucesso! Você recebeu 100 fichas.")
+          tela_login.destroy()
+          tela_inicial()
+        
