@@ -46,6 +46,8 @@ The first thing that you go see in the code is the screen of edition selector, o
 		    canvas.pack()
 		
 		    root.mainloop()
+  # If the bet mode is activated
+  After the user turn on the bet mode, will appaer a login screen, the user need make the login
 
 This function is responsible to open the first screen of the code, actually, this function start the work of code. with this functions work, the user can choose which year want simulate and if the user want or no the bet mode turned on, actually this function is very simple and after it call the function select_edition, this function must recive a parameter, about the year of the edition, if the user click in 2024, the parameter will be 2024, if click in 2025, parameter will be 2025.
 This function also is responsible to turn on the bet mode, look the variable 'btn_modo_aposta' in the code, this variable talk about the bet mode, if the user click, the function 'toggle_bet_mode' will turn on, if the user click again, the function will change the boolan number of bet mode, after I say more about this function.
