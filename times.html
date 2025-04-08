@@ -1,0 +1,2085 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Times | Brasileirão Simulator</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        /* Estilos Gerais */
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            color: #f8f9fa;
+            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+            margin: 0;
+            padding: 0;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+        /* Navbar */
+        .navbar {
+            background: rgba(0, 0, 0, 0.8);
+            backdrop-filter: blur(10px);
+            padding: 15px 5%;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+        }
+
+        .logo h1 {
+            margin: 0;
+            font-size: 1.8rem;
+            background: linear-gradient(90deg, #00d2ff 0%, #3a7bd5 100%);
+            background-clip: text;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 25px;
+            list-style: none;
+            margin: 0;
+            padding: 0;
+        }
+
+        .nav-links a {
+            color: white;
+            text-decoration: none;
+            font-weight: 500;
+            transition: all 0.3s;
+            padding: 5px 10px;
+            border-radius: 4px;
+        }
+
+        .nav-links a:hover {
+            background: rgba(255, 255, 255, 0.1);
+        }
+
+        .nav-links a.active {
+            background: linear-gradient(90deg, #00d2ff 0%, #3a7bd5 100%);
+        }
+
+        /* Header */
+        .header {
+            text-align: center;
+            padding: 100px 5% 60px;
+            background: linear-gradient(rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.7)), 
+                        url('https://img.freepik.com/free-photo/doing-sport-concept_23-2151937746.jpg');
+            background-size: cover;
+            background-position: center;
+        }
+
+        .header h1 {
+            font-size: 3rem;
+            margin-bottom: 20px;
+            background: linear-gradient(90deg, #00d2ff 0%, #3a7bd5 100%);
+            background-clip: text;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        /* Main Content */
+        .main-content {
+            padding: 60px 5%;
+            flex: 1;
+            max-width: 1400px;
+            margin: 0 auto;
+            width: 100%;
+            box-sizing: border-box;
+        }
+
+        .section-title {
+            text-align: center;
+            margin-bottom: 50px;
+            position: relative;
+        }
+
+        .section-title h2 {
+            font-size: 2.2rem;
+            display: inline-block;
+            background: linear-gradient(90deg, #00d2ff 0%, #3a7bd5 100%);
+            background-clip: text;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .section-title h2::after {
+            content: '';
+            display: block;
+            width: 80px;
+            height: 4px;
+            background: linear-gradient(90deg, #00d2ff 0%, #3a7bd5 100%);
+            margin: 15px auto 0;
+            border-radius: 2px;
+        }
+
+        /* Filtros */
+        .filters {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            margin-bottom: 40px;
+            flex-wrap: wrap;
+        }
+
+        .filter-btn {
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            color: white;
+            padding: 8px 20px;
+            border-radius: 30px;
+            cursor: pointer;
+            transition: all 0.3s;
+            font-size: 0.9rem;
+        }
+
+        .filter-btn:hover, .filter-btn.active {
+            background: linear-gradient(90deg, #00d2ff 0%, #3a7bd5 100%);
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0, 210, 255, 0.3);
+        }
+
+        /* Grid de Times */
+        .teams-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+            gap: 30px;
+            margin-top: 40px;
+        }
+
+        .team-card {
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
+            transition: all 0.4s;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            position: relative;
+        }
+
+        .team-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 15px 45px rgba(0, 210, 255, 0.2);
+            border-color: rgba(0, 210, 255, 0.3);
+        }
+
+        .team-banner {
+            height: 150px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .team-banner img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.5s;
+        }
+
+        .team-card:hover .team-banner img {
+            transform: scale(1.05);
+        }
+            /* Ajuste na posição do logo */
+            .team-logo {
+                position: absolute;
+                bottom: 250px; /* Alterado de -40px para -30px */
+                left: 50%;
+                transform: translateX(-50%);
+                width: 80px;
+                height: 80px;
+                border-radius: 50%;
+                background: rgba(0, 0, 0, 0.8);
+                border: 3px solid white;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                box-shadow: 0 5px 20px rgba(0, 0, 0, 0.5);
+                z-index: 2;
+            }
+        
+            /* Ajuste no padding superior do team-info */
+            .team-info {
+                padding: 40px 20px 20px; /* Alterado de 50px para 40px no topo */
+            }
+
+        .team-logo img {
+            width: 70%;
+            height: 70%;
+            object-fit: contain;
+        }
+
+        .team-name {
+            font-size: 1.4rem;
+            margin: 0 0 5px;
+            color: white;
+            font-weight: 600;
+        }
+
+        .team-meta {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            margin-bottom: 15px;
+            color: rgba(255, 255, 255, 0.7);
+            font-size: 0.9rem;
+        }
+
+        .team-stats {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 10px;
+            margin-top: 20px;
+        }
+
+        .stat-item {
+            background: rgba(0, 210, 255, 0.1);
+            padding: 10px;
+            border-radius: 8px;
+        }
+
+        .stat-value {
+            font-size: 1.2rem;
+            font-weight: 600;
+            color: #00d2ff;
+            margin-bottom: 3px;
+        }
+
+        .stat-label {
+            font-size: 0.7rem;
+            color: rgba(255, 255, 255, 0.7);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .team-btn {
+            display: block;
+            margin-top: 20px;
+            background: linear-gradient(90deg, #00d2ff 0%, #3a7bd5 100%);
+            color: white;
+            text-align: center;
+            padding: 10px;
+            border-radius: 6px;
+            text-decoration: none;
+            font-weight: 500;
+            transition: all 0.3s;
+            cursor: pointer;
+        }
+
+        .team-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 20px rgba(0, 210, 255, 0.4);
+        }
+
+        /* Footer */
+        .footer {
+            background: rgba(0, 0, 0, 0.8);
+            padding: 40px 5%;
+            text-align: center;
+            margin-top: 80px;
+        }
+
+        .footer p {
+            color: rgba(255, 255, 255, 0.7);
+            margin: 5px 0;
+        }
+
+        .social-icons {
+            display: flex;
+            justify-content: center;
+            gap: 25px;
+            margin: 25px 0;
+        }
+
+        .social-icons a {
+            color: white;
+            font-size: 1.5rem;
+            transition: all 0.3s;
+        }
+
+        .social-icons a:hover {
+            color: #00d2ff;
+            transform: translateY(-3px);
+        }
+
+        /* Modal */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.8);
+            z-index: 2000;
+            overflow-y: auto;
+        }
+
+        .modal-content {
+            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+            margin: 5% auto;
+            padding: 30px;
+            border-radius: 12px;
+            max-width: 800px;
+            width: 90%;
+            box-shadow: 0 15px 50px rgba(0, 210, 255, 0.2);
+            border: 1px solid rgba(0, 210, 255, 0.3);
+            position: relative;
+        }
+
+        .close-modal {
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            font-size: 1.8rem;
+            color: white;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .close-modal:hover {
+            color: #00d2ff;
+            transform: rotate(90deg);
+        }
+
+        .modal-header {
+            display: flex;
+            align-items: center;
+            margin-bottom: 30px;
+        }
+
+        .modal-logo {
+            width: 100px;
+            height: 100px;
+            border-radius: 50%;
+            background: rgba(0, 0, 0, 0.8);
+            border: 3px solid white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-right: 30px;
+            flex-shrink: 0;
+        }
+
+        .modal-logo img {
+            width: 80%;
+            height: 80%;
+            object-fit: contain;
+        }
+
+        .modal-title h2 {
+            font-size: 2rem;
+            margin: 0 0 5px;
+            background: linear-gradient(90deg, #00d2ff 0%, #3a7bd5 100%);
+            background-clip: text;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .modal-meta {
+            display: flex;
+            gap: 20px;
+            color: rgba(255, 255, 255, 0.7);
+            font-size: 0.9rem;
+        }
+
+        .modal-body {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 30px;
+        }
+
+        .modal-history {
+            line-height: 1.8;
+        }
+
+        .modal-history h3 {
+            font-size: 1.5rem;
+            margin-top: 0;
+            margin-bottom: 15px;
+            color: #00d2ff;
+        }
+
+        .modal-stats {
+            background: rgba(0, 0, 0, 0.2);
+            padding: 20px;
+            border-radius: 10px;
+        }
+
+        .modal-stats h3 {
+            font-size: 1.5rem;
+            margin-top: 0;
+            margin-bottom: 20px;
+            color: #00d2ff;
+            text-align: center;
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 15px;
+        }
+
+        .stat-bar {
+            margin-bottom: 15px;
+        }
+
+        .stat-info {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 5px;
+        }
+
+        .stat-name {
+            font-weight: 500;
+        }
+
+        .stat-value {
+            font-weight: 600;
+            color: #00d2ff;
+        }
+
+        .bar-container {
+            width: 100%;
+            height: 10px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 5px;
+            overflow: hidden;
+        }
+
+        .bar-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #00d2ff 0%, #3a7bd5 100%);
+            border-radius: 5px;
+        }
+
+        .modal-trophies {
+            grid-column: 1 / -1;
+            margin-top: 20px;
+        }
+
+        .modal-trophies h3 {
+            font-size: 1.5rem;
+            margin-top: 0;
+            margin-bottom: 15px;
+            color: #00d2ff;
+        }
+
+        .trophies-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+            gap: 15px;
+        }
+
+        .trophy-item {
+            background: rgba(0, 0, 0, 0.2);
+            padding: 15px;
+            border-radius: 8px;
+            text-align: center;
+        }
+
+        .trophy-icon {
+            font-size: 2rem;
+            color: gold;
+            margin-bottom: 10px;
+        }
+
+        .trophy-name {
+            font-size: 0.9rem;
+            margin-bottom: 5px;
+        }
+
+        .trophy-count {
+            font-weight: 600;
+            color: #00d2ff;
+        }
+
+        /* Responsividade */
+        @media (max-width: 992px) {
+            .teams-grid {
+                grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+                gap: 20px;
+            }
+            
+            .modal-body {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .navbar {
+                flex-direction: column;
+                padding: 15px;
+            }
+            
+            .nav-links {
+                margin-top: 15px;
+                gap: 15px;
+            }
+            
+            .header {
+                padding: 80px 5% 40px;
+            }
+            
+            .header h1 {
+                font-size: 2rem;
+            }
+            
+            .section-title h2 {
+                font-size: 1.8rem;
+            }
+            
+            .teams-grid {
+                grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+                gap: 15px;
+            }
+            
+            .modal-header {
+                flex-direction: column;
+                text-align: center;
+            }
+            
+            .modal-logo {
+                margin-right: 0;
+                margin-bottom: 20px;
+            }
+        }
+
+        @media (max-width: 576px) {
+            .header h1 {
+                font-size: 1.8rem;
+            }
+            
+            .section-title h2 {
+                font-size: 1.5rem;
+            }
+            
+            .filters {
+                gap: 10px;
+            }
+            
+            .filter-btn {
+                padding: 6px 15px;
+                font-size: 0.8rem;
+            }
+            
+            .teams-grid {
+                grid-template-columns: 1fr;
+                max-width: 400px;
+                margin-left: auto;
+                margin-right: auto;
+            }
+            
+            .social-icons {
+                gap: 20px;
+            }
+            
+            .modal-content {
+                padding: 20px;
+            }
+            
+            .stats-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <nav class="navbar">
+        <div class="logo">
+            <h1>Brasileirão Simulator</h1>
+        </div>
+        <ul class="nav-links">
+            <li><a href="index.html">Início</a></li>
+            <li><a href="sobre.html">Sobre</a></li>
+            <li><a href="times.html" class ="active">Times</a></li>
+            <li><a href="http://127.0.0.1:5500/site/pathingnotes.html" >Patch Notes</a></li>
+        </ul>
+    </nav>
+
+    <!-- Header -->
+    <header class="header">
+        <h1>Times do Brasileirão</h1>
+    </header>
+
+    <!-- Main Content -->
+    <main class="main-content">
+        <div class="section-title">
+            <h2>Conheça os Clubes</h2>
+        </div>
+        
+        <!-- Filtros -->
+        <div class="filters">
+            <button class="filter-btn active" data-filter="all">Todos</button>
+            <button class="filter-btn" data-filter="sul">Sul/Sudeste</button>
+            <button class="filter-btn" data-filter="nordeste">Nordeste</button>
+            <button class="filter-btn" data-filter="norte">Norte/Centro-Oeste</button>
+        </div>
+        
+        <!-- Grid de Times -->
+        <div class="teams-grid">
+            <!-- Athletico-PR -->
+            <div class="team-card" data-region="sul">
+                <div class="team-banner">
+                    <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSuknY22PLuJLS2wHfAL74AoOvhSRXH-disvA&s" alt="Arena da Baixada">
+                </div>
+                <div class="team-logo">
+                    <img src="https://upload.wikimedia.org/wikipedia/pt/c/c7/Club_Athletico_Paranaense_2019.png" alt="Athletico-PR">
+                </div>
+                <div class="team-info">
+                    <h3 class="team-name">Athletico-PR</h3>
+                    <div class="team-meta">
+                        <span>Curitiba-PR</span>
+                        <span>Fundado: 1924</span>
+                    </div>
+                    <div class="team-stats">
+                        <div class="stat-item">
+                            <div class="stat-value">7</div>
+                            <div class="stat-label">Força</div>
+                        </div>
+                        <div class="stat-item">
+                            <div class="stat-value">4</div>
+                            <div class="stat-label">Ataque</div>
+                        </div>
+                        <div class="stat-item">
+                            <div class="stat-value">3</div>
+                            <div class="stat-label">Defesa</div>
+                        </div>
+                    </div>
+                    <button class="team-btn" data-team="athletico-pr">Ver Detalhes</button>
+                </div>
+            </div>
+            
+            <!-- Atlético-MG -->
+            <div class="team-card" data-region="sul">
+                <div class="team-banner">
+                    <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQUhVyO9js6sSyXfuqBaD3OhMfYmfjNPFuj2g&s" alt="Mineirão">
+                </div>
+                <div class="team-logo">
+                    <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/5/5f/Atletico_mineiro_galo.png/672px-Atletico_mineiro_galo.png" alt="Atlético-MG">
+                </div>
+                <div class="team-info">
+                    <h3 class="team-name">Atlético-MG</h3>
+                    <div class="team-meta">
+                        <span>Belo Horizonte-MG</span>
+                        <span>Fundado: 1908</span>
+                    </div>
+                    <div class="team-stats">
+                        <div class="stat-item">
+                            <div class="stat-value">9</div>
+                            <div class="stat-label">Força</div>
+                        </div>
+                        <div class="stat-item">
+                            <div class="stat-value">5</div>
+                            <div class="stat-label">Ataque</div>
+                        </div>
+                        <div class="stat-item">
+                            <div class="stat-value">4</div>
+                            <div class="stat-label">Defesa</div>
+                        </div>
+                    </div>
+                    <button class="team-btn" data-team="atletico-mg">Ver Detalhes</button>
+                </div>
+            </div>
+            
+            <!-- Bahia -->
+            <div class="team-card" data-region="nordeste">
+                <div class="team-banner">
+                    <img src="https://w0.peakpx.com/wallpaper/503/554/HD-wallpaper-arena-fonte-nova-view-inside-bahia-stadium-brazilian-football-stadium-brazil-salvador-esporte-clube-bahia.jpg" alt="Arena Fonte Nova">
+                </div>
+                <div class="team-logo">
+                    <img src="https://upload.wikimedia.org/wikipedia/pt/9/90/ECBahia.png" alt="Bahia">
+                </div>
+                <div class="team-info">
+                    <h3 class="team-name">Bahia</h3>
+                    <div class="team-meta">
+                        <span>Salvador-BA</span>
+                        <span>Fundado: 1931</span>
+                    </div>
+                    <div class="team-stats">
+                        <div class="stat-item">
+                            <div class="stat-value">9</div>
+                            <div class="stat-label">Força</div>
+                        </div>
+                        <div class="stat-item">
+                            <div class="stat-value">5</div>
+                            <div class="stat-label">Ataque</div>
+                        </div>
+                        <div class="stat-item">
+                            <div class="stat-value">4</div>
+                            <div class="stat-label">Defesa</div>
+                        </div>
+                    </div>
+                    <button class="team-btn" data-team="bahia">Ver Detalhes</button>
+                </div>
+            </div>
+            
+            <!-- Botafogo -->
+            <div class="team-card" data-region="sul">
+                <div class="team-banner">
+                    <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/d/d3/Botafogo_2x2_Ava%C3%AD%2C_2009%2C_Est%C3%A1dio_Nilton_Santos.jpg/1200px-Botafogo_2x2_Ava%C3%AD%2C_2009%2C_Est%C3%A1dio_Nilton_Santos.jpg" alt="Nilton Santos">
+                </div>
+                <div class="team-logo">
+                    <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/5/52/Botafogo_de_Futebol_e_Regatas_logo.svg/1816px-Botafogo_de_Futebol_e_Regatas_logo.svg.png" alt="Botafogo">
+                </div>
+                <div class="team-info">
+                    <h3 class="team-name">Botafogo</h3>
+                    <div class="team-meta">
+                        <span>Rio de Janeiro-RJ</span>
+                        <span>Fundado: 1904</span>
+                    </div>
+                    <div class="team-stats">
+                        <div class="stat-item">
+                            <div class="stat-value">11</div>
+                            <div class="stat-label">Força</div>
+                        </div>
+                        <div class="stat-item">
+                            <div class="stat-value">6</div>
+                            <div class="stat-label">Ataque</div>
+                        </div>
+                        <div class="stat-item">
+                            <div class="stat-value">5</div>
+                            <div class="stat-label">Defesa</div>
+                        </div>
+                    </div>
+                    <button class="team-btn" data-team="botafogo">Ver Detalhes</button>
+                </div>
+            </div>
+            
+            <!-- Corinthians -->
+            <div class="team-card" data-region="sul">
+                <div class="team-banner">
+                    <img src="https://assets.goal.com/images/v3/blt66a94a2dab47b56d/getty_arena_corinthians.jpg?auto=webp&format=pjpg&width=3840&quality=60" alt="Neo Química Arena">
+                </div>
+                <div class="team-logo">
+                    <img src="https://upload.wikimedia.org/wikipedia/pt/b/b4/Corinthians_simbolo.png" alt="Corinthians">
+                </div>
+                <div class="team-info">
+                    <h3 class="team-name">Corinthians</h3>
+                    <div class="team-meta">
+                        <span>São Paulo-SP</span>
+                        <span>Fundado: 1910</span>
+                    </div>
+                    <div class="team-stats">
+                        <div class="stat-item">
+                            <div class="stat-value">10</div>
+                            <div class="stat-label">Força</div>
+                        </div>
+                        <div class="stat-item">
+                            <div class="stat-value">6</div>
+                            <div class="stat-label">Ataque</div>
+                        </div>
+                        <div class="stat-item">
+                            <div class="stat-value">4</div>
+                            <div class="stat-label">Defesa</div>
+                        </div>
+                    </div>
+                    <button class="team-btn" data-team="corinthians">Ver Detalhes</button>
+                </div>
+            </div>
+            
+            <!-- Cruzeiro -->
+            <div class="team-card" data-region="sul">
+                <div class="team-banner">
+                    <img src="https://w0.peakpx.com/wallpaper/869/404/HD-wallpaper-mineirao-empty-stadium-r-soccer-cruzeiro-stadium-football-stadium-belo-horizonte-minas-gerais-brazil-mineirao-stadium-brazilian-stadiums-thumbnail.jpg" alt="Mineirão">
+                </div>
+                <div class="team-logo">
+                    <img src="https://upload.wikimedia.org/wikipedia/commons/b/bc/Logo_Cruzeiro_1996.png" alt="Cruzeiro">
+                </div>
+                <div class="team-info">
+                    <h3 class="team-name">Cruzeiro</h3>
+                    <div class="team-meta">
+                        <span>Belo Horizonte-MG</span>
+                        <span>Fundado: 1921</span>
+                    </div>
+                    <div class="team-stats">
+                        <div class="stat-item">
+                            <div class="stat-value">8</div>
+                            <div class="stat-label">Força</div>
+                        </div>
+                        <div class="stat-item">
+                            <div class="stat-value">5</div>
+                            <div class="stat-label">Ataque</div>
+                        </div>
+                        <div class="stat-item">
+                            <div class="stat-value">3</div>
+                            <div class="stat-label">Defesa</div>
+                        </div>
+                    </div>
+                    <button class="team-btn" data-team="cruzeiro">Ver Detalhes</button>
+                </div>
+            </div>
+            
+            <!-- Cuiabá -->
+            <div class="team-card" data-region="norte">
+                <div class="team-banner">
+                    <img src="https://images.adsttc.com/media/images/5368/32a1/c07a/806b/9b00/002a/medium_jpg/IMG_7930.jpg?1399337627" alt="Arena Pantanal">
+                </div>
+                <div class="team-logo">
+                    <img src="https://upload.wikimedia.org/wikipedia/pt/2/20/Cuiab%C3%A1EC2020.png" alt="Cuiabá">
+                </div>
+                <div class="team-info">
+                    <h3 class="team-name">Cuiabá</h3>
+                    <div class="team-meta">
+                        <span>Cuiabá-MT</span>
+                        <span>Fundado: 2001</span>
+                    </div>
+                    <div class="team-stats">
+                        <div class="stat-item">
+                            <div class="stat-value">6</div>
+                            <div class="stat-label">Força</div>
+                        </div>
+                        <div class="stat-item">
+                            <div class="stat-value">2</div>
+                            <div class="stat-label">Ataque</div>
+                        </div>
+                        <div class="stat-item">
+                            <div class="stat-value">4</div>
+                            <div class="stat-label">Defesa</div>
+                        </div>
+                    </div>
+                    <button class="team-btn" data-team="cuiaba">Ver Detalhes</button>
+                </div>
+            </div>
+            
+            <!-- Flamengo -->
+            <div class="team-card" data-region="sul">
+                <div class="team-banner">
+                    <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcS34y3MTuF1DzkpMBn4x797WGvrwtcL8UcGcw&s" alt="Maracanã">
+                </div>
+                <div class="team-logo">
+                    <img src="https://upload.wikimedia.org/wikipedia/commons/9/93/Flamengo-RJ_%28BRA%29.png" alt="Flamengo">
+                </div>
+                <div class="team-info">
+                    <h3 class="team-name">Flamengo</h3>
+                    <div class="team-meta">
+                        <span>Rio de Janeiro-RJ</span>
+                        <span>Fundado: 1895</span>
+                    </div>
+                    <div class="team-stats">
+                        <div class="stat-item">
+                            <div class="stat-value">11</div>
+                            <div class="stat-label">Força</div>
+                        </div>
+                        <div class="stat-item">
+                            <div class="stat-value">6</div>
+                            <div class="stat-label">Ataque</div>
+                        </div>
+                        <div class="stat-item">
+                            <div class="stat-value">5</div>
+                            <div class="stat-label">Defesa</div>
+                        </div>
+                    </div>
+                    <button class="team-btn" data-team="flamengo">Ver Detalhes</button>
+                </div>
+            </div>
+            
+            <!-- Fluminense -->
+            <div class="team-card" data-region="sul">
+                <div class="team-banner">
+                    <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQ8fyNMi4Onf-z6SnDpmsS-TLkFZVHi9jUc4w&s" alt="Maracanã">
+                </div>
+                <div class="team-logo">
+                    <img src="https://upload.wikimedia.org/wikipedia/commons/a/ad/Fluminense_FC_escudo.png" alt="Fluminense">
+                </div>
+                <div class="team-info">
+                    <h3 class="team-name">Fluminense</h3>
+                    <div class="team-meta">
+                        <span>Rio de Janeiro-RJ</span>
+                        <span>Fundado: 1902</span>
+                    </div>
+                    <div class="team-stats">
+                        <div class="stat-item">
+                            <div class="stat-value">9</div>
+                            <div class="stat-label">Força</div>
+                        </div>
+                        <div class="stat-item">
+                            <div class="stat-value">4</div>
+                            <div class="stat-label">Ataque</div>
+                        </div>
+                        <div class="stat-item">
+                            <div class="stat-value">5</div>
+                            <div class="stat-label">Defesa</div>
+                        </div>
+                    </div>
+                    <button class="team-btn" data-team="fluminense">Ver Detalhes</button>
+                </div>
+            </div>
+            
+            <!-- Fortaleza -->
+            <div class="team-card" data-region="nordeste">
+                <div class="team-banner">
+                    <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQdHNrCQ_1LoV2mVkeMX7b6ZTbOpOIM9pCWjQ&s" alt="Castelão">
+                </div>
+                <div class="team-logo">
+                    <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/e/e9/Fortaleza_EC_2018.png/1200px-Fortaleza_EC_2018.png" alt="Fortaleza">
+                </div>
+                <div class="team-info">
+                    <h3 class="team-name">Fortaleza</h3>
+                    <div class="team-meta">
+                        <span>Fortaleza-CE</span>
+                        <span>Fundado: 1918</span>
+                    </div>
+                    <div class="team-stats">
+                        <div class="stat-item">
+                            <div class="stat-value">9</div>
+                            <div class="stat-label">Força</div>
+                        </div>
+                        <div class="stat-item">
+                            <div class="stat-value">4</div>
+                            <div class="stat-label">Ataque</div>
+                        </div>
+                        <div class="stat-item">
+                            <div class="stat-value">5</div>
+                            <div class="stat-label">Defesa</div>
+                        </div>
+                    </div>
+                    <button class="team-btn" data-team="fortaleza">Ver Detalhes</button>
+                </div>
+            </div>
+            
+            <!-- Grêmio -->
+            <div class="team-card" data-region="sul">
+                <div class="team-banner">
+                    <img src="https://gremio.blob.core.windows.net/imgs-site/lg-noticias-arena-do-gremio-tera-suas-luzes-apagadas-em-referencia-a-hora-do-planeta-9579.jpg" alt="Arena do Grêmio">
+                </div>
+                <div class="team-logo">
+                    <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/0/08/Gremio_logo.svg/1718px-Gremio_logo.svg.png" alt="Grêmio">
+                </div>
+                <div class="team-info">
+                    <h3 class="team-name">Grêmio</h3>
+                    <div class="team-meta">
+                        <span>Porto Alegre-RS</span>
+                        <span>Fundado: 1903</span>
+                    </div>
+                    <div class="team-stats">
+                        <div class="stat-item">
+                            <div class="stat-value">9</div>
+                            <div class="stat-label">Força</div>
+                        </div>
+                        <div class="stat-item">
+                            <div class="stat-value">5</div>
+                            <div class="stat-label">Ataque</div>
+                        </div>
+                        <div class="stat-item">
+                            <div class="stat-value">4</div>
+                            <div class="stat-label">Defesa</div>
+                        </div>
+                    </div>
+                    <button class="team-btn" data-team="gremio">Ver Detalhes</button>
+                </div>
+            </div>
+            
+            <!-- Internacional -->
+            <div class="team-card" data-region="sul">
+                <div class="team-banner">
+                    <img src="https://pbs.twimg.com/media/FW3Yk7AWYAADoJV.jpg:large" alt="Beira-Rio">
+                </div>
+                <div class="team-logo">
+                    <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/f/f1/Escudo_do_Sport_Club_Internacional.svg/1200px-Escudo_do_Sport_Club_Internacional.svg.png" alt="Internacional">
+                </div>
+                <div class="team-info">
+                    <h3 class="team-name">Internacional</h3>
+                    <div class="team-meta">
+                        <span>Porto Alegre-RS</span>
+                        <span>Fundado: 1909</span>
+                    </div>
+                    <div class="team-stats">
+                        <div class="stat-item">
+                            <div class="stat-value">10</div>
+                            <div class="stat-label">Força</div>
+                        </div>
+                        <div class="stat-item">
+                            <div class="stat-value">5</div>
+                            <div class="stat-label">Ataque</div>
+                        </div>
+                        <div class="stat-item">
+                            <div class="stat-value">5</div>
+                            <div class="stat-label">Defesa</div>
+                        </div>
+                    </div>
+                    <button class="team-btn" data-team="internacional">Ver Detalhes</button>
+                </div>
+            </div>
+
+
+            <!-- Sport Recife -->
+<div class="team-card" data-region="nordeste">
+    <div class="team-banner">
+        <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSRWgbbWejGraqq5ppZx-rYKb6o5fNzGQA5Fw&s" alt="Ilha do Retiro">
+    </div>
+    <div class="team-logo">
+        <img src="https://pbesportes.net/wp-content/uploads/2019/10/sport-recife-logo-escudo-1.png" alt="Sport Recife">
+    </div>
+    <div class="team-info">
+        <h3 class="team-name">Sport Recife</h3>
+        <div class="team-meta">
+            <span>Recife-PE</span>
+            <span>Fundado: 1905</span>
+        </div>
+        <div class="team-stats">
+            <div class="stat-item">
+                <div class="stat-value">7</div>
+                <div class="stat-label">Força</div>
+            </div>
+            <div class="stat-item">
+                <div class="stat-value">4</div>
+                <div class="stat-label">Ataque</div>
+            </div>
+            <div class="stat-item">
+                <div class="stat-value">3</div>
+                <div class="stat-label">Defesa</div>
+            </div>
+        </div>
+        <button class="team-btn" data-team="sport">Ver Detalhes</button>
+    </div>
+</div>
+
+<!-- Criciúma -->
+<div class="team-card" data-region="sul">
+    <div class="team-banner">
+        <img src="https://pbs.twimg.com/media/FTxsecZWQAEcS35.jpg:large" alt="Heriberto Hülse">
+    </div>
+    <div class="team-logo">
+        <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/6/6a/EscudoCriciumaEC.svg/1200px-EscudoCriciumaEC.svg.png" alt="Criciúma">
+    </div>
+    <div class="team-info">
+        <h3 class="team-name">Criciúma</h3>
+        <div class="team-meta">
+            <span>Criciúma-SC</span>
+            <span>Fundado: 1947</span>
+        </div>
+        <div class="team-stats">
+            <div class="stat-item">
+                <div class="stat-value">7</div>
+                <div class="stat-label">Força</div>
+            </div>
+            <div class="stat-item">
+                <div class="stat-value">5</div>
+                <div class="stat-label">Ataque</div>
+            </div>
+            <div class="stat-item">
+                <div class="stat-value">2</div>
+                <div class="stat-label">Defesa</div>
+            </div>
+        </div>
+        <button class="team-btn" data-team="criciuma">Ver Detalhes</button>
+    </div>
+</div>
+
+<!-- Juventude -->
+<div class="team-card" data-region="sul">
+    <div class="team-banner">
+        <img src="https://www.rbsdirect.com.br/imagesrc/34995358.jpg?w=1200&h=630&a=c&version=1575255600" alt="Alfredo Jaconi">
+    </div>
+    <div class="team-logo">
+        <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/5/51/EC_Juventude.svg/1024px-EC_Juventude.svg.png" alt="Juventude">
+    </div>
+    <div class="team-info">
+        <h3 class="team-name">Juventude</h3>
+        <div class="team-meta">
+            <span>Caxias do Sul-RS</span>
+            <span>Fundado: 1913</span>
+        </div>
+        <div class="team-stats">
+            <div class="stat-item">
+                <div class="stat-value">7</div>
+                <div class="stat-label">Força</div>
+            </div>
+            <div class="stat-item">
+                <div class="stat-value">3</div>
+                <div class="stat-label">Ataque</div>
+            </div>
+            <div class="stat-item">
+                <div class="stat-value">4</div>
+                <div class="stat-label">Defesa</div>
+            </div>
+        </div>
+        <button class="team-btn" data-team="juventude">Ver Detalhes</button>
+    </div>
+</div>
+
+<!-- Atlético Goianiense -->
+<div class="team-card" data-region="norte">
+    <div class="team-banner">
+        <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQCJc8eXQUGz8VgzPfQpev9yEa7J6dlYTMWPg&s" alt="Antônio Accioly">
+    </div>
+    <div class="team-logo">
+        <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/3/3e/Atl%C3%A9tico_Goianiense.svg/613px-Atl%C3%A9tico_Goianiense.svg.png" alt="Atlético Goianiense">
+    </div>
+    <div class="team-info">
+        <h3 class="team-name">Atlético-GO</h3>
+        <div class="team-meta">
+            <span>Goiânia-GO</span>
+            <span>Fundado: 1937</span>
+        </div>
+        <div class="team-stats">
+            <div class="stat-item">
+                <div class="stat-value">5</div>
+                <div class="stat-label">Força</div>
+            </div>
+            <div class="stat-item">
+                <div class="stat-value">2</div>
+                <div class="stat-label">Ataque</div>
+            </div>
+            <div class="stat-item">
+                <div class="stat-value">3</div>
+                <div class="stat-label">Defesa</div>
+            </div>
+        </div>
+        <button class="team-btn" data-team="atletico-go">Ver Detalhes</button>
+    </div>
+</div>
+
+<!-- Goiás -->
+<div class="team-card" data-region="norte">
+    <div class="team-banner">
+        <img src="https://media-cdn.tripadvisor.com/media/photo-s/0b/be/dd/75/serra-dourada.jpg" alt="Serra Dourada">
+    </div>
+    <div class="team-logo">
+        <img src="https://upload.wikimedia.org/wikipedia/commons/f/ff/Goi%C3%A1sLogo21.png" alt="Goiás">
+    </div>
+    <div class="team-info">
+        <h3 class="team-name">Goiás</h3>
+        <div class="team-meta">
+            <span>Goiânia-GO</span>
+            <span>Fundado: 1943</span>
+        </div>
+        <div class="team-stats">
+            <div class="stat-item">
+                <div class="stat-value">6</div>
+                <div class="stat-label">Força</div>
+            </div>
+            <div class="stat-item">
+                <div class="stat-value">2</div>
+                <div class="stat-label">Ataque</div>
+            </div>
+            <div class="stat-item">
+                <div class="stat-value">4</div>
+                <div class="stat-label">Defesa</div>
+            </div>
+        </div>
+        <button class="team-btn" data-team="goias">Ver Detalhes</button>
+    </div>
+</div>
+
+<!-- Coritiba -->
+    <div class="team-card" data-region="sul">
+     <div class="team-banner">
+        <img src="https://upload.wikimedia.org/wikipedia/commons/8/88/Major_Ant%C3%B4nio_Couto_Pereira_Stadium.jpg" alt="Couto Pereira">
+    </div>
+    <div class="team-logo">
+        <img src="https://upload.wikimedia.org/wikipedia/pt/8/87/ICoritibaFBC.png" alt="Coritiba">
+    </div>
+    <div class="team-info">
+        <h3 class="team-name">Coritiba</h3>
+        <div class="team-meta">
+            <span>Curitiba-PR</span>
+            <span>Fundado: 1909</span>
+        </div>
+        <div class="team-stats">
+            <div class="stat-item">
+                <div class="stat-value">6</div>
+                <div class="stat-label">Força</div>
+            </div>
+            <div class="stat-item">
+                <div class="stat-value">2</div>
+                <div class="stat-label">Ataque</div>
+            </div>
+            <div class="stat-item">
+                <div class="stat-value">4</div>
+                <div class="stat-label">Defesa</div>
+            </div>
+        </div>
+        <button class="team-btn" data-team="coritiba">Ver Detalhes</button>
+    </div>
+</div>
+            
+            <!-- Palmeiras -->
+            <div class="team-card" data-region="sul">
+                <div class="team-banner">
+                    <img src="https://pbs.twimg.com/media/FD28XjTWUAgrWph.jpg:large" alt="Allianz Parque">
+                </div>
+                <div class="team-logo">
+                    <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/1/10/Palmeiras_logo.svg/2048px-Palmeiras_logo.svg.png" alt="Palmeiras">
+                </div>
+                <div class="team-info">
+                    <h3 class="team-name">Palmeiras</h3>
+                    <div class="team-meta">
+                        <span>São Paulo-SP</span>
+                        <span>Fundado: 1914</span>
+                    </div>
+                    <div class="team-stats">
+                        <div class="stat-item">
+                            <div class="stat-value">11</div>
+                            <div class="stat-label">Força</div>
+                        </div>
+                        <div class="stat-item">
+                            <div class="stat-value">5</div>
+                            <div class="stat-label">Ataque</div>
+                        </div>
+                        <div class="stat-item">
+                            <div class="stat-value">6</div>
+                            <div class="stat-label">Defesa</div>
+                        </div>
+                    </div>
+                    <button class="team-btn" data-team="palmeiras">Ver Detalhes</button>
+                </div>
+            </div>
+            
+            <!-- Red Bull Bragantino -->
+            <div class="team-card" data-region="sul">
+                <div class="team-banner">
+                    <img src="https://img.redbull.com/images/c_limit,w_1500,h_1000/f_auto,q_auto/redbullcom/2020/3/18/nwqdhrimnppf1rdxkmv6/futebolnabiabichedid" alt="Nabi Abi Chedid">
+                </div>
+                <div class="team-logo">
+                    <img src="https://upload.wikimedia.org/wikipedia/pt/9/9e/RedBullBragantino.png" alt="Red Bull Bragantino">
+                </div>
+                <div class="team-info">
+                    <h3 class="team-name">RB Bragantino</h3>
+                    <div class="team-meta">
+                        <span>Bragança Paulista-SP</span>
+                        <span>Fundado: 1928</span>
+                    </div>
+                    <div class="team-stats">
+                        <div class="stat-item">
+                            <div class="stat-value">3</div>
+                            <div class="stat-label">Força</div>
+                        </div>
+                        <div class="stat-item">
+                            <div class="stat-value">3</div>
+                            <div class="stat-label">Ataque</div>
+                        </div>
+                        <div class="stat-item">
+                            <div class="stat-value">6</div>
+                            <div class="stat-label">Defesa</div>
+                        </div>
+                    </div>
+                    <button class="team-btn" data-team="bragantino">Ver Detalhes</button>
+                </div>
+            </div>
+            
+            <!-- Santos -->
+            <div class="team-card" data-region="sul">
+                <div class="team-banner">
+                    <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQad8CoJC02Rget990KpnbDLaAyct3UDNqwBA&s" alt="Vila Belmiro">
+                </div>
+                <div class="team-logo">
+                    <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/1/15/Santos_Logo.png/768px-Santos_Logo.png" alt="Santos">
+                </div>
+                <div class="team-info">
+                    <h3 class="team-name">Santos</h3>
+                    <div class="team-meta">
+                        <span>Santos-SP</span>
+                        <span>Fundado: 1912</span>
+                    </div>
+                    <div class="team-stats">
+                        <div class="stat-item">
+                            <div class="stat-value">8</div>
+                            <div class="stat-label">Força</div>
+                        </div>
+                        <div class="stat-item">
+                            <div class="stat-value">5</div>
+                            <div class="stat-label">Ataque</div>
+                        </div>
+                        <div class="stat-item">
+                            <div class="stat-value">3</div>
+                            <div class="stat-label">Defesa</div>
+                        </div>
+                    </div>
+                    <button class="team-btn" data-team="santos">Ver Detalhes</button>
+                </div>
+            </div>
+            
+            <!-- São Paulo -->
+            <div class="team-card" data-region="sul">
+                <div class="team-banner">
+                    <img src="https://nacaotricolor.com/wp-content/uploads/2021/11/Morumbi-1-1024x681.jpg" alt="Morumbi">
+                </div>
+                <div class="team-logo">
+                    <img src="https://upload.wikimedia.org/wikipedia/commons/f/f1/Sao_paulo_fc_starslogo.png" alt="São Paulo">
+                </div>
+                <div class="team-info">
+                    <h3 class="team-name">São Paulo</h3>
+                    <div class="team-meta">
+                        <span>São Paulo-SP</span>
+                        <span>Fundado: 1930</span>
+                    </div>
+                    <div class="team-stats">
+                        <div class="stat-item">
+                            <div class="stat-value">10</div>
+                            <div class="stat-label">Força</div>
+                        </div>
+                        <div class="stat-item">
+                            <div class="stat-value">5</div>
+                            <div class="stat-label">Ataque</div>
+                        </div>
+                        <div class="stat-item">
+                            <div class="stat-value">5</div>
+                            <div class="stat-label">Defesa</div>
+                        </div>
+                    </div>
+                    <button class="team-btn" data-team="sao-paulo">Ver Detalhes</button>
+                </div>
+            </div>
+            
+            <!-- Vasco -->
+            <div class="team-card" data-region="sul">
+                <div class="team-banner">
+                    <img src="https://s2-ge.glbimg.com/HXJWcQ8utkeUfEut7j-MoJ61saQ=/0x0:5542x3466/984x0/smart/filters:strip_icc()/i.s3.glbimg.com/v1/AUTH_bc8228b6673f488aa253bbcb03c80ec5/internal_photos/bs/2019/D/w/JJXkpLQbA5vRVxu8zWBQ/refletores.jpg" alt="São Januário">
+                </div>
+                <div class="team-logo">
+                    <img src="https://logodetimes.com/times/vasco-da-gama/logo-vasco-da-gama-4096.png" alt="Vasco">
+                </div>
+                <div class="team-info">
+                    <h3 class="team-name">Vasco</h3>
+                    <div class="team-meta">
+                        <span>Rio de Janeiro-RJ</span>
+                        <span>Fundado: 1898</span>
+                    </div>
+                    <div class="team-stats">
+                        <div class="stat-item">
+                            <div class="stat-value">7</div>
+                            <div class="stat-label">Força</div>
+                        </div>
+                        <div class="stat-item">
+                            <div class="stat-value">4</div>
+                            <div class="stat-label">Ataque</div>
+                        </div>
+                        <div class="stat-item">
+                            <div class="stat-value">7</div>
+                            <div class="stat-label">Defesa</div>
+                        </div>
+                    </div>
+                    <button class="team-btn" data-team="vasco">Ver Detalhes</button>
+                </div>
+            </div>
+            
+            <!-- Vitória -->
+            <div class="team-card" data-region="nordeste">
+                <div class="team-banner">
+                    <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/e/e0/Est%C3%A1dio_Barrad%C3%A3o_-_Esporte_Clube_Vit%C3%B3ria_8.jpg/1200px-Est%C3%A1dio_Barrad%C3%A3o_-_Esporte_Clube_Vit%C3%B3ria_8.jpg" alt="Barradão">
+                </div>
+                <div class="team-logo">
+                    <img src="https://upload.wikimedia.org/wikipedia/pt/3/34/Esporte_Clube_Vit%C3%B3ria_logo.png" alt="Vitória">
+                </div>
+                <div class="team-info">
+                    <h3 class="team-name">Vitória</h3>
+                    <div class="team-meta">
+                        <span>Salvador-BA</span>
+                        <span>Fundado: 1899</span>
+                    </div>
+                    <div class="team-stats">
+                        <div class="stat-item">
+                            <div class="stat-value">4</div>
+                            <div class="stat-label">Força</div>
+                        </div>
+                        <div class="stat-item">
+                            <div class="stat-value">2</div>
+                            <div class="stat-label">Ataque</div>
+                        </div>
+                        <div class="stat-item">
+                            <div class="stat-value">6</div>
+                            <div class="stat-label">Defesa</div>
+                        </div>
+                    </div>
+                    <button class="team-btn" data-team="vitoria">Ver Detalhes</button>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <p>&copy; 2025 Brasileirão Simulator. Todos os direitos reservados.</p>
+        <p>Desenvolvido com paixão por futebol e tecnologia desde 2024</p>
+        
+        <div class="social-icons">
+            <a href="https://github.com/2pacdevv" target="_blank" aria-label="GitHub">
+                <i class="fab fa-github"></i>
+            </a>
+            <a href="https://www.instagram.com/marcelo_grr/" target="_blank" aria-label="Instagram">
+                <i class="fab fa-instagram"></i>
+            </a>
+            <a href="#" aria-label="LinkedIn">
+                <i class="fab fa-linkedin"></i>
+            </a>
+            <a href="#" aria-label="Twitter">
+                <i class="fab fa-twitter"></i>
+            </a>
+        </div>
+    </footer>
+
+    <!-- Modal -->
+    <div class="modal" id="teamModal">
+        <div class="modal-content">
+            <span class="close-modal">&times;</span>
+            <div class="modal-header">
+                <div class="modal-logo">
+                    <img id="modalLogo" src="" alt="">
+                </div>
+                <div class="modal-title">
+                    <h2 id="modalTeamName"></h2>
+                    <div class="modal-meta">
+                        <span id="modalCity"></span>
+                        <span id="modalFounded"></span>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-body">
+                <div class="modal-history">
+                    <h3>História</h3>
+                    <p id="modalHistory"></p>
+                </div>
+                <div class="modal-stats">
+                    <h3>Estatísticas</h3>
+                    <div class="stats-grid">
+                        <div class="stat-bar">
+                            <div class="stat-info">
+                                <span class="stat-name">Força</span>
+                                <span class="stat-value" id="modalStrength"></span>
+                            </div>
+                            <div class="bar-container">
+                                <div class="bar-fill" id="strengthBar"></div>
+                            </div>
+                        </div>
+                        <div class="stat-bar">
+                            <div class="stat-info">
+                                <span class="stat-name">Ataque</span>
+                                <span class="stat-value" id="modalAttack"></span>
+                            </div>
+                            <div class="bar-container">
+                                <div class="bar-fill" id="attackBar"></div>
+                            </div>
+                        </div>
+                        <div class="stat-bar">
+                            <div class="stat-info">
+                                <span class="stat-name">Defesa</span>
+                                <span class="stat-value" id="modalDefense"></span>
+                            </div>
+                            <div class="bar-container">
+                                <div class="bar-fill" id="defenseBar"></div>
+                            </div>
+                        </div>
+                        <div class="stat-bar">
+                            <div class="stat-info">
+                                <span class="stat-name">Meio-Campo</span>
+                                <span class="stat-value" id="modalMidfield"></span>
+                            </div>
+                            <div class="bar-container">
+                                <div class="bar-fill" id="midfieldBar"></div>
+                            </div>
+                        </div>
+                        <div class="stat-bar">
+                            <div class="stat-info">
+                                <span class="stat-name">Técnico</span>
+                                <span class="stat-value" id="modalCoach"></span>
+                            </div>
+                            <div class="bar-container">
+                                <div class="bar-fill" id="coachBar"></div>
+                            </div>
+                        </div>
+                        <div class="stat-bar">
+                            <div class="stat-info">
+                                <span class="stat-name">Torcida</span>
+                                <span class="stat-value" id="modalFans"></span>
+                            </div>
+                            <div class="bar-container">
+                                <div class="bar-fill" id="fansBar"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-trophies">
+                    <h3>Títulos</h3>
+                    <div class="trophies-grid" id="trophiesGrid"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Scripts -->
+    <script>
+        // Dados dos times
+        const teamsData = {
+            'athletico-pr': {
+                name: 'Athletico Paranaense',
+                logo: 'https://upload.wikimedia.org/wikipedia/pt/c/c7/Club_Athletico_Paranaense_2019.png',
+                city: 'Curitiba-PR',
+                founded: 'Fundado: 1924',
+                history: 'O Club Athletico Paranaense, conhecido como Athletico-PR ou Furacão, é um dos principais clubes do Paraná. Fundado em 1924, tem uma história marcada por conquistas recentes, como a Copa Sul-Americana de 2018 e 2021. O clube é conhecido por sua forte estrutura e por revelar grandes talentos do futebol brasileiro.',
+                strength: 7,
+                attack: 8,
+                defense: 8,
+                midfield: 7,
+                coach: 8,
+                fans: 8,
+                trophies: [
+                    { name: 'Copa Sul-Americana', count: 2, icon: 'fa-trophy' },
+                    { name: 'Campeonato Brasileiro', count: 0, icon: 'fa-star' },
+                    { name: 'Copa do Brasil', count: 1, icon: 'fa-trophy' },
+                    { name: 'Campeonato Paranaense', count: 26, icon: 'fa-shield-alt' }
+                ]
+            },
+            'atletico-mg': {
+                name: 'Atlético Mineiro',
+                logo: 'https://upload.wikimedia.org/wikipedia/commons/thumb/5/5f/Atletico_mineiro_galo.png/672px-Atletico_mineiro_galo.png',
+                city: 'Belo Horizonte-MG',
+                founded: 'Fundado: 1908',
+                history: 'O Clube Atlético Mineiro, conhecido como Galo, é um dos clubes mais tradicionais do Brasil. Fundado em 1908, conquistou o Campeonato Brasileiro em 2021 e a Copa Libertadores em 2013. O clube tem uma das torcidas mais apaixonadas do país e é conhecido por seu estilo ofensivo de jogo.',
+                strength: 8,
+                attack: 9,
+                defense: 8,
+                midfield: 8,
+                coach: 8,
+                fans: 9,
+                trophies: [
+                    { name: 'Libertadores', count: 1, icon: 'fa-trophy' },
+                    { name: 'Campeonato Brasileiro', count: 2, icon: 'fa-star' },
+                    { name: 'Copa do Brasil', count: 2, icon: 'fa-trophy' },
+                    { name: 'Campeonato Mineiro', count: 47, icon: 'fa-shield-alt' }
+                ]
+            },
+            'bahia': {
+                name: 'Bahia',
+                logo: 'https://upload.wikimedia.org/wikipedia/pt/9/90/ECBahia.png',
+                city: 'Salvador-BA',
+                founded: 'Fundado: 1931',
+                history: 'O Esporte Clube Bahia é o maior clube do estado da Bahia e um dos mais tradicionais do Nordeste. Fundado em 1931, foi o primeiro clube nordestino a vencer o Campeonato Brasileiro, em 1959 e 1988. O clube tem uma torcida fanática e é conhecido como "Tricolor de Aço".',
+                strength: 6,
+                attack: 7,
+                defense: 7,
+                midfield: 6,
+                coach: 6,
+                fans: 8,
+                trophies: [
+                    { name: 'Campeonato Brasileiro', count: 2, icon: 'fa-star' },
+                    { name: 'Campeonato Baiano', count: 49, icon: 'fa-shield-alt' },
+                    { name: 'Copa do Nordeste', count: 2, icon: 'fa-trophy' }
+                ]
+            },
+            'botafogo': {
+                name: 'Botafogo',
+                logo: 'https://upload.wikimedia.org/wikipedia/commons/thumb/5/52/Botafogo_de_Futebol_e_Regatas_logo.svg/1816px-Botafogo_de_Futebol_e_Regatas_logo.svg.png',
+                city: 'Rio de Janeiro-RJ',
+                founded: 'Fundado: 1904',
+                history: 'O Botafogo de Futebol e Regatas é um dos clubes mais tradicionais do Brasil. Fundado em 1904, foi o primeiro clube carioca a vencer o Campeonato Brasileiro, em 1968. Conhecido como "O Glorioso", o clube revelou grandes jogadores como Garrincha, Jairzinho e Nilton Santos.',
+                strength: 7,
+                attack: 8,
+                defense: 8,
+                midfield: 7,
+                coach: 7,
+                fans: 7,
+                trophies: [
+                    { name: 'Campeonato Brasileiro', count: 2, icon: 'fa-star' },
+                    { name: 'Campeonato Carioca', count: 21, icon: 'fa-shield-alt' },
+                    { name: 'Torneio Rio-SP', count: 4, icon: 'fa-trophy' }
+                ]
+            },
+            'corinthians': {
+                name: 'Corinthians',
+                logo: 'https://upload.wikimedia.org/wikipedia/pt/b/b4/Corinthians_simbolo.png',
+                city: 'São Paulo-SP',
+                founded: 'Fundado: 1910',
+                history: 'O Sport Club Corinthians Paulista é um dos clubes mais populares do Brasil. Fundado em 1910, conquistou dois Mundiais (2000 e 2012), uma Libertadores (2012) e sete Campeonatos Brasileiros. Conhecido como "Time do Povo", tem uma das maiores torcidas do país.',
+                strength: 8,
+                attack: 8,
+                defense: 9,
+                midfield: 8,
+                coach: 8,
+                fans: 10,
+                trophies: [
+                    { name: 'Mundial', count: 2, icon: 'fa-globe' },
+                    { name: 'Libertadores', count: 1, icon: 'fa-trophy' },
+                    { name: 'Campeonato Brasileiro', count: 7, icon: 'fa-star' },
+                    { name: 'Campeonato Paulista', count: 31, icon: 'fa-shield-alt' },
+                    { name: 'Copa do Brasil', count: 3, icon: 'fa-trophy' }
+                ]
+            },
+            'cruzeiro': {
+                name: 'Cruzeiro',
+                logo: 'https://upload.wikimedia.org/wikipedia/commons/b/bc/Logo_Cruzeiro_1996.png',
+                city: 'Belo Horizonte-MG',
+                founded: 'Fundado: 1921',
+                history: 'O Cruzeiro Esporte Clube é um dos clubes mais vitoriosos do Brasil. Fundado em 1921, conquistou quatro Campeonatos Brasileiros e duas Copas do Brasil. Foi o primeiro clube brasileiro a vencer a tríplice corcontinental (Libertadores, Copa do Brasil e Campeonato Mineiro em 2003).',
+                strength: 7,
+                attack: 8,
+                defense: 8,
+                midfield: 7,
+                coach: 7,
+                fans: 8,
+                trophies: [
+                    { name: 'Libertadores', count: 2, icon: 'fa-trophy' },
+                    { name: 'Campeonato Brasileiro', count: 4, icon: 'fa-star' },
+                    { name: 'Copa do Brasil', count: 6, icon: 'fa-trophy' },
+                    { name: 'Campeonato Mineiro', count: 38, icon: 'fa-shield-alt' }
+                ]
+            },
+            'cuiaba': {
+                name: 'Cuiabá',
+                logo: 'https://upload.wikimedia.org/wikipedia/pt/2/20/Cuiab%C3%A1EC2020.png',
+                city: 'Cuiabá-MT',
+                founded: 'Fundado: 2001',
+                history: 'O Cuiabá Esporte Clube é o principal clube do estado do Mato Grosso. Fundado em 2001, teve uma ascensão meteórica no futebol brasileiro, alcançando a Série A em 2021. Conhecido como "Dourado", o clube representa a força do futebol da região Centro-Oeste.',
+                strength: 5,
+                attack: 6,
+                defense: 6,
+                midfield: 5,
+                coach: 6,
+                fans: 6,
+                trophies: [
+                    { name: 'Campeonato Mato-Grossense', count: 5, icon: 'fa-shield-alt' },
+                    { name: 'Série C', count: 1, icon: 'fa-star' }
+                ]
+            },
+            'flamengo': {
+                name: 'Flamengo',
+                logo: 'https://upload.wikimedia.org/wikipedia/commons/9/93/Flamengo-RJ_%28BRA%29.png',
+                city: 'Rio de Janeiro-RJ',
+                founded: 'Fundado: 1895',
+                history: 'O Clube de Regatas do Flamengo é o clube mais popular do Brasil, com mais de 40 milhões de torcedores. Fundado em 1895, conquistou três Libertadores (1981, 2019, 2022) e oito Campeonatos Brasileiros. Conhecido como "Mengão", é famoso por seu futebol ofensivo e por revelar grandes craques como Zico.',
+                strength: 9,
+                attack: 10,
+                defense: 9,
+                midfield: 9,
+                coach: 9,
+                fans: 10,
+                trophies: [
+                    { name: 'Mundial', count: 1, icon: 'fa-globe' },
+                    { name: 'Libertadores', count: 3, icon: 'fa-trophy' },
+                    { name: 'Campeonato Brasileiro', count: 8, icon: 'fa-star' },
+                    { name: 'Campeonato Carioca', count: 37, icon: 'fa-shield-alt' },
+                    { name: 'Copa do Brasil', count: 5, icon: 'fa-trophy' },
+
+                    
+                ]
+            },
+            'fluminense': {
+                name: 'Fluminense',
+                logo: 'https://upload.wikimedia.org/wikipedia/commons/a/ad/Fluminense_FC_escudo.png',
+                city: 'Rio de Janeiro-RJ',
+                founded: 'Fundado: 1902',
+                history: 'O Fluminense Football Club é um dos clubes mais tradicionais do Brasil. Fundado em 1902, conquistou quatro Campeonatos Brasileiros e uma Copa do Brasil. Conhecido como "Tricolor", foi o primeiro clube carioca a vencer a Copa Libertadores, em 2023. Tem uma das torcidas mais fiéis do país.',
+                strength: 8,
+                attack: 8,
+                defense: 8,
+                midfield: 8,
+                coach: 8,
+                fans: 8,
+                trophies: [
+                    { name: 'Libertadores', count: 1, icon: 'fa-trophy' },
+                    { name: 'Campeonato Brasileiro', count: 4, icon: 'fa-star' },
+                    { name: 'Campeonato Carioca', count: 32, icon: 'fa-shield-alt' },
+                    { name: 'Copa do Brasil', count: 1, icon: 'fa-trophy' }
+                ]
+            },
+            'fortaleza': {
+                name: 'Fortaleza',
+                logo: 'https://upload.wikimedia.org/wikipedia/commons/thumb/e/e9/Fortaleza_EC_2018.png/1200px-Fortaleza_EC_2018.png',
+                city: 'Fortaleza-CE',
+                founded: 'Fundado: 1918',
+                history: 'O Fortaleza Esporte Clube é um dos principais clubes do Nordeste. Fundado em 1918, tem uma história de superação e conquistas recentes, como a Copa do Nordeste e boas campanhas na Série A. Conhecido como "Leão do Pici", tem uma torcida apaixonada que lota o estádio Castelão.',
+                strength: 6,
+                attack: 7,
+                defense: 7,
+                midfield: 6,
+                coach: 7,
+                fans: 8,
+                trophies: [
+                    { name: 'Campeonato Cearense', count: 45, icon: 'fa-shield-alt' },
+                    { name: 'Copa do Nordeste', count: 3, icon: 'fa-trophy' },
+                    { name: 'Série B', count: 2, icon: 'fa-star' }
+                ]
+            },
+            'gremio': {
+                name: 'Grêmio',
+                logo: 'https://upload.wikimedia.org/wikipedia/commons/thumb/0/08/Gremio_logo.svg/1718px-Gremio_logo.svg.png',
+                city: 'Porto Alegre-RS',
+                founded: 'Fundado: 1903',
+                history: 'O Grêmio Foot-Ball Porto Alegrense é um dos clubes mais vitoriosos do Brasil. Fundado em 1903, conquistou três Libertadores (1983, 1995, 2017) e dois Mundiais (1983, 2017). Conhecido como "Imortal Tricolor", é famoso por sua escola de futebol e por revelar craques como Renato Portaluppi.',
+                strength: 8,
+                attack: 9,
+                defense: 8,
+                midfield: 8,
+                coach: 8,
+                fans: 9,
+                trophies: [
+                    { name: 'Mundial', count: 1, icon: 'fa-globe' },
+                    { name: 'Libertadores', count: 3, icon: 'fa-trophy' },
+                    { name: 'Copa do Brasil', count: 5, icon: 'fa-trophy' },
+                    { name: 'Campeonato Brasileiro', count: 2, icon: 'fa-star' },
+                    { name: 'Campeonato Gaúcho', count: 42, icon: 'fa-shield-alt' }
+                ]
+            },
+            'internacional': {
+                name: 'Internacional',
+                logo: 'https://upload.wikimedia.org/wikipedia/commons/thumb/f/f1/Escudo_do_Sport_Club_Internacional.svg/1200px-Escudo_do_Sport_Club_Internacional.svg.png',
+                city: 'Porto Alegre-RS',
+                founded: 'Fundado: 1909',
+                history: 'O Sport Club Internacional é um dos clubes mais tradicionais do Brasil. Fundado em 1909, conquistou uma Libertadores (2006) e um Mundial (2006), além de três Campeonatos Brasileiros. Conhecido como "Colorado", tem uma das torcidas mais apaixonadas do país e uma forte rivalidade com o Grêmio.',
+                strength: 8,
+                attack: 8,
+                defense: 8,
+                midfield: 8,
+                coach: 8,
+                fans: 9,
+                trophies: [
+                    { name: 'Mundial', count: 1, icon: 'fa-globe' },
+                    { name: 'Libertadores', count: 2, icon: 'fa-trophy' },
+                    { name: 'Campeonato Brasileiro', count: 3, icon: 'fa-star' },
+                    { name: 'Copa do Brasil', count: 1, icon: 'fa-trophy' },
+                    { name: 'Campeonato Gaúcho', count: 45, icon: 'fa-shield-alt' }
+                ]
+            },
+            'palmeiras': {
+                name: 'Palmeiras',
+                logo: 'https://upload.wikimedia.org/wikipedia/commons/thumb/1/10/Palmeiras_logo.svg/2048px-Palmeiras_logo.svg.png',
+                city: 'São Paulo-SP',
+                founded: 'Fundado: 1914',
+                history: 'A Sociedade Esportiva Palmeiras é o clube mais vitorioso do Brasil. Fundado em 1914 por imigrantes italianos, conquistou três Libertadores (1999, 2020, 2021) e dez Campeonatos Brasileiros. Conhecido como "Verdão", tem uma das maiores torcidas do país e um dos melhores centros de treinamento da América Latina.',
+                strength: 9,
+                attack: 9,
+                defense: 9,
+                midfield: 9,
+                coach: 9,
+                fans: 10,
+                trophies: [
+                    { name: 'Libertadores', count: 3, icon: 'fa-trophy' },
+                    { name: 'Campeonato Brasileiro', count: 10, icon: 'fa-star' },
+                    { name: 'Copa do Brasil', count: 4, icon: 'fa-trophy' },
+                    { name: 'Campeonato Paulista', count: 25, icon: 'fa-shield-alt' }
+                ]
+            },
+            'bragantino': {
+                name: 'RB Bragantino',
+                logo: 'https://upload.wikimedia.org/wikipedia/pt/9/9e/RedBullBragantino.png',
+                city: 'Bragança Paulista-SP',
+                founded: 'Fundado: 1928',
+                history: 'O Red Bull Bragantino, antigo Clube Atlético Bragantino, é um clube que teve uma reviravolta após ser adquirido pela Red Bull em 2019. Fundado em 1928, alcançou destaque nacional com boas campanhas no Campeonato Brasileiro. Conhecido como "Massa Bruta", investe pesado em revelação de jovens talentos.',
+                strength: 7,
+                attack: 8,
+                defense: 7,
+                midfield: 7,
+                coach: 7,
+                fans: 6,
+                trophies: [
+                    { name: 'Campeonato Paulista', count: 1, icon: 'fa-shield-alt' },
+                    { name: 'Série B', count: 1, icon: 'fa-star' },
+                    { name: 'Copa Paulista', count: 1, icon: 'fa-trophy' }
+                ]
+            },
+            'santos': {
+                name: 'Santos',
+                logo: 'https://upload.wikimedia.org/wikipedia/commons/thumb/1/15/Santos_Logo.png/768px-Santos_Logo.png',
+                city: 'Santos-SP',
+                founded: 'Fundado: 1912',
+                history: 'O Santos Futebol Clube é um dos clubes mais tradicionais do Brasil. Fundado em 1912, ficou famoso mundialmente na década de 1960 com Pelé, conquistando duas Libertadores e dois Mundiais. Conhecido como "Peixe", é o clube que revelou o maior jogador de todos os tempos e mantém uma forte tradição de revelar talentos.',
+                strength: 7,
+                attack: 8,
+                defense: 7,
+                midfield: 7,
+                coach: 7,
+                fans: 8,
+                trophies: [
+                    { name: 'Mundial', count: 2, icon: 'fa-globe' },
+                    { name: 'Libertadores', count: 3, icon: 'fa-trophy' },
+                    { name: 'Copa do Brasil', count: 1, icon: 'fa-trophy' },
+                    { name: 'Campeonato Brasileiro', count: 8, icon: 'fa-star' },
+                    { name: 'Campeonato Paulista', count: 22, icon: 'fa-shield-alt' }
+                ]
+            },
+            'sao-paulo': {
+                name: 'São Paulo',
+                logo: 'https://upload.wikimedia.org/wikipedia/commons/f/f1/Sao_paulo_fc_starslogo.png',
+                city: 'São Paulo-SP',
+                founded: 'Fundado: 1930',
+                history: 'O São Paulo Futebol Clube é um dos clubes mais vitoriosos do Brasil. Fundado em 1930, conquistou três Mundiais (1992, 1993, 2005) e três Libertadores (1992, 1993, 2005). Conhecido como "Tricolor Paulista", é o único clube brasileiro invicto em finais de Mundial e tem uma das melhores estruturas do país.',
+                strength: 8,
+                attack: 9,
+                defense: 9,
+                midfield: 8,
+                coach: 8,
+                fans: 9,
+                trophies: [
+                    { name: 'Mundial', count: 3, icon: 'fa-globe' },
+                    { name: 'Libertadores', count: 3, icon: 'fa-trophy' },
+                    { name: 'Copa do Brasil', count: 1, icon: 'fa-trophy' },
+                    { name: 'Campeonato Brasileiro', count: 6, icon: 'fa-star' },
+                    { name: 'Campeonato Paulista', count: 22, icon: 'fa-shield-alt' }
+                ]
+            },
+            'vasco': {
+                name: 'Vasco da Gama',
+                logo: 'https://logodetimes.com/times/vasco-da-gama/logo-vasco-da-gama-4096.png',
+                city: 'Rio de Janeiro-RJ',
+                founded: 'Fundado: 1898',
+                history: 'O Club de Regatas Vasco da Gama é um dos clubes mais tradicionais do Brasil. Fundado em 1898, foi pioneiro na inclusão de negros e operários no futebol. Conquistou uma Libertadores (1998) e quatro Campeonatos Brasileiros. Conhecido como "Gigante da Colina", tem uma das torcidas mais apaixonadas do país.',
+                strength: 6,
+                attack: 7,
+                defense: 7,
+                midfield: 6,
+                coach: 6,
+                fans: 9,
+                trophies: [
+                    { name: 'Libertadores', count: 1, icon: 'fa-trophy' },
+                    { name: 'Campeonato Brasileiro', count: 4, icon: 'fa-star' },
+                    { name: 'Campeonato Carioca', count: 24, icon: 'fa-shield-alt' },
+                    { name: 'Copa do Brasil', count: 1, icon: 'fa-trophy' }
+                ]
+            },
+            'vitoria': {
+                name: 'Vitória',
+                logo: 'https://upload.wikimedia.org/wikipedia/pt/3/34/Esporte_Clube_Vit%C3%B3ria_logo.png',
+                city: 'Salvador-BA',
+                founded: 'Fundado: 1899',
+                history: 'O Esporte Clube Vitória é um dos clubes mais tradicionais do Nordeste. Fundado em 1899, é conhecido como "Leão da Barra" e tem uma forte rivalidade com o Bahia. Apesar de nunca ter conquistado títulos nacionais de expressão, é um clube formador de talentos e com uma torcida apaixonada.',
+                strength: 6,
+                attack: 7,
+                defense: 7,
+                midfield: 6,
+                coach: 6,
+                fans: 7,
+                trophies: [
+                    { name: 'Campeonato Baiano', count: 29, icon: 'fa-shield-alt' },
+                    { name: 'Copa do Nordeste', count: 1, icon: 'fa-trophy' },
+                    { name: 'Série B', count: 0, icon: 'fa-star' }
+                ]
+                
+            },
+            'sport': {
+    name: 'Sport Recife',
+    logo: 'https://pbesportes.net/wp-content/uploads/2019/10/sport-recife-logo-escudo-1.png',
+    city: 'Recife-PE',
+    founded: 'Fundado: 1905',
+    history: 'O Sport Club do Recife é um dos clubes mais tradicionais do Nordeste. Fundado em 1905, conquistou o Campeonato Brasileiro em 1987 e é o maior vencedor do Campeonato Pernambucano. Conhecido como "Leão da Ilha", tem uma das torcidas mais apaixonadas do país e uma forte rivalidade com Náutico e Santa Cruz.',
+    strength: 6,
+    attack: 7,
+    defense: 7,
+    midfield: 6,
+    coach: 6,
+    fans: 4,
+    trophies: [
+        { name: 'Campeonato Brasileiro', count: 1, icon: 'fa-star' },
+        { name: 'Campeonato Pernambucano', count: 42, icon: 'fa-shield-alt' },
+        { name: 'Copa do Brasil', count: 1, icon: 'fa-trophy' },
+        { name: 'Copa do Nordeste', count: 1, icon: 'fa-trophy' }
+    ]
+},
+'criciuma': {
+    name: 'Criciúma',
+    logo: 'https://upload.wikimedia.org/wikipedia/commons/thumb/6/6a/EscudoCriciumaEC.svg/1200px-EscudoCriciumaEC.svg.png',
+    city: 'Criciúma-SC',
+    founded: 'Fundado: 1947',
+    history: 'O Criciúma Esporte Clube é o principal clube do sul de Santa Catarina. Fundado em 1947 por imigrantes italianos, conquistou a Copa do Brasil em 1991 e tem uma história de superação. Conhecido como "Tigre", representa a força do futebol do interior catarinense e tem uma torcida apaixonada.',
+    strength: 5,
+    attack: 6,
+    defense: 6,
+    midfield: 5,
+    coach: 6,
+    fans: 6,
+    trophies: [
+        { name: 'Copa do Brasil', count: 1, icon: 'fa-trophy' },
+        { name: 'Campeonato Catarinense', count: 10, icon: 'fa-shield-alt' },
+        { name: 'Série B', count: 1, icon: 'fa-star' }
+    ]
+},
+'juventude': {
+    name: 'Juventude',
+    logo: 'https://upload.wikimedia.org/wikipedia/commons/thumb/5/51/EC_Juventude.svg/1024px-EC_Juventude.svg.png',
+    city: 'Caxias do Sul-RS',
+    founded: 'Fundado: 1913',
+    history: 'O Esporte Clube Juventude é um dos clubes mais tradicionais do interior gaúcho. Fundado em 1913, conquistou a Copa do Brasil em 1999 e representa a cidade de Caxias do Sul. Conhecido como "Papão", tem uma torcida fiel e é conhecido por suas campanhas surpreendentes em competições nacionais.',
+    strength: 5,
+    attack: 6,
+    defense: 6,
+    midfield: 5,
+    coach: 6,
+    fans: 6,
+    trophies: [
+        { name: 'Copa do Brasil', count: 1, icon: 'fa-trophy' },
+        { name: 'Campeonato Gaúcho', count: 1, icon: 'fa-shield-alt' }
+    ]
+},
+'atletico-go': {
+    name: 'Atlético Goianiense',
+    logo: 'https://upload.wikimedia.org/wikipedia/commons/thumb/3/3e/Atl%C3%A9tico_Goianiense.svg/613px-Atl%C3%A9tico_Goianiense.svg.png',
+    city: 'Goiânia-GO',
+    founded: 'Fundado: 1937',
+    history: 'O Atlético Clube Goianiense é um dos principais clubes do Centro-Oeste. Fundado em 1937, tem uma história de ascensão recente no futebol brasileiro. Conhecido como "Dragão", é o maior campeão do Campeonato Goiano e tem uma torcida apaixonada que lota o estádio Antônio Accioly.',
+    strength: 6,
+    attack: 7,
+    defense: 7,
+    midfield: 6,
+    coach: 7,
+    fans: 7,
+    trophies: [
+        { name: 'Campeonato Goiano', count: 15, icon: 'fa-shield-alt' },
+        { name: 'Série B', count: 1, icon: 'fa-star' }
+    ]
+},
+'goias': {
+    name: 'Goiás',
+    logo: 'https://upload.wikimedia.org/wikipedia/commons/f/ff/Goi%C3%A1sLogo21.png',
+    city: 'Goiânia-GO',
+    founded: 'Fundado: 1943',
+    history: 'O Goiás Esporte Clube é um dos clubes mais tradicionais do Centro-Oeste. Fundado em 1943, conquistou a Copa do Brasil em 1990 e tem uma história marcada por boas campanhas no Campeonato Brasileiro. Conhecido como "Esmeraldino", tem uma forte rivalidade com o Atlético-GO e uma torcida apaixonada.',
+    strength: 6,
+    attack: 7,
+    defense: 7,
+    midfield: 6,
+    coach: 7,
+    fans: 7,
+    trophies: [
+        { name: 'Campeonato Goiano', count: 28, icon: 'fa-shield-alt' }
+    ]
+},
+'coritiba': {
+    name: 'Coritiba',
+    logo: 'https://upload.wikimedia.org/wikipedia/pt/8/87/ICoritibaFBC.png',
+    city: 'Curitiba-PR',
+    founded: 'Fundado: 1909',
+    history: 'O Coritiba Foot Ball Club é um dos clubes mais tradicionais do Paraná. Fundado em 1909 por imigrantes alemães, foi o primeiro clube paranaense a vencer o Campeonato Brasileiro, em 1985. Conhecido como "Coxa Branca", tem uma forte rivalidade com Athletico-PR e Paraná Clube, e uma torcida apaixonada.',
+    strength: 6,
+    attack: 7,
+    defense: 7,
+    midfield: 6,
+    coach: 6,
+    fans: 7,
+    trophies: [
+        { name: 'Campeonato Brasileiro', count: 1, icon: 'fa-star' },
+        { name: 'Campeonato Paranaense', count: 39, icon: 'fa-shield-alt' }
+    ]
+}
+        };
+
+        // Filtro de times por região
+        document.querySelectorAll('.filter-btn').forEach(btn => {
+            btn.addEventListener('click', () => {
+                // Remove classe active de todos os botões
+                document.querySelectorAll('.filter-btn').forEach(b => {
+                    b.classList.remove('active');
+                });
+                
+                // Adiciona classe active no botão clicado
+                btn.classList.add('active');
+                
+                const filter = btn.dataset.filter;
+                const teams = document.querySelectorAll('.team-card');
+                
+                teams.forEach(team => {
+                    if (filter === 'all' || team.dataset.region === filter) {
+                        team.style.display = 'block';
+                    } else {
+                        team.style.display = 'none';
+                    }
+                });
+            });
+        });
+
+        // Efeito de hover nos cards
+        document.querySelectorAll('.team-card').forEach(card => {
+            card.addEventListener('mouseenter', () => {
+                const logo = card.querySelector('.team-logo');
+                logo.style.transform = 'translateX(-50%) scale(1.1)';
+                logo.style.boxShadow = '0 8px 25px rgba(0, 210, 255, 0.4)';
+            });
+            
+            card.addEventListener('mouseleave', () => {
+                const logo = card.querySelector('.team-logo');
+                logo.style.transform = 'translateX(-50%) scale(1)';
+                logo.style.boxShadow = '0 5px 20px rgba(0, 0, 0, 0.5)';
+            });
+        });
+
+        // Modal de detalhes do time
+        const modal = document.getElementById('teamModal');
+        const closeModal = document.querySelector('.close-modal');
+        
+        document.querySelectorAll('.team-btn').forEach(btn => {
+            btn.addEventListener('click', () => {
+                const teamId = btn.dataset.team;
+                const teamData = teamsData[teamId];
+                
+                // Preenche os dados do modal
+                document.getElementById('modalTeamName').textContent = teamData.name;
+                document.getElementById('modalLogo').src = teamData.logo;
+                document.getElementById('modalLogo').alt = teamData.name;
+                document.getElementById('modalCity').textContent = teamData.city;
+                document.getElementById('modalFounded').textContent = teamData.founded;
+                document.getElementById('modalHistory').textContent = teamData.history;
+                
+                // Preenche as estatísticas
+                document.getElementById('modalStrength').textContent = teamData.strength;
+                document.getElementById('modalAttack').textContent = teamData.attack;
+                document.getElementById('modalDefense').textContent = teamData.defense;
+                document.getElementById('modalMidfield').textContent = teamData.midfield;
+                document.getElementById('modalCoach').textContent = teamData.coach;
+                document.getElementById('modalFans').textContent = teamData.fans;
+                
+                // Atualiza as barras de progresso
+                document.getElementById('strengthBar').style.width = `${teamData.strength * 10}%`;
+                document.getElementById('attackBar').style.width = `${teamData.attack * 10}%`;
+                document.getElementById('defenseBar').style.width = `${teamData.defense * 10}%`;
+                document.getElementById('midfieldBar').style.width = `${teamData.midfield * 10}%`;
+                document.getElementById('coachBar').style.width = `${teamData.coach * 10}%`;
+                document.getElementById('fansBar').style.width = `${teamData.fans * 10}%`;
+                
+                // Preenche os títulos
+                const trophiesGrid = document.getElementById('trophiesGrid');
+                trophiesGrid.innerHTML = '';
+                
+                teamData.trophies.forEach(trophy => {
+                    const trophyItem = document.createElement('div');
+                    trophyItem.className = 'trophy-item';
+                    trophyItem.innerHTML = `
+                        <div class="trophy-icon">
+                            <i class="fas ${trophy.icon}"></i>
+                        </div>
+                        <div class="trophy-name">${trophy.name}</div>
+                        <div class="trophy-count">${trophy.count}</div>
+                    `;
+                    trophiesGrid.appendChild(trophyItem);
+                });
+                
+                // Mostra o modal
+                modal.style.display = 'block';
+                document.body.style.overflow = 'hidden';
+            });
+        });
+        
+        // Fecha o modal
+        closeModal.addEventListener('click', () => {
+            modal.style.display = 'none';
+            document.body.style.overflow = 'auto';
+        });
+        
+        // Fecha o modal ao clicar fora
+        window.addEventListener('click', (e) => {
+            if (e.target === modal) {
+                modal.style.display = 'none';
+                document.body.style.overflow = 'auto';
+            }
+        });
+
+        // Animação inicial
+        document.addEventListener('DOMContentLoaded', () => {
+            const teams = document.querySelectorAll('.team-card');
+            
+            teams.forEach((team, index) => {
+                setTimeout(() => {
+                    team.style.opacity = '1';
+                    team.style.transform = 'translateY(0)';
+                }, index * 100);
+            });
+        });
+
+        
+    </script>
+</body>
+</html>

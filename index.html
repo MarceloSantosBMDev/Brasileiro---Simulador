@@ -4,9 +4,303 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Brasileirão Simulator</title>
-    <!-- Referência ao arquivo CSS -->
     <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
+        /* Estilos Gerais */
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            color: #f8f9fa;
+            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+            margin: 0;
+            padding: 0;
+        }
+        
+        /* Navbar */
+        .navbar {
+            background: rgba(0, 0, 0, 0.8);
+            backdrop-filter: blur(10px);
+            padding: 15px 5%;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+        }
+        
+        .logo h1 {
+            margin: 0;
+            font-size: 1.8rem;
+            background: linear-gradient(90deg, #00d2ff 0%, #3a7bd5 100%);
+            background-clip: text;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        
+        .nav-links {
+            display: flex;
+            gap: 25px;
+            list-style: none;
+            margin: 0;
+            padding: 0;
+        }
+        
+        .nav-links a {
+            color: white;
+            text-decoration: none;
+            font-weight: 500;
+            transition: all 0.3s;
+            padding: 5px 10px;
+            border-radius: 4px;
+        }
+        
+        .nav-links a.active {
+            background: linear-gradient(90deg, #00d2ff 0%, #3a7bd5 100%);
+        }
+        
+
+        
+        /* Header */
+        .header {
+            text-align: center;
+            padding: 100px 5% 80px;
+            background: linear-gradient(rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.7)), 
+                        url('https://images.unsplash.com/photo-1540747913346-19e32dc3e97e?ixlib=rb-1.2.1&auto=format&fit=crop&w=1600&q=80');
+            background-size: cover;
+            background-position: center;
+            position: relative;
+        }
+        
+        .header::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            height: 100px;
+            background: linear-gradient(to top, #1a1a2e, transparent);
+        }
+        
+        .header h1 {
+            font-size: 3rem;
+            margin-bottom: 20px;
+            background: linear-gradient(90deg, #00d2ff 0%, #3a7bd5 100%);
+            background-clip: text;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            position: relative;
+            z-index: 1;
+            text-shadow: 0 2px 10px rgba(0,0,0,0.5);
+        }
+        
+        .header p {
+            font-size: 1.2rem;
+            max-width: 800px;
+            margin: 0 auto;
+            color: rgba(255, 255, 255, 0.9);
+            position: relative;
+            z-index: 1;
+            text-shadow: 0 1px 5px rgba(0,0,0,0.5);
+        }
+        
+        /* Main Content */
+        .main-content {
+            padding: 60px 5%;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        
+        .section-title {
+            text-align: center;
+            margin-bottom: 50px;
+            position: relative;
+        }
+        
+        .section-title h2 {
+            font-size: 2.2rem;
+            display: inline-block;
+            background: linear-gradient(90deg, #00d2ff 0%, #3a7bd5 100%);
+            background-clip: text;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        
+        .section-title h2::after {
+            content: '';
+            display: block;
+            width: 80px;
+            height: 4px;
+            background: linear-gradient(90deg, #00d2ff 0%, #3a7bd5 100%);
+            margin: 15px auto 0;
+            border-radius: 2px;
+        }
+        
+        /* Download Cards */
+        .download-cards {
+            display: flex;
+            gap: 30px;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+        
+        .download-card {
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 15px;
+            padding: 30px;
+            width: 100%;
+            max-width: 400px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+            transition: transform 0.3s, box-shadow 0.3s;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            text-align: center;
+        }
+        
+        .download-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.4);
+            background: rgba(255, 255, 255, 0.08);
+        }
+        
+        .download-card h3 {
+            font-size: 1.5rem;
+            margin-top: 0;
+            color: #00d2ff;
+        }
+        
+        .download-card p {
+            color: rgba(255, 255, 255, 0.8);
+            margin-bottom: 25px;
+            font-size: 1rem;
+        }
+        
+        .download-button {
+            background: linear-gradient(90deg, #00d2ff 0%, #3a7bd5 100%);
+            color: white;
+            border: none;
+            padding: 12px 30px;
+            border-radius: 30px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            box-shadow: 0 4px 15px rgba(0, 210, 255, 0.3);
+        }
+        
+        .download-button:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 7px 20px rgba(0, 210, 255, 0.4);
+        }
+        
+        /* Features Section */
+        .features-section {
+            margin: 80px 0;
+        }
+        
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 30px;
+            margin-top: 50px;
+        }
+        
+        .feature-card {
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 15px;
+            padding: 30px;
+            transition: all 0.3s;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        
+        .feature-card:hover {
+            transform: translateY(-5px);
+            background: rgba(255, 255, 255, 0.1);
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.3);
+        }
+        
+        .feature-icon {
+            font-size: 2.5rem;
+            margin-bottom: 20px;
+            color: #00d2ff;
+        }
+        
+        .feature-card h3 {
+            margin: 0 0 15px;
+            color: white;
+            font-size: 1.3rem;
+        }
+        
+        .feature-card p {
+            color: rgba(255, 255, 255, 0.7);
+            margin: 0;
+            font-size: 0.95rem;
+        }
+        
+        /* Footer */
+        .footer {
+            background: rgba(0, 0, 0, 0.8);
+            padding: 40px 5%;
+            text-align: center;
+            margin-top: 80px;
+        }
+        
+        .footer p {
+            color: rgba(255, 255, 255, 0.7);
+            margin: 5px 0;
+        }
+        
+        .social-icons {
+            display: flex;
+            justify-content: center;
+            gap: 25px;
+            margin: 25px 0;
+        }
+        
+        .social-icons a {
+            color: white;
+            font-size: 1.5rem;
+            transition: all 0.3s;
+        }
+        
+        .social-icons a:hover {
+            color: #00d2ff;
+            transform: translateY(-3px);
+        }
+        
+        /* Responsividade */
+        @media (max-width: 768px) {
+            .navbar {
+                flex-direction: column;
+                padding: 15px;
+            }
+            
+            .nav-links {
+                margin-top: 15px;
+                gap: 15px;
+            }
+            
+            .header {
+                padding: 80px 5% 60px;
+            }
+            
+            .header h1 {
+                font-size: 2.2rem;
+            }
+            
+            .header p {
+                font-size: 1rem;
+            }
+            
+            .download-cards {
+                flex-direction: column;
+                align-items: center;
+            }
+            
+            .download-card {
+                max-width: 100%;
+            }
+        }
     </style>
 </head>
 <body>
@@ -16,46 +310,129 @@
             <h1>Brasileirão Simulator</h1>
         </div>
         <ul class="nav-links">
-            <li><a href="#">Início</a></li>
-            <li><a href="#">Sobre</a></li>
-            <li><a href="#">Serviços</a></li>
-            <li><a href="#">Contato</a></li>
+            <li><a href="http://127.0.0.1:5500/site/index.html" class="active">Início</a></li>
+            <li><a href="http://127.0.0.1:5500/site/sobre.html">Sobre</a></li>
+            <li><a href="http://127.0.0.1:5500/site/times.html#">Times</a></li>
+            <li><a href="http://127.0.0.1:5500/site/pathingnotes.html">Patch Notes</a></li>
         </ul>
     </nav>
 
     <!-- Header -->
     <header class="header">
-        <h1>Welcome to Brasileirão Simulator</h1>
-        <p>The best soccer championship simulator, here you can simulate the Brazilian football league.</p>
+        <h1>Bem-vindo ao Brasileirão Simulator</h1>
+        <p>O simulador mais realista do campeonato brasileiro de futebol. Viva a emoção de gerenciar seu próprio campeonato com estatísticas precisas e resultados dinâmicos.</p>
     </header>
 
     <!-- Main Content -->
     <main class="main-content">
+        <!-- Download Section -->
         <section class="download-section">
-            <h2>Download</h2>
-            
-            <!-- Versão Oficial -->
-            <div class="download-card">
-                <h3>Oficial Version</h3>
-                <p>Download the 1.0.4 version, the Oficial without bugs that you can have in beta test version.</p>
-                <button class="download-button" data-file="brasileirao.py">Download Oficial</button>
+            <div class="section-title">
+                <h2>Download</h2>
             </div>
+            
+            <div class="download-cards">
+                <!-- Versão Oficial -->
+                <div class="download-card">
+                    <h3>Versão Oficial</h3>
+                    <p>Versão estável 1.0.4 com todos os recursos implementados e testados. Perfeito para quem quer uma experiência confiável sem surpresas.</p>
+                    <button class="download-button" data-file="brasileirao.py">Baixar Agora</button>
+                    <div style="margin-top: 15px; font-size: 0.8rem; color: rgba(255,255,255,0.5)">
+                        <i class="fas fa-check-circle"></i> Versão Estável
+                    </div>
+                </div>
     
-            <!-- Versão Beta -->
-            <div class="download-card">
-                <h3>Beta Version</h3>
-                <p>Download the 1.0.5 beta version, can have bugs but nothing that break you for use.</p>
-                <button class="download-button" data-file="brasileirao105.py">Download Beta</button>
+                <!-- Versão Beta -->
+                <div class="download-card">
+                    <h3>Versão Beta</h3>
+                    <p>Experimente a versão beta 1.0.5 com novos recursos. Pode conter pequenos bugs mas oferece uma prévia das próximas melhorias.</p>
+                    <button class="download-button" data-file="brasileirao105.py">Testar Beta</button>
+                    <div style="margin-top: 15px; font-size: 0.8rem; color: rgba(255,255,255,0.5)">
+                        <i class="fas fa-flask"></i> Recursos Experimentais
+                    </div>
+                </div>
+            </div>
+        </section>
+        
+        <!-- Features Section -->
+        <section class="features-section">
+            <div class="section-title">
+                <h2>Principais Recursos</h2>
+            </div>
+            
+            <div class="features-grid">
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <i class="fas fa-trophy"></i>
+                    </div>
+                    <h3>Simulação Realista</h3>
+                    <p>Algoritmos avançados que simulam com precisão os resultados das partidas baseados em estatísticas dos times.</p>
+                </div>
+                
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <i class="fas fa-chart-line"></i>
+                    </div>
+                    <h3>Estatísticas dos times</h3>
+                    <p>Estatísticas de ataque e defesa dos times balanceadas de acordo com a situação atual dos times.</p>
+                </div>
+                
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <i class="fas fa-language"></i>
+                    </div>
+                    <h3>Suporte Multilíngue</h3>
+                    <p>Disponível em Português e Alemão, com mais idiomas em breve.</p>
+                </div>
+                
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <i class="fas fa-database"></i>
+                    </div>
+                    <h3>Gerenciamento de Times</h3>
+                    <p>Visualize informações completas sobre todos os times participantes do campeonato.</p>
+                </div>
+                
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <i class="fas fa-history"></i>
+                    </div>
+                    <h3>Histórico de Partidas</h3>
+                    <p>Revise todos os resultados e acompanhe o desempenho do seu time durante a temporada.</p>
+                </div>
+                
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <i class="fas fa-cogs"></i>
+                    </div>
+                    <h3>Personalizável</h3>
+                    <p>Ajuste os parâmetros de simulação para criar sua experiência ideal de campeonato.</p>
+                </div>
             </div>
         </section>
     </main>
 
     <!-- Footer -->
     <footer class="footer">
-        <p>&copy; 2025 Brasileirão Simulator.</p>
+        <p>&copy; 2025 Brasileirão Simulator. Todos os direitos reservados.</p>
+        <p>Desenvolvido com paixão por futebol e tecnologia desde 2024</p>
+        
+        <div class="social-icons">
+            <a href="https://github.com/2pacdevv" target="_blank" aria-label="GitHub">
+                <i class="fab fa-github"></i>
+            </a>
+            <a href="https://www.instagram.com/marcelo_grr/" target="_blank" aria-label="Instagram">
+                <i class="fab fa-instagram"></i>
+            </a>
+            <a href="#" aria-label="LinkedIn">
+                <i class="fab fa-linkedin"></i>
+            </a>
+            <a href="#" aria-label="Twitter">
+                <i class="fab fa-twitter"></i>
+            </a>
+        </div>
     </footer>
 
-    <!-- Script de Download -->
     <script src="script.js"></script>
 </body>
 </html>
