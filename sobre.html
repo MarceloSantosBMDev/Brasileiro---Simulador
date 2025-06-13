@@ -19,7 +19,7 @@
             flex-direction: column;
         }
 
-        /* Navbar */
+        /* Navbar - IDÊNTICA À PÁGINA INICIAL */
         .navbar {
             background: rgba(0, 0, 0, 0.8);
             backdrop-filter: blur(10px);
@@ -31,7 +31,7 @@
             top: 0;
             z-index: 1000;
         }
-
+        
         .logo h1 {
             margin: 0;
             font-size: 1.8rem;
@@ -40,15 +40,15 @@
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
         }
-
-        .nav-links {
+        
+             .nav-links {
             display: flex;
             gap: 25px;
             list-style: none;
             margin: 0;
             padding: 0;
         }
-
+        
         .nav-links a {
             color: white;
             text-decoration: none;
@@ -57,11 +57,7 @@
             padding: 5px 10px;
             border-radius: 4px;
         }
-
-        .nav-links a:hover {
-            background: rgba(255, 255, 255, 0.1);
-        }
-
+        
         .nav-links a.active {
             background: linear-gradient(90deg, #00d2ff 0%, #3a7bd5 100%);
         }
@@ -69,7 +65,7 @@
         /* Header */
         .header {
             text-align: center;
-            padding: 100px 5% 80px;
+            padding: 80px 5% 60px;
             background: linear-gradient(rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.7)), 
                         url('https://images.unsplash.com/photo-1574629810360-7efbbe195018?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80');
             background-size: cover;
@@ -77,16 +73,15 @@
         }
 
         .header h1 {
-            font-size: 3rem;
+            font-size: 2.5rem;
             margin-bottom: 20px;
             background: linear-gradient(90deg, #00d2ff 0%, #3a7bd5 100%);
-            background-clip: text;
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
         }
 
         .header p {
-            font-size: 1.2rem;
+            font-size: 1.1rem;
             max-width: 800px;
             margin: 0 auto;
             color: rgba(255, 255, 255, 0.9);
@@ -105,14 +100,12 @@
         .section-title {
             text-align: center;
             margin-bottom: 50px;
-            position: relative;
         }
 
         .section-title h2 {
-            font-size: 2.2rem;
+            font-size: 2rem;
             display: inline-block;
             background: linear-gradient(90deg, #00d2ff 0%, #3a7bd5 100%);
-            background-clip: text;
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
         }
@@ -132,14 +125,14 @@
             max-width: 1000px;
             margin: 0 auto 60px;
             display: flex;
+            flex-direction: column;
             background: rgba(255, 255, 255, 0.05);
             border-radius: 15px;
             overflow: hidden;
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
         }
 
         .dev-image-container {
-            flex: 0 0 300px;
+            flex: 0 0 250px;
             position: relative;
             overflow: hidden;
         }
@@ -152,7 +145,6 @@
 
         .dev-info {
             padding: 30px;
-            flex: 1;
         }
 
         .dev-info h3 {
@@ -182,7 +174,7 @@
             font-weight: 600;
         }
 
-        /* Seção da Jornada do Projeto */
+        /* Linha do Tempo */
         .project-timeline {
             position: relative;
             max-width: 800px;
@@ -195,49 +187,31 @@
             position: absolute;
             top: 0;
             bottom: 0;
-            left: 50%;
-            transform: translateX(-50%);
+            left: 20px;
             width: 4px;
             background: linear-gradient(to bottom, #00d2ff, #3a7bd5);
-            z-index: 1;
         }
 
         .timeline-item {
             position: relative;
             margin-bottom: 40px;
-            width: 100%;
+            padding-left: 50px;
         }
 
         .timeline-content {
-            position: relative;
-            width: calc(50% - 40px);
-            padding: 20px;
             background: rgba(255, 255, 255, 0.05);
             border-radius: 8px;
-            box-shadow: 0 4px 16px rgba(0, 0, 0, 0.2);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-        }
-
-        .timeline-item:nth-child(odd) .timeline-content {
-            margin-right: auto;
-            text-align: right;
-        }
-
-        .timeline-item:nth-child(even) .timeline-content {
-            margin-left: auto;
-            text-align: left;
+            padding: 20px;
         }
 
         .timeline-dot {
             position: absolute;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            width: 20px;
-            height: 20px;
+            left: 16px;
+            top: 20px;
+            width: 16px;
+            height: 16px;
             border-radius: 50%;
             background: linear-gradient(135deg, #00d2ff, #3a7bd5);
-            z-index: 2;
             border: 3px solid rgba(255, 255, 255, 0.8);
         }
 
@@ -250,12 +224,11 @@
         .timeline-content h3 {
             margin: 0 0 10px;
             color: white;
-            font-size: 1.3rem;
+            font-size: 1.2rem;
         }
 
         .timeline-content p {
             color: rgba(255, 255, 255, 0.8);
-            line-height: 1.6;
             margin: 0;
         }
 
@@ -267,7 +240,7 @@
 
         .tech-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+            grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
             gap: 20px;
             margin-top: 40px;
         }
@@ -275,13 +248,12 @@
         .tech-card {
             background: rgba(255, 255, 255, 0.05);
             border-radius: 10px;
-            padding: 25px;
+            padding: 20px;
             text-align: center;
-            border: 1px solid rgba(255, 255, 255, 0.1);
         }
 
         .tech-icon {
-            font-size: 2.5rem;
+            font-size: 2rem;
             margin-bottom: 15px;
             color: #00d2ff;
         }
@@ -289,20 +261,21 @@
         .tech-card h3 {
             margin: 0 0 10px;
             color: white;
+            font-size: 1.1rem;
         }
 
         .tech-card p {
             color: rgba(255, 255, 255, 0.7);
-            font-size: 0.9rem;
+            font-size: 0.8rem;
             margin: 0;
         }
 
         /* Footer */
         .footer {
             background: rgba(0, 0, 0, 0.8);
-            padding: 40px 5%;
+            padding: 30px 5%;
             text-align: center;
-            margin-top: 80px;
+            margin-top: 60px;
         }
 
         .footer p {
@@ -313,30 +286,16 @@
         .social-icons {
             display: flex;
             justify-content: center;
-            gap: 25px;
-            margin: 25px 0;
+            gap: 20px;
+            margin: 20px 0;
         }
 
         .social-icons a {
             color: white;
-            font-size: 1.5rem;
+            font-size: 1.3rem;
         }
 
-        /* Responsividade */
-        @media (max-width: 992px) {
-            .dev-card {
-                flex-direction: column;
-            }
-            
-            .dev-image-container {
-                flex: 0 0 250px;
-            }
-            
-            .timeline-content {
-                width: calc(50% - 30px);
-            }
-        }
-
+        /* Media Queries - RESPONSIVIDADE IDÊNTICA À PÁGINA INICIAL */
         @media (max-width: 768px) {
             .navbar {
                 flex-direction: column;
@@ -353,134 +312,67 @@
             }
             
             .header h1 {
-                font-size: 2rem;
+                font-size: 2.2rem;
             }
             
             .header p {
                 font-size: 1rem;
             }
+        }
+
+        @media (min-width: 768px) {
+            .dev-card {
+                flex-direction: row;
+            }
             
             .dev-image-container {
-                flex: 0 0 200px;
+                flex: 0 0 300px;
             }
             
             .project-timeline::before {
-                left: 20px;
+                left: 50%;
+                transform: translateX(-50%);
             }
             
             .timeline-item {
-                padding-left: 40px;
+                padding-left: 0;
             }
             
-            .timeline-content {
-                width: 100%;
-                margin-left: 0 !important;
-                text-align: left !important;
+            .timeline-item:nth-child(odd) .timeline-content {
+                margin-right: auto;
+                width: calc(50% - 40px);
+                text-align: right;
             }
             
-            .timeline-dot {
-                left: 20px;
-            }
-            
-            .tech-grid {
-                grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
-            }
-        }
-
-        @media (max-width: 576px) {
-            .header h1 {
-                font-size: 1.8rem;
-            }
-            
-            .section-title h2 {
-                font-size: 1.6rem;
-            }
-            
-            .dev-info {
-                padding: 20px;
+            .timeline-item:nth-child(even) .timeline-content {
+                margin-left: auto;
+                width: calc(50% - 40px);
+                text-align: left;
             }
             
             .timeline-dot {
-                width: 16px;
-                height: 16px;
+                left: 50%;
+                transform: translateX(-50%);
             }
             
             .tech-grid {
-                grid-template-columns: 1fr;
-            }
-            
-            .social-icons {
-                gap: 20px;
+                grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
             }
         }
-        @media (max-width: 768px) {
-    /* ... (mantenha os estilos existentes) ... */
-    
-    /* Ajustes específicos para a timeline */
-    .project-timeline::before {
-        left: 20px;
-    }
-    
-    .timeline-item {
-        padding-left: 40px;
-    }
-    
-    .timeline-content {
-        width: 100% !important; /* Sobrescreve qualquer largura definida */
-        margin-left: 0 !important;
-        text-align: left !important;
-    }
-    
-    .timeline-dot {
-        left: 20px;
-        transform: translate(-50%, -50%);
-    }
-    
-    .timeline-item:nth-child(odd) .timeline-content,
-    .timeline-item:nth-child(even) .timeline-content {
-        margin-right: 0;
-        text-align: left;
-    }
-}
 
-@media (max-width: 576px) {
-    /* ... (mantenha os estilos existentes) ... */
-    
-    /* Ajustes adicionais para telas muito pequenas */
-    .timeline-content {
-        padding: 15px;
-    }
-    
-    .timeline-date {
-        font-size: 0.9rem;
-    }
-    
-    .timeline-content h3 {
-        font-size: 1.1rem;
-    }
-    
-    .timeline-content p {
-        font-size: 0.9rem;
-    }
-    
-    .timeline-dot {
-        width: 14px;
-        height: 14px;
-    }
-}
     </style>
 </head>
 <body>
-    <!-- Navbar -->
+    <!-- Navbar - IDÊNTICA À PÁGINA INICIAL -->
     <nav class="navbar">
         <div class="logo">
             <h1>Brasileirão Simulator</h1>
         </div>
         <ul class="nav-links">
-            <li><a href="http://127.0.0.1:5500/site/index.html">Início</a></li>
-            <li><a href="http://127.0.0.1:5500/site/sobre.html" class="active">Sobre</a></li>
-            <li><a href="http://127.0.0.1:5500/site/times.html#">Times</a></li>
-            <li><a href="http://127.0.0.1:5500/site/pathingnotes.html">Patch Notes</a></li>
+            <li><a href="index.html">Início</a></li>
+            <li><a href="sobre.html" class="active">Sobre</a></li>
+            <li><a href="times.html">Times</a></li>
+            <li><a href="pathingnotes.html">Patch Notes</a></li>
         </ul>
     </nav>
 
@@ -560,7 +452,7 @@
                     <div class="timeline-date">Outubro 2024</div>
                     <h3>Segunda versão</h3>
                     <p>
-                        Após um mês de código foi adcionado uma forma de ver os jogos de cada time apenas clicando no botão de jogos.
+                        Após um mês de código foi adicionado uma forma de ver os jogos de cada time apenas clicando no botão de jogos.
                     </p>
                 </div>
                 <div class="timeline-dot"></div>
@@ -582,27 +474,23 @@
                     <div class="timeline-date">Fevereiro 2024</div>
                     <h3>Versão atual</h3>
                     <p>
-                        A versão 1.0.4 foi lançada oficialmente em fevereiro de 2024, introduzindo tradução em ingles e alemão para o software e algumas outras pequenas funcionalidade.
+                        A versão 1.0.4 foi lançada oficialmente em fevereiro de 2024, introduzindo tradução em inglês e alemão para o software e algumas outras pequenas funcionalidades.
                     </p>
                 </div>
                 <div class="timeline-dot"></div>
             </div>
-       
-
-        <div class="timeline-item">
-            <div class="timeline-content">
-                <div class="timeline-date">Março 2024</div>
-                <h3>Versão teste</h3>
-                <p>
-                    Em março a versão beta começou a ser desenvolvida, introduzindo diversas grandes funcionalidade como o modo aposta, um banco de dados e uma maneira de fazer login na sua conta.
-                </p>
+            
+            <div class="timeline-item">
+                <div class="timeline-content">
+                    <div class="timeline-date">Março 2024</div>
+                    <h3>Versão teste</h3>
+                    <p>
+                        Em março a versão beta começou a ser desenvolvida, introduzindo diversas grandes funcionalidades como o modo aposta, um banco de dados e uma maneira de fazer login na sua conta.
+                    </p>
+                </div>
+                <div class="timeline-dot"></div>
             </div>
-            <div class="timeline-dot"></div>
         </div>
-
-
-     <!-- Aqui acaba o traço da jornada do projeto-->
-    </div>
         
         <!-- Seção de Tecnologias -->
         <div class="tech-section">
@@ -666,122 +554,5 @@
             </a>
         </div>
     </footer>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.11.4/gsap.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.11.4/ScrollTrigger.min.js"></script>
-    
-    <script>
-        // 1. Efeito de digitação nos títulos
-        function typeWriter(element, speed = 50) {
-            const text = element.textContent;
-            element.textContent = '';
-            let i = 0;
-            
-            function type() {
-                if (i < text.length) {
-                    element.textContent += text.charAt(i);
-                    i++;
-                    setTimeout(type, speed);
-                }
-            }
-            type();
-        }
-
-        // 2. Animação suave de aparecimento
-        function animateElements() {
-            // Configura o GSAP
-            gsap.registerPlugin(ScrollTrigger);
-            
-            // Animação para os cards da timeline
-            gsap.utils.toArray('.timeline-content').forEach((item, i) => {
-                gsap.fromTo(item, {
-                    opacity: 0,
-                    y: 20
-                }, {
-                    opacity: 1,
-                    y: 0,
-                    duration: 0.8,
-                    delay: i * 0.15,
-                    scrollTrigger: {
-                        trigger: item,
-                        start: "top 80%",
-                        toggleActions: "play none none none"
-                    },
-                    ease: "power2.out"
-                });
-            });
-
-            // Animação para as tecnologias
-            gsap.utils.toArray('.tech-card').forEach((card, i) => {
-                gsap.fromTo(card, {
-                    opacity: 0,
-                    y: 30
-                }, {
-                    opacity: 1,
-                    y: 0,
-                    duration: 0.6,
-                    delay: i * 0.1,
-                    scrollTrigger: {
-                        trigger: card,
-                        start: "top 85%",
-                        toggleActions: "play none none none"
-                    },
-                    ease: "back.out(1.2)"
-                });
-            });
-
-            // Efeito hover nos cards
-            document.querySelectorAll('.tech-card, .timeline-content').forEach(card => {
-                card.addEventListener('mouseenter', () => {
-                    gsap.to(card, {
-                        y: -5,
-                        duration: 0.3,
-                        ease: "power2.out"
-                    });
-                });
-                
-                card.addEventListener('mouseleave', () => {
-                    gsap.to(card, {
-                        y: 0,
-                        duration: 0.3,
-                        ease: "power2.out"
-                    });
-                });
-            });
-        }
-
-        // 3. Efeito de pulsação sutil nos dots
-        function animateDots() {
-            gsap.to('.timeline-dot', {
-                scale: 1.1,
-                duration: 1.5,
-                repeat: -1,
-                yoyo: true,
-                ease: "sine.inOut",
-                stagger: 0.2
-            });
-        }
-
-        // Inicia todas as animações quando o DOM estiver pronto
-        document.addEventListener('DOMContentLoaded', () => {
-            // Aplica efeito de digitação nos títulos
-            document.querySelectorAll('.section-title h2').forEach(title => {
-                typeWriter(title, 70);
-            });
-            
-            // Inicia animações
-            animateElements();
-            animateDots();
-            
-            // Efeito especial para o card do desenvolvedor
-            const devCard = document.querySelector('.dev-card');
-            gsap.from(devCard, {
-                opacity: 0,
-                y: 50,
-                duration: 1,
-                delay: 0.5,
-                ease: "elastic.out(1, 0.5)"
-            });
-        });
-    </script>
 </body>
 </html>

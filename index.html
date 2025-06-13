@@ -192,7 +192,36 @@
             transform: translateY(-3px);
             box-shadow: 0 7px 20px rgba(0, 210, 255, 0.4);
         }
+                @media (max-width: 768px) {
+            /* GARANTE QUE OS CARDS NÃO ULTRAPASSEM A TELA */
+            .download-cards {
+                width: 100%;
+                padding: 0 5%;
+                box-sizing: border-box;
+            }
+            
+            /* MANTÉM A BELEZA DOS CARDS APENAS AJUSTANDO LARGURA */
+            .download-card {
+                width: 100%;
+                max-width: 100%;
+                box-sizing: border-box;
+            }
+            
+            /* GARANTE QUE O CONTEÚDO INTERNO NÃO CAUSE OVERFLOW */
+            .download-card h3,
+            .download-card p,
+            .download-button {
+                word-wrap: break-word;
+                max-width: 100%;
+            }
+        }
         
+        /* AJUSTE EXTRA PARA TELAS MUITO PEQUENAS (OPCIONAL) */
+        @media (max-width: 480px) {
+            .download-card {
+                padding: 25px; /* UM POUCO MAIS COMPACTO */
+            }
+        }
         /* Features Section */
         .features-section {
             margin: 80px 0;
