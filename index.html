@@ -365,7 +365,7 @@
                 <div class="download-card">
                     <h3>Versão Oficial</h3>
                     <p>Versão estável 1.0.4 com todos os recursos implementados e testados. Perfeito para quem quer uma experiência confiável sem surpresas.</p>
-                    <button class="download-button" data-file="brasileirao.py">Baixar Agora</button>
+                    <button class="download-button" onclick="downloadFile('https://raw.githubusercontent.com/MarceloSantosBMDev/Brasileiro---Simulador/main/brasileirao.py', 'brasileirao.py')">Baixar Agora</button>
                     <div style="margin-top: 15px; font-size: 0.8rem; color: rgba(255,255,255,0.5)">
                         <i class="fas fa-check-circle"></i> Versão Estável
                     </div>
@@ -375,7 +375,7 @@
                 <div class="download-card">
                     <h3>Versão Beta</h3>
                     <p>Experimente a versão beta 1.0.5 com novos recursos. Pode conter pequenos bugs mas oferece uma prévia das próximas melhorias.</p>
-                    <button class="download-button" data-file="brasileirao105.py">Testar Beta</button>
+                    <button class="download-button" onclick="downloadFile('https://raw.githubusercontent.com/MarceloSantosBMDev/Brasileiro---Simulador/v.1.0.5/brasileirao105.py', 'brasileirao105.py')">Testar Beta</button>
                     <div style="margin-top: 15px; font-size: 0.8rem; color: rgba(255,255,255,0.5)">
                         <i class="fas fa-flask"></i> Recursos Experimentais
                     </div>
@@ -462,6 +462,25 @@
         </div>
     </footer>
 
-    <script src="script.js"></script>
+    <script>
+        function downloadFile(url, filename) {
+            fetch(url)
+                .then(response => response.blob())
+                .then(blob => {
+                    const blobUrl = window.URL.createObjectURL(blob);
+                    const a = document.createElement('a');
+                    a.href = blobUrl;
+                    a.download = filename;
+                    document.body.appendChild(a);
+                    a.click();
+                    window.URL.revokeObjectURL(blobUrl);
+                    document.body.removeChild(a);
+                })
+                .catch(error => {
+                    console.error('Erro ao baixar o arquivo:', error);
+                    alert('Ocorreu um erro ao baixar o arquivo. Por favor, tente novamente.');
+                });
+        }
+    </script>
 </body>
 </html>
