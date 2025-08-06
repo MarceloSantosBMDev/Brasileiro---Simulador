@@ -4,7 +4,7 @@ from tkinter import messagebox
 import os
 from tkinter import font as tkFont
 from PIL import Image, ImageTk
-import sqlite3  # Biblioteca para trabalhar com SQLite
+import sqlite3 
 import atexit
 
 
@@ -154,25 +154,25 @@ def select_edition(edition):
 }
     elif edicao == 2025:
         times = {
-    "Ceará-SC":  [0, 0, 0, 2, 0, 0, 0, 0, 0, 3, 0, 0, 5],
-    "Sport-Recife": [0, 0, 0, 4, 0, 0, 0, 0, 0, 3, 0, 0, 7],
+    "Ceará-SC":  [0, 0, 0, 5, 0, 0, 0, 0, 0, 4, 0, 0, 9],
+    "Sport-Recife": [0, 0, 0, 2, 0, 0, 0, 0, 0, 3, 0, 0, 5],
     "Atlético-MG":  [0, 0, 0, 5, 0, 0, 0, 0, 0, 4, 0, 0, 9],
-    "Bahia":        [0, 0, 0, 5, 0, 0, 0, 0, 0, 4, 0, 0, 9],
-    "Botafogo":     [0, 0, 0, 6, 0, 0, 0, 0, 0, 5, 0, 0, 11],
-    "Corinthians": [0, 0, 0, 6, 0,0,0,0,0,4, 0, 0, 10],
-    "Vitória": [0, 0, 0, 4, 0,0,0,0,0,2, 0, 0, 6],
-    "Cruzeiro": [0, 0, 0, 5, 0,0,0,0,0,3, 0, 0, 8],
-    "Mirassol": [0, 0, 0, 4, 0,0,0,0,0,3, 0, 0, 7],
-    "Flamengo": [0, 0, 0, 6, 0,0,0,0,0,5, 0, 0, 11],
-    "Fluminense": [0, 0, 0, 4, 0,0,0,0,0,5, 0, 0, 9],
-    "Fortaleza": [0, 0, 0, 5, 0,0,0,0,0,4, 0, 0, 9],
-    "Juventude": [0, 0, 0, 3, 0,0,0,0,0,4, 0, 0, 7],
-    "Grêmio": [0, 0, 0, 5, 0,0,0,0,0,4, 0, 0, 9],
-    "Internacional": [0, 0, 0, 5, 0,0,0,0,0,5, 0, 0, 10],
-    "Palmeiras": [0, 0, 0, 5, 0,0,0,0,0,6, 0, 0, 11],
-    "RB Bragantino": [0, 0, 0, 3, 0,0,0,0,0,3, 0, 0, 6],
-    "Santos": [0, 0, 0, 5, 0,0,0,0,0,3, 0, 0, 8],
-    "São Paulo": [0, 0, 0, 5, 0,0,0,0,0,5, 0, 0, 10],
+    "Bahia":        [0, 0, 0, 5, 0, 0, 0, 0, 0, 5, 0, 0, 10],
+    "Botafogo":     [0, 0, 0, 5, 0, 0, 0, 0, 0, 4, 0, 0, 9],
+    "Corinthians": [0, 0, 0, 4, 0,0,0,0,0,4, 0, 0, 8],
+    "Vitória": [0, 0, 0, 4, 0,0,0,0,0,3, 0, 0, 7],
+    "Cruzeiro": [0, 0, 0, 6, 0,0,0,0,0,5, 0, 0, 11],
+    "Mirassol": [0, 0, 0, 5, 0,0,0,0,0,4, 0, 0, 9],
+    "Flamengo": [0, 0, 0, 6, 0,0,0,0,0,6, 0, 0, 12],
+    "Fluminense": [0, 0, 0, 4, 0,0,0,0,0,4, 0, 0, 8],
+    "Fortaleza": [0, 0, 0, 4, 0,0,0,0,0,3, 0, 0, 7],
+    "Juventude": [0, 0, 0, 3, 0,0,0,0,0,2, 0, 0, 5],
+    "Grêmio": [0, 0, 0, 4, 0,0,0,0,0,3, 0, 0, 7],
+    "Internacional": [0, 0, 0, 4, 0,0,0,0,0,4, 0, 0, 8],
+    "Palmeiras": [0, 0, 0, 4, 0,0,0,0,0,7, 0, 0, 11],
+    "RB Bragantino": [0, 0, 0, 5, 0,0,0,0,0,4, 0, 0, 9],
+    "Santos": [0, 0, 0, 4, 0,0,0,0,0,4, 0, 0, 8],
+    "São Paulo": [0, 0, 0, 5, 0,0,0,0,0,4, 0, 0, 9],
     "Vasco da Gama": [0, 0, 0, 4, 0,0,0,0,0,3, 0, 0, 7]
 }    
     
@@ -246,7 +246,6 @@ def criar_tela_jogos():
         botao_time.bind("<Leave>", on_leave)
 
     tela_times.mainloop()
-
 
 def mostrar_jogos(time):
     global label_aviso, times, jogos, max_jogos
@@ -506,8 +505,11 @@ def tela_inicial():
     abrir_tela_jogos = tk.Button(frame_botoes, text="Abrir Tela de Jogos", command=criar_tela_jogos, bg="#ff8c42", fg="white", font=font_btn, bd=0, padx=20, pady=5)
     abrir_tela_jogos.pack(side="left", padx=10, fill="x", expand=True)
 
+    btn_relatorio = tk.Button(frame_botoes, text="Abrir Tela de relátorio", bg="#9932CC", fg="white", font=font_btn, bd=0, padx=20, pady=5, command=criar_tela_relatorio)
+    btn_relatorio.pack(side="left", padx=10, fill="x", expand=True)
+
     if bet_mode == 1:
-        btn_apostar = tk.Button(frame_botoes, text="Apostar em Jogos", bg="#2980b9", fg="white", font=font_btn, command=tela_escolher_jogos)
+        btn_apostar = tk.Button(frame_botoes, text="Apostar em Jogos", bg="#2980b9", fg="white", font=font_btn, bd=0, padx=20, pady=5, command=tela_escolher_jogos)
         btn_apostar.pack(side="left", padx=10, fill="x", expand=True)
 
     frame_rodape = tk.Frame(tela_inicial, bg="#2c3e50")
@@ -651,10 +653,10 @@ def calcular_odd(time1, time2):
     if stat_time1 > stat_time2:
         # Time 1 é favorito
         odd_time1 = max(1.2, 2.0 - (diferenca * 0.70))
-        odd_time2 = min(5.0, 2.0 + (diferenca * 0.60))
+        odd_time2 = min(10.0, 2.0 + (diferenca * 0.60))
     elif stat_time2 > stat_time1:
         # Time 2 é favorito
-        odd_time1 = min(5.0, 2.0 + (diferenca * 0.60))
+        odd_time1 = min(10.0, 2.0 + (diferenca * 0.60))
         odd_time2 = max(1.2, 2.0 - (diferenca * 0.70))
     else:
         odd_time1 = 1.8
@@ -1890,6 +1892,11 @@ def comparar_apostas_com_resultados():
     apostas_usuario.clear()
     label_pontos.config(text=f"Fichas: {fichas_usuario}")
     
+
+# Relatório (telas e funções)
+
+def criar_tela_relatorio():
+    tela_relatorio = tk.tk()
 
 
 
