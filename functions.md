@@ -17,3 +17,6 @@ Actually, now, the code don´t have tbis function, today is february 17th 2025, 
 
 # Random All Stats
 In settings, the user can also randomize all stats of each teams, it´s very simple, just one click and all teams have them stats randomize.
+
+# See championship information
+After the user simulate all rounds, the simulate button will change for "See championship info", if the user click this, will open a screen with some information of the championship, like a the four teams who be in last four(Z4), or the first four(G4), the user can see the team with more goals in championship and the team who win more in your house.
