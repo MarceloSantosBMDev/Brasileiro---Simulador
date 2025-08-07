@@ -4,7 +4,7 @@ from tkinter import messagebox
 import os
 from tkinter import font as tkFont
 from PIL import Image, ImageTk
-import sqlite3 
+import sqlite3  # Biblioteca para trabalhar com SQLite
 import atexit
 
 
@@ -94,32 +94,52 @@ class Usuario:
 
 from tkinter import filedialog
 from PIL import Image, ImageTk
-def selecionar_fundo_perfil(usuario):
-    # Abre uma janela para selecionar um arquivo de imagem
-    caminho_imagem = filedialog.askopenfilename(
-        title="Selecione uma imagem de fundo",
-        filetypes=[("Imagens", "*.png;*.jpg;*.jpeg")]
-    )
-    
-    if caminho_imagem:
-        # Atualiza o fundo de perfil do usuário
-        usuario.fundo_perfil = caminho_imagem
-        usuario.atualizar()
-        messagebox.showinfo("Sucesso", "Imagem de fundo atualizada com sucesso!")
+
         
         
 def selecionar_foto_perfil(usuario):
-    # Abre uma janela para selecionar um arquivo de imagem
+    # Configurações de diálogo traduzidas
+    if idioma_selecionado == 'Português':
+        title = "Selecione uma foto de perfil"
+        success_msg = "Foto de perfil atualizada com sucesso!"
+    elif idioma_selecionado == 'Inglês':
+        title = "Select a profile photo"
+        success_msg = "Profile photo updated successfully!"
+    elif idioma_selecionado == 'Alemão':
+        title = "Wählen Sie ein Profilbild aus"
+        success_msg = "Profilbild erfolgreich aktualisiert!"
+    
     caminho_imagem = filedialog.askopenfilename(
-        title="Selecione uma foto de perfil",
+        title=title,
         filetypes=[("Imagens", "*.png;*.jpg;*.jpeg")]
     )
     
     if caminho_imagem:
-        # Atualiza a foto de perfil do usuário
         usuario.foto_perfil = caminho_imagem
         usuario.atualizar()
-        messagebox.showinfo("Sucesso", "Foto de perfil atualizada com sucesso!")
+        messagebox.showinfo("Sucesso" if idioma_selecionado == 'Português' else "Success" if idioma_selecionado == 'Inglês' else "Erfolg", success_msg)
+
+def selecionar_fundo_perfil(usuario):
+    # Configurações de diálogo traduzidas
+    if idioma_selecionado == 'Português':
+        title = "Selecione uma imagem de fundo"
+        success_msg = "Imagem de fundo atualizada com sucesso!"
+    elif idioma_selecionado == 'Inglês':
+        title = "Select a background image"
+        success_msg = "Background image updated successfully!"
+    elif idioma_selecionado == 'Alemão':
+        title = "Wählen Sie ein Hintergrundbild aus"
+        success_msg = "Hintergrundbild erfolgreich aktualisiert!"
+    
+    caminho_imagem = filedialog.askopenfilename(
+        title=title,
+        filetypes=[("Imagens", "*.png;*.jpg;*.jpeg")]
+    )
+    
+    if caminho_imagem:
+        usuario.fundo_perfil = caminho_imagem
+        usuario.atualizar()
+        messagebox.showinfo("Sucesso" if idioma_selecionado == 'Português' else "Success" if idioma_selecionado == 'Inglês' else "Erfolg", success_msg)
         
         
 def select_edition(edition):
@@ -153,7 +173,7 @@ def select_edition(edition):
     "Vasco da Gama": [0, 0, 0, 4, 0,0,0,0,0,2, 0, 0, 6]
 }
     elif edicao == 2025:
-        times = {
+         times = {
     "Ceará-SC":  [0, 0, 0, 5, 0, 0, 0, 0, 0, 4, 0, 0, 9],
     "Sport-Recife": [0, 0, 0, 2, 0, 0, 0, 0, 0, 3, 0, 0, 5],
     "Atlético-MG":  [0, 0, 0, 5, 0, 0, 0, 0, 0, 4, 0, 0, 9],
@@ -209,10 +229,18 @@ def carregar_jogos(nome_arquivo="placares_jogos.txt"):
 
 
 def criar_tela_jogos():
+    # Título da janela traduzido
+    if idioma_selecionado == 'Português':
+        title = "Escolha um Time"
+    elif idioma_selecionado == 'Inglês':
+        title = "Choose a Team"
+    elif idioma_selecionado == 'Alemão':
+        title = "Wählen Sie ein Team"
+    
     tela_times = tk.Tk()
-    tela_times.title("Escolha um Time")
+    tela_times.title(title)
     tela_times.geometry("600x600")
-    tela_times.configure(bg="#2c3e50")  
+    tela_times.configure(bg="#2c3e50")
 
     frame_principal = tk.Frame(tela_times, bg="#2c3e50")
     frame_principal.pack(fill="both", expand=True, padx=10, pady=10)
@@ -247,12 +275,22 @@ def criar_tela_jogos():
 
     tela_times.mainloop()
 
+
 def mostrar_jogos(time):
     global label_aviso, times, jogos, max_jogos
+    
+    # Título da janela traduzido
+    if idioma_selecionado == 'Português':
+        title = f"Jogos de {time}"
+    elif idioma_selecionado == 'Inglês':
+        title = f"{time}'s Matches"
+    elif idioma_selecionado == 'Alemão':
+        title = f"Spiele von {time}"
+    
     tela_jogos = tk.Tk()
-    tela_jogos.title(f"Jogos de {time}")
+    tela_jogos.title(title)
     tela_jogos.geometry("500x600")
-    tela_jogos.configure(bg="#2c3e50")  
+    tela_jogos.configure(bg="#2c3e50")
 
     jogos = jogos_por_time.get(time, [])
     max_jogos = 38
@@ -264,44 +302,46 @@ def mostrar_jogos(time):
     scrollbar = tk.Scrollbar(frame_jogos, orient="vertical", command=canvas.yview, bg="#2980b9", troughcolor="#34495e")
     scrollable_frame = tk.Frame(canvas, bg="#34495e")
 
-    scrollable_frame.bind(
-        "<Configure>",
-        lambda e: canvas.configure(scrollregion=canvas.bbox("all"))
-    )
-
+    scrollable_frame.bind("<Configure>", lambda e: canvas.configure(scrollregion=canvas.bbox("all")))
     canvas.create_window((0, 0), window=scrollable_frame, anchor="nw")
     canvas.configure(yscrollcommand=scrollbar.set)
 
+    # Label de informações traduzido
     if idioma_selecionado == "Português":
-         label_aviso = tk.Label(
+        label_aviso = tk.Label(
             tela_jogos,
-           text=f"Total de jogos: {len(jogos)} (Máximo: {max_jogos})\n Posição do time: {times[time][4]}\n Vitorias em casa: {times[time][10]}\n Derrotas em casa: {times[time][11]}",
-           font=("Helvetica", 10, "bold"),
-        fg="#ecf0f1",
-        bg="#2c3e50"
-    )
+            text=f"Total de jogos: {len(jogos)} (Máximo: {max_jogos})\nPosição do time: {times[time][4]}\nVitórias em casa: {times[time][10]}\nDerrotas em casa: {times[time][11]}",
+            font=("Helvetica", 10, "bold"),
+            fg="#ecf0f1",
+            bg="#2c3e50"
+        )
     elif idioma_selecionado == "Inglês":
-             label_aviso = tk.Label(
+        label_aviso = tk.Label(
             tela_jogos,
-           text=f"Total of games: {len(jogos)} (Max: {max_jogos})\n Team position: {times[time][4]}\n Wins in house: {times[time][10]}\n Loses in house: {times[time][11]}",
-           font=("Helvetica", 10, "bold"),
-        fg="#ecf0f1",
-        bg="#2c3e50"
-    )
-    
+            text=f"Total matches: {len(jogos)} (Max: {max_jogos})\nTeam position: {times[time][4]}\nHome wins: {times[time][10]}\nHome losses: {times[time][11]}",
+            font=("Helvetica", 10, "bold"),
+            fg="#ecf0f1",
+            bg="#2c3e50"
+        )
     elif idioma_selecionado == "Alemão":
-      label_aviso = tk.Label(
-        tela_jogos,
-        text=f"Gesamtzahl der Spiele: {len(jogos)} (Maximal: {max_jogos})\n Teamposition: {times[time][4]}\n Heimsiege: {times[time][10]}\n Heimniederlagen: {times[time][11]}",
-        font=("Helvetica", 10, "bold"),
-        fg="#ecf0f1",
-        bg="#2c3e50"
-    )
+        label_aviso = tk.Label(
+            tela_jogos,
+            text=f"Gesamtspiele: {len(jogos)} (Max: {max_jogos})\nTeamposition: {times[time][4]}\nHeimsiege: {times[time][10]}\nHeimniederlagen: {times[time][11]}",
+            font=("Helvetica", 10, "bold"),
+            fg="#ecf0f1",
+            bg="#2c3e50"
+        )
     
     label_aviso.pack(pady=(20, 10))
 
     if not jogos:
-        label_aviso.config(text="Nenhum jogo encontrado.", font=("Helvetica", 10, "italic"), fg="#e74c3e")
+        # Mensagem de nenhum jogo traduzida
+        if idioma_selecionado == "Português":
+            label_aviso.config(text="Nenhum jogo encontrado.", font=("Helvetica", 10, "italic"), fg="#e74c3e")
+        elif idioma_selecionado == "Inglês":
+            label_aviso.config(text="No matches found.", font=("Helvetica", 10, "italic"), fg="#e74c3e")
+        elif idioma_selecionado == "Alemão":
+            label_aviso.config(text="Keine Spiele gefunden.", font=("Helvetica", 10, "italic"), fg="#e74c3e")
 
     if jogos:
         for i, jogo in enumerate(jogos[:max_jogos]):
@@ -321,19 +361,48 @@ def mostrar_jogos(time):
 
     scrollbar.pack(side="right", fill="y")
     canvas.pack(side="left", fill="both", expand=True)
-
-    btn_fechar = tk.Button(
-        tela_jogos,
-        text="Fechar",
-        command=tela_jogos.destroy,
-        bg="#e74c3c",
-        fg="white",
-        font=("Helvetica", 10, "bold"),
-        relief="flat",
-        width=20,
-        bd=0,
-        activebackground="#c0392b"
-    )
+    
+    # Botão de fechar traduzido
+    if idioma_selecionado == "Português":
+        btn_fechar = tk.Button(
+            tela_jogos,
+            text="Fechar",
+            command=tela_jogos.destroy,
+            bg="#e74c3c",
+            fg="white",
+            font=("Helvetica", 10, "bold"),
+            relief="flat",
+            width=20,
+            bd=0,
+            activebackground="#c0392b"
+        )
+    elif idioma_selecionado == "Inglês":
+        btn_fechar = tk.Button(
+            tela_jogos,
+            text="Close",
+            command=tela_jogos.destroy,
+            bg="#e74c3c",
+            fg="white",
+            font=("Helvetica", 10, "bold"),
+            relief="flat",
+            width=20,
+            bd=0,
+            activebackground="#c0392b"
+        )
+    elif idioma_selecionado == "Alemão":
+        btn_fechar = tk.Button(
+            tela_jogos,
+            text="Schließen",
+            command=tela_jogos.destroy,
+            bg="#e74c3c",
+            fg="white",
+            font=("Helvetica", 10, "bold"),
+            relief="flat",
+            width=20,
+            bd=0,
+            activebackground="#c0392b"
+        )
+     
     btn_fechar.pack(pady=20)
 
     tela_jogos.mainloop()
@@ -433,14 +502,25 @@ def criar_jogos():
     return todososjogos
     
 def tela_inicial():
-    global frame_times, labels_times, rodadas_label, btn_simular, rodadas, abrir_tela_jogos, label_introducao, label_pontos
+    global frame_times, labels_times, rodadas_label, btn_simular, rodadas, abrir_tela_jogos, label_introducao, label_pontos, btn_apostar
 
     tela_inicial = tk.Tk()
-    tela_inicial.configure(bg="#1c1c1c")  
-    tela_inicial.title("Simulator Brasileirão")
+    tela_inicial.configure(bg="#1c1c1c")
+    
+    # Título da janela traduzido
+    if idioma_selecionado == 'Português':
+        tela_inicial.title("Simulador Brasileirão")
+        label_introducao_texto = "Bem-vindo ao Simulador de Brasileirão"
+    elif idioma_selecionado == 'Inglês':
+        tela_inicial.title("Brasileirão Simulator")
+        label_introducao_texto = "Welcome to Brasileirão Simulator"
+    elif idioma_selecionado == 'Alemão':
+        tela_inicial.title("Brasileirão Simulator")
+        label_introducao_texto = "Willkommen im Brasileirão-Simulator"
+    
     tela_inicial.attributes("-fullscreen", True)
     
-    # Fontes personalizadas
+    # Fontes
     font_titulo = tkFont.Font(family="Arial", size=24, weight="bold")
     font_btn = tkFont.Font(family="Arial", size=14, weight="bold")
     font_texto = tkFont.Font(family="Arial", size=12)
@@ -448,18 +528,16 @@ def tela_inicial():
     frame_cabecalho = tk.Frame(tela_inicial, bg="#2c3e50")
     frame_cabecalho.pack(fill="x", pady=10)
 
-    label_introducao = tk.Label(frame_cabecalho, text="Bem-vindo ao Simulador de Brasileirão", bg="#2c3e50", fg="white", font=font_titulo)
+    label_introducao = tk.Label(frame_cabecalho, text=label_introducao_texto, bg="#2c3e50", fg="white", font=font_titulo)
     label_introducao.pack(pady=10)
 
-    # Botão para fechar a tela
+    # Botões do cabeçalho
     btn_fechar = tk.Button(frame_cabecalho, text=" X ", command=tela_inicial.destroy, bg="#ff5c5c", fg="white", font=font_btn, relief="flat")
     btn_fechar.pack(side="right", padx=10)
 
-    # Botão de configuração
     btn_config = tk.Button(frame_cabecalho, text="⚙️", command=config_tela, bg="#ffba08", fg="black", font=font_btn, relief="flat")
     btn_config.pack(side="right", padx=10)
 
-    # Botão para abrir a tela de perfil
     btn_perfil = tk.Button(frame_cabecalho, text="👤", command=Abrir_Perfil, bg="#3498db", fg="white", font=font_btn, relief="flat")
     btn_perfil.pack(side="right", padx=10)
 
@@ -469,54 +547,80 @@ def tela_inicial():
     frame_times = tk.Frame(frame_principal, bg="#2c2c2c", bd=2, relief="groove")
     frame_times.pack(fill="both", expand=True, pady=10)
 
+    
     canvas = tk.Canvas(frame_times, bg="#2c2c2c", highlightthickness=0)
     scrollbar = tk.Scrollbar(frame_times, orient="vertical", command=canvas.yview)
     scrollable_frame = tk.Frame(canvas, bg="#2c2c2c")
 
-    scrollable_frame.bind(
-        "<Configure>",
-        lambda e: canvas.configure(scrollregion=canvas.bbox("all"))
-    )
-    
+    scrollable_frame.bind("<Configure>", lambda e: canvas.configure(scrollregion=canvas.bbox("all")))
     canvas.create_window((0, 0), window=scrollable_frame, anchor="nw")
     canvas.configure(yscrollcommand=scrollbar.set)
 
     canvas.pack(side="left", fill="both", expand=True)
     scrollbar.pack(side="right", fill="y")
 
-    labels_times = {}  # Dicionário para armazenar os labels dos times
-
     frame_info = tk.Frame(frame_principal, bg="#1c1c1c")
     frame_info.pack(fill="x", pady=10)
     
-    rodadas_label = tk.Label(frame_info, text=f"Rodadas restantes: {rodadas}", bg="#1c1c1c", fg="#d3d3d3", font=font_texto)
-    rodadas_label.pack(side="left", padx=10)
+    # Label de rodadas traduzido
+    if idioma_selecionado == 'Português':
+        rodadas_label = tk.Label(frame_info, text=f"Rodadas restantes: {rodadas}", bg="#1c1c1c", fg="#d3d3d3", font=font_texto)
+    elif idioma_selecionado == 'Inglês':
+        rodadas_label = tk.Label(frame_info, text=f"Rounds remaining: {rodadas}", bg="#1c1c1c", fg="#d3d3d3", font=font_texto)
+    elif idioma_selecionado == 'Alemão':
+        rodadas_label = tk.Label(frame_info, text=f"Verbleibende Runden: {rodadas}", bg="#1c1c1c", fg="#d3d3d3", font=font_texto)
     
+    rodadas_label.pack(side="left", padx=10)
+
     if bet_mode == 1:
-        label_pontos = tk.Label(frame_info, text=f"Fichas: {fichas_usuario}", bg="#1c1c1c", fg="#d3d3d3", font=font_texto)
+        # Label de fichas traduzido
+        if idioma_selecionado == 'Português':
+            label_pontos = tk.Label(frame_info, text=f"Fichas: {fichas_usuario}", bg="#1c1c1c", fg="#d3d3d3", font=font_texto)
+        elif idioma_selecionado == 'Inglês':
+            label_pontos = tk.Label(frame_info, text=f"Chips: {fichas_usuario}", bg="#1c1c1c", fg="#d3d3d3", font=font_texto)
+        elif idioma_selecionado == 'Alemão':
+            label_pontos = tk.Label(frame_info, text=f"Chips: {fichas_usuario}", bg="#1c1c1c", fg="#d3d3d3", font=font_texto)
         label_pontos.pack(side="left", padx=10)
 
     frame_botoes = tk.Frame(frame_principal, bg="#1c1c1c")
     frame_botoes.pack(fill="x", pady=10)
 
-    btn_simular = tk.Button(frame_botoes, text="Simular Próxima Rodada", command=simular_rodada, bg="#00aaff", fg="white", font=font_btn, bd=0, padx=20, pady=5)
-    btn_simular.pack(side="left", padx=10, fill="x", expand=True)
+    # Botões principais traduzidos
+    if idioma_selecionado == 'Português':
+        btn_simular = tk.Button(frame_botoes, text="Simular Próxima Rodada", command=simular_rodada, bg="#00aaff", fg="white", font=font_btn, bd=0, padx=20, pady=5)
+        abrir_tela_jogos = tk.Button(frame_botoes, text="Abrir Tela de Jogos", command=criar_tela_jogos, bg="#ff8c42", fg="white", font=font_btn, bd=0, padx=20, pady=5)
+    elif idioma_selecionado == 'Inglês':
+        btn_simular = tk.Button(frame_botoes, text="Simulate Next Round", command=simular_rodada, bg="#00aaff", fg="white", font=font_btn, bd=0, padx=20, pady=5)
+        abrir_tela_jogos = tk.Button(frame_botoes, text="Open Matches Screen", command=criar_tela_jogos, bg="#ff8c42", fg="white", font=font_btn, bd=0, padx=20, pady=5)
+    elif idioma_selecionado == 'Alemão':
+        btn_simular = tk.Button(frame_botoes, text="Nächste Runde simulieren", command=simular_rodada, bg="#00aaff", fg="white", font=font_btn, bd=0, padx=20, pady=5)
+        abrir_tela_jogos = tk.Button(frame_botoes, text="Spielbildschirm öffnen", command=criar_tela_jogos, bg="#ff8c42", fg="white", font=font_btn, bd=0, padx=20, pady=5)
 
-    abrir_tela_jogos = tk.Button(frame_botoes, text="Abrir Tela de Jogos", command=criar_tela_jogos, bg="#ff8c42", fg="white", font=font_btn, bd=0, padx=20, pady=5)
+    btn_simular.pack(side="left", padx=10, fill="x", expand=True)
     abrir_tela_jogos.pack(side="left", padx=10, fill="x", expand=True)
 
-    btn_relatorio = tk.Button(frame_botoes, text="Abrir Tela de relátorio", bg="#9932CC", fg="white", font=font_btn, bd=0, padx=20, pady=5, command=criar_tela_relatorio)
-    btn_relatorio.pack(side="left", padx=10, fill="x", expand=True)
+    
+            
 
+    
+    
     if bet_mode == 1:
-        btn_apostar = tk.Button(frame_botoes, text="Apostar em Jogos", bg="#2980b9", fg="white", font=font_btn, bd=0, padx=20, pady=5, command=tela_escolher_jogos)
+        # this part create the button with the language which the user choose.
+        if idioma_selecionado == 'Português':
+            btn_apostar = tk.Button(frame_botoes, text="Apostar em Jogos", bg="#2980b9", fg="white", font=font_btn, command=tela_escolher_jogos)
+        elif idioma_selecionado == 'Inglês':
+            btn_apostar = tk.Button(frame_botoes, text="Bet on Matches", bg="#2980b9", fg="white", font=font_btn, command=tela_escolher_jogos)
+        elif idioma_selecionado == 'Alemão':
+            btn_apostar = tk.Button(frame_botoes, text="Auf Spiele wetten", bg="#2980b9", fg="white", font=font_btn, command=tela_escolher_jogos)
+     
         btn_apostar.pack(side="left", padx=10, fill="x", expand=True)
+        
+  
 
     frame_rodape = tk.Frame(tela_inicial, bg="#2c3e50")
     frame_rodape.pack(fill="x", pady=10)
 
-
-
+    organizar_tabela()
     tela_inicial.mainloop()
 
 def iniciar_simulacao(nome_arquivo="placares_jogos.txt"):
@@ -637,12 +741,7 @@ def parabenizar_campeao():
     )
 
 def calcular_odd(time1, time2):
-    """
-    Calcula a odd para uma aposta baseada nos stats dos times.
-    Stat 12 = ataque + defesa do time
-    
-    Retorna uma tupla com: (odd_time1, odd_empate, odd_time2)
-    """
+
     stat_time1 = times[time1][12]
     stat_time2 = times[time2][12]
     
@@ -653,10 +752,10 @@ def calcular_odd(time1, time2):
     if stat_time1 > stat_time2:
         # Time 1 é favorito
         odd_time1 = max(1.2, 2.0 - (diferenca * 0.70))
-        odd_time2 = min(10.0, 2.0 + (diferenca * 0.60))
+        odd_time2 = min(5.0, 2.0 + (diferenca * 0.60))
     elif stat_time2 > stat_time1:
         # Time 2 é favorito
-        odd_time1 = min(10.0, 2.0 + (diferenca * 0.60))
+        odd_time1 = min(5.0, 2.0 + (diferenca * 0.60))
         odd_time2 = max(1.2, 2.0 - (diferenca * 0.70))
     else:
         odd_time1 = 1.8
@@ -801,247 +900,277 @@ from PIL import Image, ImageTk
 def Abrir_Perfil():
     global usuario_logado
 
-    # Configuração da janela
     tela_de_perfil = tk.Toplevel()
-    tela_de_perfil.title("Perfil do Usuário")
+    
+    # Título da janela traduzido
+    if idioma_selecionado == 'Português':
+        tela_de_perfil.title("Perfil do Usuário")
+    elif idioma_selecionado == 'Inglês':
+        tela_de_perfil.title("User Profile")
+    elif idioma_selecionado == 'Alemão':
+        tela_de_perfil.title("Benutzerprofil")
+    
     tela_de_perfil.geometry('800x600')
-    tela_de_perfil.configure(bg="#2c3e50")  # Cor de fundo suave
+    tela_de_perfil.configure(bg="#2c3e50")
     tela_de_perfil.resizable(False, False)
 
-    # Header com Foto de Capa
+    # Cabeçalho
     header_frame = tk.Frame(tela_de_perfil, bg="#3a506b", height=200)
     header_frame.pack(fill=tk.X)
 
-    # Carregar imagem de capa (usando o caminho do banco de dados)
+    # Foto de fundo
     if usuario_logado.fundo_perfil:
         try:
-            capa = Image.open(usuario_logado.fundo_perfil)  # Usa o caminho do banco de dados
+            capa = Image.open(usuario_logado.fundo_perfil)
             capa = capa.resize((800, 200), Image.Resampling.LANCZOS)
             capa_tk = ImageTk.PhotoImage(capa)
             label_capa = tk.Label(header_frame, image=capa_tk, bg="#3a506b")
-            label_capa.image = capa_tk  # Mantém uma referência
+            label_capa.image = capa_tk
             label_capa.place(relx=0.5, rely=0.5, anchor=tk.CENTER)
         except Exception as e:
             print(f"Erro ao carregar a capa: {e}")
-            label_capa = tk.Label(header_frame, text="Capa não disponível", bg="#3a506b", fg="#000000", font=('Arial', 12))
+            if idioma_selecionado == 'Português':
+                label_capa = tk.Label(header_frame, text="Capa não disponível", bg="#3a506b", fg="#000000", font=('Arial', 12))
+            elif idioma_selecionado == 'Inglês':
+                label_capa = tk.Label(header_frame, text="Cover not available", bg="#3a506b", fg="#000000", font=('Arial', 12))
+            elif idioma_selecionado == 'Alemão':
+                label_capa = tk.Label(header_frame, text="Titelbild nicht verfügbar", bg="#3a506b", fg="#000000", font=('Arial', 12))
             label_capa.place(relx=0.5, rely=0.5, anchor=tk.CENTER)
     else:
-        label_capa = tk.Label(header_frame, text="Sem capa", bg="#ffffff", fg="#3a506b", font=('Arial', 12))
+        if idioma_selecionado == 'Português':
+            label_capa = tk.Label(header_frame, text="Sem capa", bg="#ffffff", fg="#3a506b", font=('Arial', 12))
+        elif idioma_selecionado == 'Inglês':
+            label_capa = tk.Label(header_frame, text="No cover", bg="#ffffff", fg="#3a506b", font=('Arial', 12))
+        elif idioma_selecionado == 'Alemão':
+            label_capa = tk.Label(header_frame, text="Kein Titelbild", bg="#ffffff", fg="#3a506b", font=('Arial', 12))
         label_capa.place(relx=0.5, rely=0.5, anchor=tk.CENTER)
 
-    # Foto de Perfil (sobreposta à capa)
+    # Foto de perfil
     if usuario_logado.foto_perfil:
         try:
             imagem = Image.open(usuario_logado.foto_perfil)
             imagem = imagem.resize((100, 100), Image.Resampling.LANCZOS)
             foto = ImageTk.PhotoImage(imagem)
             label_imagem = tk.Label(header_frame, image=foto, bg="#3a506b", bd=0)
-            label_imagem.image = foto  # Mantém uma referência
-            label_imagem.place(relx=0.5, rely=1, anchor=tk.S)  # Posiciona no centro inferior do header
+            label_imagem.image = foto
+            label_imagem.place(relx=0.5, rely=1, anchor=tk.S)
         except Exception as e:
             print(f"Erro ao carregar a foto de perfil: {e}")
-            label_imagem = tk.Label(header_frame, text="Sem foto", bg="#3a506b", fg="#000000", font=('Arial', 12))
+            if idioma_selecionado == 'Português':
+                label_imagem = tk.Label(header_frame, text="Sem foto", bg="#3a506b", fg="#000000", font=('Arial', 12))
+            elif idioma_selecionado == 'Inglês':
+                label_imagem = tk.Label(header_frame, text="No photo", bg="#3a506b", fg="#000000", font=('Arial', 12))
+            elif idioma_selecionado == 'Alemão':
+                label_imagem = tk.Label(header_frame, text="Kein Foto", bg="#3a506b", fg="#000000", font=('Arial', 12))
             label_imagem.place(relx=0.5, rely=1, anchor=tk.S)
     else:
-        label_imagem = tk.Label(header_frame, text="Sem foto", bg="#3a506b", fg="#000000", font=('Arial', 12))
+        if idioma_selecionado == 'Português':
+            label_imagem = tk.Label(header_frame, text="Sem foto", bg="#3a506b", fg="#000000", font=('Arial', 12))
+        elif idioma_selecionado == 'Inglês':
+            label_imagem = tk.Label(header_frame, text="No photo", bg="#3a506b", fg="#000000", font=('Arial', 12))
+        elif idioma_selecionado == 'Alemão':
+            label_imagem = tk.Label(header_frame, text="Kein Foto", bg="#3a506b", fg="#000000", font=('Arial', 12))
         label_imagem.place(relx=0.5, rely=1, anchor=tk.S)
 
-    # Nome do Usuário
-    label_nome_user = tk.Label(tela_de_perfil, text=usuario_logado.nome, fg="#000000", bg="#f0f2f5", font=('Arial', 18, 'bold'))
+    # Nome do usuário
+    label_nome_user = tk.Label(tela_de_perfil, text=usuario_logado.nome, fg="#000000", bg="#2c3e50", font=('Arial', 18, 'bold'))
     label_nome_user.place(relx=0.5, rely=0.35, anchor=tk.CENTER)
 
-    # Cards de Informações
+    # Cartão de informações
     card_frame = tk.Frame(tela_de_perfil, bg="#3a506b", bd=1, relief=tk.SOLID)
     card_frame.place(relx=0.5, rely=0.55, anchor=tk.CENTER, width=600, height=200)
 
-    # Fichas
-    label_fichas = tk.Label(card_frame, text=f"Fichas: {usuario_logado.fichas}", fg="#000000", bg="#3a506b", font=('Arial', 12))
+    # Labels de informações traduzidos
+    if idioma_selecionado == 'Português':
+        label_fichas = tk.Label(card_frame, text=f"Fichas: {usuario_logado.fichas}", fg="#000000", bg="#3a506b", font=('Arial', 12))
+        label_vezes_apostadas = tk.Label(card_frame, text=f"Vezes Apostadas: {usuario_logado.vezes_apostadas}", fg="#000000", bg="#3a506b", font=('Arial', 12))
+        label_apostas_vencidas = tk.Label(card_frame, text=f"Apostas Vencidas: {usuario_logado.apostas_ganhas}", fg="#000000", bg="#3a506b", font=('Arial', 12))
+        label_apostas_perdidas = tk.Label(card_frame, text=f"Apostas Perdidas: {usuario_logado.apostas_perdidas}", fg="#000000", bg="#3a506b", font=('Arial', 12))
+    elif idioma_selecionado == 'Inglês':
+        label_fichas = tk.Label(card_frame, text=f"Chips: {usuario_logado.fichas}", fg="#000000", bg="#3a506b", font=('Arial', 12))
+        label_vezes_apostadas = tk.Label(card_frame, text=f"Times Bet: {usuario_logado.vezes_apostadas}", fg="#000000", bg="#3a506b", font=('Arial', 12))
+        label_apostas_vencidas = tk.Label(card_frame, text=f"Wins: {usuario_logado.apostas_ganhas}", fg="#000000", bg="#3a506b", font=('Arial', 12))
+        label_apostas_perdidas = tk.Label(card_frame, text=f"Losses: {usuario_logado.apostas_perdidas}", fg="#000000", bg="#3a506b", font=('Arial', 12))
+    elif idioma_selecionado == 'Alemão':
+        label_fichas = tk.Label(card_frame, text=f"Chips: {usuario_logado.fichas}", fg="#000000", bg="#3a506b", font=('Arial', 12))
+        label_vezes_apostadas = tk.Label(card_frame, text=f"Wetten: {usuario_logado.vezes_apostadas}", fg="#000000", bg="#3a506b", font=('Arial', 12))
+        label_apostas_vencidas = tk.Label(card_frame, text=f"Gewonnen: {usuario_logado.apostas_ganhas}", fg="#000000", bg="#3a506b", font=('Arial', 12))
+        label_apostas_perdidas = tk.Label(card_frame, text=f"Verloren: {usuario_logado.apostas_perdidas}", fg="#000000", bg="#3a506b", font=('Arial', 12))
+
     label_fichas.place(relx=0.25, rely=0.3, anchor=tk.CENTER)
-
-    # Vezes Apostadas
-    label_vezes_apostadas = tk.Label(card_frame, text=f"Vezes Apostadas: {usuario_logado.vezes_apostadas}", fg="#000000", bg="#3a506b", font=('Arial', 12))
     label_vezes_apostadas.place(relx=0.75, rely=0.3, anchor=tk.CENTER)
-
-    # Apostas Vencidas
-    label_apostas_vencidas = tk.Label(card_frame, text=f"Apostas Vencidas: {usuario_logado.apostas_ganhas}", fg="#000000", bg="#3a506b", font=('Arial', 12))
     label_apostas_vencidas.place(relx=0.25, rely=0.6, anchor=tk.CENTER)
-
-    # Apostas Perdidas
-    label_apostas_perdidas = tk.Label(card_frame, text=f"Apostas Perdidas: {usuario_logado.apostas_perdidas}", fg="#000000", bg="#3a506b", font=('Arial', 12))
     label_apostas_perdidas.place(relx=0.75, rely=0.6, anchor=tk.CENTER)
 
-    # Botão para Selecionar Foto de Perfil
-    btn_selecionar_foto = tk.Button(
-        tela_de_perfil,
-        text="Selecionar Foto de Perfil",
-        command=lambda: selecionar_foto_perfil(usuario_logado),
-        bg="#1877f2",  # Azul do Facebook
-        fg="#ffffff",
-        font=('Arial', 12, 'bold'),
-        bd=0,
-        padx=20,
-        pady=10,
-        relief=tk.FLAT,
-        activebackground="#165dbb",
-        activeforeground="white"
-    )
-    btn_selecionar_foto.place(relx=0.3, rely=0.8, anchor=tk.CENTER)
+    # Botões traduzidos
+    if idioma_selecionado == 'Português':
+        btn_selecionar_foto = tk.Button(
+            tela_de_perfil,
+            text="Selecionar Foto de Perfil",
+            command=lambda: selecionar_foto_perfil(usuario_logado),
+            bg="#1877f2", fg="#ffffff", font=('Arial', 12, 'bold'),
+            bd=0, padx=20, pady=10, relief=tk.FLAT,
+            activebackground="#165dbb", activeforeground="white"
+        )
+        btn_selecionar_fundo = tk.Button(
+            tela_de_perfil,
+            text="Selecionar Foto de Fundo",
+            command=lambda: selecionar_fundo_perfil(usuario_logado),
+            bg="#1877f2", fg="#ffffff", font=('Arial', 12, 'bold'),
+            bd=0, padx=20, pady=10, relief=tk.FLAT,
+            activebackground="#165dbb", activeforeground="white"
+        )
+    elif idioma_selecionado == 'Inglês':
+        btn_selecionar_foto = tk.Button(
+            tela_de_perfil,
+            text="Select Profile Photo",
+            command=lambda: selecionar_foto_perfil(usuario_logado),
+            bg="#1877f2", fg="#ffffff", font=('Arial', 12, 'bold'),
+            bd=0, padx=20, pady=10, relief=tk.FLAT,
+            activebackground="#165dbb", activeforeground="white"
+        )
+        btn_selecionar_fundo = tk.Button(
+            tela_de_perfil,
+            text="Select Cover Photo",
+            command=lambda: selecionar_fundo_perfil(usuario_logado),
+            bg="#1877f2", fg="#ffffff", font=('Arial', 12, 'bold'),
+            bd=0, padx=20, pady=10, relief=tk.FLAT,
+            activebackground="#165dbb", activeforeground="white"
+        )
+    elif idioma_selecionado == 'Alemão':
+        btn_selecionar_foto = tk.Button(
+            tela_de_perfil,
+            text="Profilbild auswählen",
+            command=lambda: selecionar_foto_perfil(usuario_logado),
+            bg="#1877f2", fg="#ffffff", font=('Arial', 12, 'bold'),
+            bd=0, padx=20, pady=10, relief=tk.FLAT,
+            activebackground="#165dbb", activeforeground="white"
+        )
+        btn_selecionar_fundo = tk.Button(
+            tela_de_perfil,
+            text="Titelbild auswählen",
+            command=lambda: selecionar_fundo_perfil(usuario_logado),
+            bg="#1877f2", fg="#ffffff", font=('Arial', 12, 'bold'),
+            bd=0, padx=20, pady=10, relief=tk.FLAT,
+            activebackground="#165dbb", activeforeground="white"
+        )
 
-    # Botão para Selecionar Foto de Fundo
-    btn_selecionar_fundo = tk.Button(
-        tela_de_perfil,
-        text="Selecionar Foto de Fundo",
-        command=lambda: selecionar_fundo_perfil(usuario_logado),
-        bg="#1877f2",  # Azul do Facebook
-        fg="#ffffff",
-        font=('Arial', 12, 'bold'),
-        bd=0,
-        padx=20,
-        pady=10,
-        relief=tk.FLAT,
-        activebackground="#165dbb",
-        activeforeground="white"
-    )
+    btn_selecionar_foto.place(relx=0.3, rely=0.8, anchor=tk.CENTER)
     btn_selecionar_fundo.place(relx=0.7, rely=0.8, anchor=tk.CENTER)
 
     tela_de_perfil.mainloop()
     
 def statsteams():
-  if bet_mode == 0:
-    global tela_times
-    tela_times = tk.Toplevel()
-    tela_times.title("Status dos Times")
-    tela_times.configure(bg="#2c3e50")  
-    tela_times.geometry("500x640")
+    if bet_mode == 0:
+        global tela_times
+        tela_times = tk.Toplevel()
+        
+        # Título da janela traduzido
+        if idioma_selecionado == 'Português':
+            tela_times.title("Status dos Times")
+        elif idioma_selecionado == 'Inglês':
+            tela_times.title("Teams Status")
+        elif idioma_selecionado == 'Alemão':
+            tela_times.title("Teamstatus")
+            
+        tela_times.configure(bg="#2c3e50")  
+        tela_times.geometry("500x640")
 
-    times_por_pagina = 5
-    pagina_atual = [0]
+        times_por_pagina = 5
+        pagina_atual = [0]
 
-    def exibir_times():
-        global btn_anterior, btn_atualizar, btn_proximo
-        for widget in tela_times.winfo_children():
-            widget.destroy()
+        def exibir_times():
+            global btn_anterior, btn_atualizar, btn_proximo
+            for widget in tela_times.winfo_children():
+                widget.destroy()
 
-        inicio = pagina_atual[0] * times_por_pagina
-        fim = inicio + times_por_pagina
-        times_pagina = list(times.items())[inicio:fim]
+            inicio = pagina_atual[0] * times_por_pagina
+            fim = inicio + times_por_pagina
+            times_pagina = list(times.items())[inicio:fim]
 
-        for nome_time, stats in times_pagina:
-            frame_time = tk.Frame(tela_times, bg="#34495e")
-            frame_time.pack(pady=5, padx=10, fill="x")
+            for nome_time, stats in times_pagina:
+                frame_time = tk.Frame(tela_times, bg="#34495e")
+                frame_time.pack(pady=5, padx=10, fill="x")
 
-            tk.Label(frame_time, text=nome_time, bg="#34495e", fg="#ecf0f1", font=("Arial", 14, 'bold')).grid(row=0, column=0, sticky="w")
-            if idioma_selecionado == "Português":
-             tk.Label(frame_time, text="Ataque:", bg="#34495e", fg="white").grid(row=1, column=0, sticky="w")
-             ataque = tk.Entry(frame_time, width=5)
-             ataque.insert(0, stats[3])
-             ataque.grid(row=1, column=1)
-
-             tk.Label(frame_time, text="Defesa:", bg="#34495e", fg="white").grid(row=2, column=0, sticky="w")
-             defesa = tk.Entry(frame_time, width=5)
-             defesa.insert(0, stats[9])
-             defesa.grid(row=2, column=1)
-
-            elif idioma_selecionado == "Inglês":
-                 tk.Label(frame_time, text="Attack:", bg="#34495e", fg="white").grid(row=1, column=0, sticky="w")
-                 ataque = tk.Entry(frame_time, width=5)
-                 ataque.insert(0, stats[3])
-                 ataque.grid(row=1, column=1)
-
-                 tk.Label(frame_time, text="Defense:", bg="#34495e", fg="white").grid(row=2, column=0, sticky="w")
-                 defesa = tk.Entry(frame_time, width=5)
-                 defesa.insert(0, stats[9])
-                 defesa.grid(row=2, column=1)
-
-            elif idioma_selecionado == "Alemão":
-                 tk.Label(frame_time, text="Angriff:", bg="#34495e", fg="white").grid(row=1, column=0, sticky="w")
-                 ataque = tk.Entry(frame_time, width=5)
-                 ataque.insert(0, stats[3])
-                 ataque.grid(row=1, column=1)
-
-                 tk.Label(frame_time, text="Verteidigung:", bg="#34495e", fg="white").grid(row=2, column=0, sticky="w")
-                 defesa = tk.Entry(frame_time, width=5)
-                 defesa.insert(0, stats[9])
-                 defesa.grid(row=2, column=1)
-
-            global textt
-            def atualizar_stats(nome=nome_time, atk_entry=ataque, def_entry=defesa):
-                times[nome][3] = int(atk_entry.get())
-                times[nome][9] = int(def_entry.get())
-                if idioma_selecionado == 'Português':
-                  times[nome][3] = int(atk_entry.get())
-                  times[nome][9] = int(def_entry.get())
-                  print(f"Time {nome}: Ataque = {times[nome][3]}, Defesa = {times[nome][9]}")
-                elif idioma_selecionado == 'Inglês':
-                  times[nome][3] = int(atk_entry.get())
-                  times[nome][9] = int(def_entry.get())
-                  print(f"Time {nome}: Attack = {times[nome][3]}, Defense = {times[nome][9]}")
-                elif idioma_selecionado == "Alemão":
-                  print(f"Mannschaft {nome}: Angriff = {times[nome][3]}, Verteidigung = {times[nome][9]}")
-            if idioma_selecionado == 'Português':
-             btn_atualizar = tk.Button(frame_time, text=f"Atualizar", command=atualizar_stats, bg="#f39c12", fg="black", font=("Arial", 10))
-             btn_atualizar.grid(row=3, column=0, columnspan=2, pady=(5, 0))
-            elif idioma_selecionado == 'Inglês':
-             btn_atualizar = tk.Button(frame_time, text=f"Update", command=atualizar_stats, bg="#f39c12", fg="black", font=("Arial", 10))
-             btn_atualizar.grid(row=3, column=0, columnspan=2, pady=(5, 0))  
-            elif idioma_selecionado == "Alemão":
-             btn_atualizar = tk.Button(frame_time, text=f"Aktualisieren", command=atualizar_stats, bg="#f39c12", fg="black", font=("Arial", 10))
-             btn_atualizar.grid(row=3, column=0, columnspan=2, pady=(5, 0))    
+                tk.Label(frame_time, text=nome_time, bg="#34495e", fg="#ecf0f1", font=("Arial", 14, 'bold')).grid(row=0, column=0, sticky="w")
                 
-        btn_frame = tk.Frame(tela_times, bg="#2c3e50")
-        btn_frame.pack(pady=10)
-        if idioma_selecionado == "Português":
-          if pagina_atual[0] > 0:
-            btn_anterior = tk.Button(btn_frame, text="Anterior", command=lambda: mudar_pagina(-1), bg="#2980b9", fg="white", font=("Arial", 12))
-            btn_anterior.pack(side="left", padx=20)
+                # Labels de status traduzidos
+                if idioma_selecionado == "Português":
+                    tk.Label(frame_time, text="Ataque:", bg="#34495e", fg="white").grid(row=1, column=0, sticky="w")
+                    tk.Label(frame_time, text="Defesa:", bg="#34495e", fg="white").grid(row=2, column=0, sticky="w")
+                    btn_text = "Atualizar"
+                elif idioma_selecionado == "Inglês":
+                    tk.Label(frame_time, text="Attack:", bg="#34495e", fg="white").grid(row=1, column=0, sticky="w")
+                    tk.Label(frame_time, text="Defense:", bg="#34495e", fg="white").grid(row=2, column=0, sticky="w")
+                    btn_text = "Update"
+                elif idioma_selecionado == "Alemão":
+                    tk.Label(frame_time, text="Angriff:", bg="#34495e", fg="white").grid(row=1, column=0, sticky="w")
+                    tk.Label(frame_time, text="Verteidigung:", bg="#34495e", fg="white").grid(row=2, column=0, sticky="w")
+                    btn_text = "Aktualisieren"
+                
+                ataque = tk.Entry(frame_time, width=5)
+                ataque.insert(0, stats[3])
+                ataque.grid(row=1, column=1)
 
-          if fim < len(times):
-            btn_proximo = tk.Button(btn_frame, text="Próximo", command=lambda: mudar_pagina(1), bg="#2980b9", fg="white", font=("Arial", 12))
-            btn_proximo.pack(side="right", padx=20)
+                defesa = tk.Entry(frame_time, width=5)
+                defesa.insert(0, stats[9])
+                defesa.grid(row=2, column=1)
+
+                def atualizar_stats(nome=nome_time, atk_entry=ataque, def_entry=defesa):
+                    times[nome][3] = int(atk_entry.get())
+                    times[nome][9] = int(def_entry.get())
+                    if idioma_selecionado == 'Português':
+                        print(f"Time {nome}: Ataque = {times[nome][3]}, Defesa = {times[nome][9]}")
+                    elif idioma_selecionado == 'Inglês':
+                        print(f"Team {nome}: Attack = {times[nome][3]}, Defense = {times[nome][9]}")
+                    elif idioma_selecionado == "Alemão":
+                        print(f"Mannschaft {nome}: Angriff = {times[nome][3]}, Verteidigung = {times[nome][9]}")
+                
+                btn_atualizar = tk.Button(frame_time, text=btn_text, command=atualizar_stats, bg="#f39c12", fg="black", font=("Arial", 10))
+                btn_atualizar.grid(row=3, column=0, columnspan=2, pady=(5, 0))
+                
+            btn_frame = tk.Frame(tela_times, bg="#2c3e50")
+            btn_frame.pack(pady=10)
             
-        if idioma_selecionado == "Inglês":
-          if pagina_atual[0] > 0:
-            btn_anterior = tk.Button(btn_frame, text="Previous", command=lambda: mudar_pagina(-1), bg="#2980b9", fg="white", font=("Arial", 12))
-            btn_anterior.pack(side="left", padx=20)
+            # Botões de navegação traduzidos
+            if idioma_selecionado == "Português":
+                if pagina_atual[0] > 0:
+                    btn_anterior = tk.Button(btn_frame, text="Anterior", command=lambda: mudar_pagina(-1), bg="#2980b9", fg="white", font=("Arial", 12))
+                    btn_anterior.pack(side="left", padx=20)
 
-          if fim < len(times):
-            btn_proximo = tk.Button(btn_frame, text="Next", command=lambda: mudar_pagina(1), bg="#2980b9", fg="white", font=("Arial", 12))
-            btn_proximo.pack(side="right", padx=20)
-            
-                   
-        if idioma_selecionado == "Alemão":
-          if pagina_atual[0] > 0:
-           btn_anterior = tk.Button(btn_frame, text="Zurück", command=lambda: mudar_pagina(-1), bg="#2980b9", fg="white", font=("Arial", 12))
-           btn_anterior.pack(side="left", padx=20)
+                if fim < len(times):
+                    btn_proximo = tk.Button(btn_frame, text="Próximo", command=lambda: mudar_pagina(1), bg="#2980b9", fg="white", font=("Arial", 12))
+                    btn_proximo.pack(side="right", padx=20)
+            elif idioma_selecionado == "Inglês":
+                if pagina_atual[0] > 0:
+                    btn_anterior = tk.Button(btn_frame, text="Previous", command=lambda: mudar_pagina(-1), bg="#2980b9", fg="white", font=("Arial", 12))
+                    btn_anterior.pack(side="left", padx=20)
 
-          if fim < len(times):
-              btn_proximo = tk.Button(btn_frame, text="Weiter", command=lambda: mudar_pagina(1), bg="#2980b9", fg="white", font=("Arial", 12))
-              btn_proximo.pack(side="right", padx=20)
+                if fim < len(times):
+                    btn_proximo = tk.Button(btn_frame, text="Next", command=lambda: mudar_pagina(1), bg="#2980b9", fg="white", font=("Arial", 12))
+                    btn_proximo.pack(side="right", padx=20)
+            elif idioma_selecionado == "Alemão":
+                if pagina_atual[0] > 0:
+                    btn_anterior = tk.Button(btn_frame, text="Zurück", command=lambda: mudar_pagina(-1), bg="#2980b9", fg="white", font=("Arial", 12))
+                    btn_anterior.pack(side="left", padx=20)
 
-    def mudar_pagina(direcao):
-        pagina_atual[0] += direcao
+                if fim < len(times):
+                    btn_proximo = tk.Button(btn_frame, text="Weiter", command=lambda: mudar_pagina(1), bg="#2980b9", fg="white", font=("Arial", 12))
+                    btn_proximo.pack(side="right", padx=20)
+
+        def mudar_pagina(direcao):
+            pagina_atual[0] += direcao
+            exibir_times()
+
         exibir_times()
-
-    exibir_times()
-  else: 
-   if idioma_selecionado == 'Português':
-    messagebox.showinfo(
-                title="Impossivel alterar status",
-                message=f"Impossivel alterar os status dos times com o modo aposta ativo",
-                icon='info'
-            )
-   elif idioma_selecionado == 'Inglês':
-       messagebox.showinfo(
-                title="Impossible change team stats",
-                message=f"Impossible change the team stats with bet mode on.",
-                icon='info'
-            )
-   elif idioma_selecionado == 'Alemão':
-       messagebox.showinfo(
-                title="Unmögliche Änderung der Teamstatistiken",
-                message=f"Es ist nicht möglich, die Teamstatistiken zu ändern, wenn der Wettmodus aktiviert ist.",
-                icon='info'
-            )
+    else: 
+        # Mensagem de erro traduzida
+        if idioma_selecionado == 'Português':
+            messagebox.showinfo("Impossivel alterar status", "Impossivel alterar os status dos times com o modo aposta ativo")
+        elif idioma_selecionado == 'Inglês':
+            messagebox.showinfo("Impossible change team stats", "Impossible change the team stats with bet mode on.")
+        elif idioma_selecionado == 'Alemão':
+            messagebox.showinfo("Unmögliche Änderung der Teamstatistiken", "Es ist nicht möglich, die Teamstatistiken zu ändern, wenn der Wettmodus aktiviert ist.")
     
 def selecionar_linguagem():
     global idioma_selecionado
@@ -1060,6 +1189,7 @@ def selecionar_linguagem():
             btn_config_teams.config(text="Change team status")
             btn_colocar_time_5.config(text="Status 5 in teams")
             btn_colocar_time_6.config(text="Randomize Status")
+            btn_apostar.config(text="Bet on Matches")
             btn_colocar_time_7.config(text="Language")
             labelconfig1.config(text="Settings")
             label_introducao.config(text="Welcome to Brasileirão Simulator")
@@ -1077,6 +1207,8 @@ def selecionar_linguagem():
             btn_colocar_time_7.config(text="Sprache")
             labelconfig1.config(text="Einstellungen")
             label_introducao.config(text="Willkommen im Brasileirão-Simulator")
+            btn_apostar.config(text="Auf Spiele wetten")
+
             if rodada_atual == 38:
               btn_simular.config(text="Meisterschaftsinformationen")
             else:
@@ -1086,6 +1218,7 @@ def selecionar_linguagem():
             organizar_tabela()
         elif idioma == "Português":
             btn_config_teams.config(text="Mudar status dos times")
+            btn_apostar.config(text="Apostar em Jogos")
             btn_colocar_time_5.config(text="Status 5 em times")
             btn_colocar_time_6.config(text="Randomizar Status")
             btn_colocar_time_7.config(text="Linguagem")
@@ -1172,59 +1305,46 @@ def config_tela():
     tela_configuracao.mainloop()
 
 def randomizestats():
-  if bet_mode == 1:
-   if idioma_selecionado == 'Português':
-    messagebox.showinfo(
-                title="Impossivel alterar status",
-                message=f"Impossivel alterar os status dos times com o modo aposta ativo",
-                icon='info'
-            )
-   elif idioma_selecionado == 'Inglês':
-       messagebox.showinfo(
-                title="Impossible change team stats",
-                message=f"Impossible change the team stats with bet mode on.",
-                icon='info'
-            )
-   elif idioma_selecionado == 'Alemão':
-       messagebox.showinfo(
-                title="Unmögliche Änderung der Teamstatistiken",
-                message=f"Es ist nicht möglich, die Teamstatistiken zu ändern, wenn der Wettmodus aktiviert ist.",
-                icon='info'
-            )
-  else:
-
-    global times
-    for team, stats in times.items():
-        stats[3] = rm.randint(1, 10)
-        stats[9] = rm.randint(1, 10)
-        print(f"{team} updated - Attack: {stats[3]}, Defense: {stats[9]}")
+    if bet_mode == 1:
+        # Mensagem de erro traduzida
+        if idioma_selecionado == 'Português':
+            messagebox.showinfo("Impossivel alterar status", "Impossivel alterar os status dos times com o modo aposta ativo")
+        elif idioma_selecionado == 'Inglês':
+            messagebox.showinfo("Impossible change team stats", "Impossible change the team stats with bet mode on.")
+        elif idioma_selecionado == 'Alemão':
+            messagebox.showinfo("Unmögliche Änderung der Teamstatistiken", "Es ist nicht möglich, die Teamstatistiken zu ändern, wenn der Wettmodus aktiviert ist.")
+    else:
+        global times
+        for team, stats in times.items():
+            stats[3] = rm.randint(1, 10)
+            stats[9] = rm.randint(1, 10)
+            if idioma_selecionado == 'Português':
+                print(f"{team} atualizado - Ataque: {stats[3]}, Defesa: {stats[9]}")
+            elif idioma_selecionado == 'Inglês':
+                print(f"{team} updated - Attack: {stats[3]}, Defense: {stats[9]}")
+            elif idioma_selecionado == 'Alemão':
+                print(f"{team} aktualisiert - Angriff: {stats[3]}, Verteidigung: {stats[9]}")
 
 def stats5teams():
-   if bet_mode == 0:
-    global times
-    for team, stats in times.items():
-        stats[3] = 5  
-        stats[9] = 5 
-        print(f"{team} updated - Attack: {stats[3]}, Defense: {stats[9]}")
-   else:
-    if idioma_selecionado == 'Português':
-     messagebox.showinfo(
-                title="Impossivel alterar status",
-                message=f"Impossivel alterar os status dos times com o modo aposta ativo",
-                icon='info'
-            )
-    elif idioma_selecionado == 'Inglês':
-       messagebox.showinfo(
-                title="Impossible change team stats",
-                message=f"Impossible change the team stats with bet mode on.",
-                icon='info'
-            )
-    elif idioma_selecionado == 'Alemão':
-       messagebox.showinfo(
-                title="Unmögliche Änderung der Teamstatistiken",
-                message=f"Es ist nicht möglich, die Teamstatistiken zu ändern, wenn der Wettmodus aktiviert ist.",
-                icon='info'
-            )
+    if bet_mode == 0:
+        global times
+        for team, stats in times.items():
+            stats[3] = 5  
+            stats[9] = 5 
+            if idioma_selecionado == 'Português':
+                print(f"{team} atualizado - Ataque: {stats[3]}, Defesa: {stats[9]}")
+            elif idioma_selecionado == 'Inglês':
+                print(f"{team} updated - Attack: {stats[3]}, Defense: {stats[9]}")
+            elif idioma_selecionado == 'Alemão':
+                print(f"{team} aktualisiert - Angriff: {stats[3]}, Verteidigung: {stats[9]}")
+    else:
+        # Mensagem de erro traduzida
+        if idioma_selecionado == 'Português':
+            messagebox.showinfo("Impossivel alterar status", "Impossivel alterar os status dos times com o modo aposta ativo")
+        elif idioma_selecionado == 'Inglês':
+            messagebox.showinfo("Impossible change team stats", "Impossible change the team stats with bet mode on.")
+        elif idioma_selecionado == 'Alemão':
+            messagebox.showinfo("Unmögliche Änderung der Teamstatistiken", "Es ist nicht möglich, die Teamstatistiken zu ändern, wenn der Wettmodus aktiviert ist.")
 
 def tela_login():
     global tela_login, entry_nome, entry_senha
@@ -1234,11 +1354,11 @@ def tela_login():
     tela_login.geometry("300x200")
     tela_login.configure(bg="#2c3e50")
 
-    tk.Label(tela_login, text="Nome:", bg="#2c3e50", fg="white").pack(pady=5)
+    tk.Label(tela_login, text="Name:", bg="#2c3e50", fg="white").pack(pady=5)
     entry_nome = tk.Entry(tela_login)
     entry_nome.pack(pady=5)
 
-    tk.Label(tela_login, text="Senha:", bg="#2c3e50", fg="white").pack(pady=5)
+    tk.Label(tela_login, text="Password:", bg="#2c3e50", fg="white").pack(pady=5)
     entry_senha = tk.Entry(tela_login, show="*")
     entry_senha.pack(pady=5)
 
@@ -1263,7 +1383,7 @@ def fechar_tela_times():
 def toggle_bet_mode():
     global bet_mode
     bet_mode = 1 if bet_mode == 0 else 0
-    btn_modo_aposta.config(text="Modo Aposta: ATIVADO" if bet_mode else "Modo Aposta: DESATIVADO")
+    btn_modo_aposta.config(text="Bet Mode: On" if bet_mode else "Bet Mode: Off")
 
 
 
@@ -1296,7 +1416,7 @@ def tela_selecao_edicao():
     btn_2025.pack(pady=10, ipady=5)
     btn_2025.config(highlightbackground="#E74C3C", highlightthickness=2, highlightcolor="#E74C3C", bd=0)
 
-    btn_modo_aposta = tk.Button(frame_central, text="Modo Aposta: DESATIVADO", font=font_btn, bg="#2980b9", fg="white", width=25, bd=0, relief="flat", command=toggle_bet_mode)
+    btn_modo_aposta = tk.Button(frame_central, text="Bet mode: Off", font=font_btn, bg="#2980b9", fg="white", width=25, bd=0, relief="flat", command=toggle_bet_mode)
     btn_modo_aposta.pack(pady=20, ipady=5)
     btn_modo_aposta.config(highlightbackground="#2980b9", highlightthickness=2, highlightcolor="#2980b9", bd=0)
 
@@ -1460,55 +1580,119 @@ def atualizar_fichas_usuario():
         usuario_logado.atualizar()
 
 def comparar_apostas_com_resultados():
-    global apostas_usuario, fichas_usuario
+    """Compara as apostas com os resultados reais e calcula os ganhos."""
+    global apostas_usuario, fichas_usuario, usuario_logado
 
-    resultados = []
-
-    with open("placares_jogos.txt", "r") as arquivo:
-        linhas = [linha.strip() for linha in arquivo.readlines()]
+    if not apostas_usuario:
+        if idioma_selecionado == 'Português':
+            messagebox.showinfo("Aviso", "Nenhuma aposta para comparar.")
+        elif idioma_selecionado == 'Inglês':
+            messagebox.showinfo("Notice", "No bets to compare.")
+        elif idioma_selecionado == 'Alemão':
+            messagebox.showinfo("Hinweis", "Keine Wetten zum Vergleichen.")
+        return
 
     resultados_dict = {}
-    for linha in linhas:
-        if "x" in linha.lower():
-            partes = linha.split()
-            try:
-                indice_x = partes.index("x") if "x" in partes else partes.index("X")
-                time1 = " ".join(partes[:indice_x - 1]).strip()
-                gols_time1 = int(partes[indice_x - 1])
-                gols_time2 = int(partes[indice_x + 1])
-                time2 = " ".join(partes[indice_x + 2:]).strip()
+    try:
+        with open("placares_jogos.txt", "r") as arquivo:
+            for linha in arquivo:
+                if "x" in linha.lower():
+                    partes = linha.strip().split()
+                    try:
+                        indice_x = partes.index("x") if "x" in partes else partes.index("X")
+                        time1 = " ".join(partes[:indice_x - 1]).strip()
+                        gols_time1 = int(partes[indice_x - 1])
+                        gols_time2 = int(partes[indice_x + 1])
+                        time2 = " ".join(partes[indice_x + 2:]).strip()
+                        resultados_dict[(time1, time2)] = (gols_time1, gols_time2)
+                    except (ValueError, IndexError):
+                        continue
+    except FileNotFoundError:
+        if idioma_selecionado == 'Português':
+            messagebox.showerror("Erro", "Arquivo de resultados não encontrado.")
+        elif idioma_selecionado == 'Inglês':
+            messagebox.showerror("Error", "Results file not found.")
+        elif idioma_selecionado == 'Alemão':
+            messagebox.showerror("Fehler", "Ergebnisdatei nicht gefunden.")
+        return
 
-                resultados_dict[(time1, time2)] = (gols_time1, gols_time2)
-                resultados_dict[(time2, time1)] = (gols_time2, gols_time1)
-            except (ValueError, IndexError):
-                continue
+    resultados = []
+    total_ganho = 0
 
     for aposta in apostas_usuario:
-        time1, time2, aposta_escolhida, fichas_apostadas = aposta["time1"], aposta["time2"], aposta["aposta"], aposta["fichas"]
+        time1 = aposta["time1"]
+        time2 = aposta["time2"]
+        aposta_escolhida = aposta["aposta"]
+        fichas_apostadas = aposta["fichas"]
+        ganho_potencial = aposta["ganho_potencial"]
 
         if (time1, time2) in resultados_dict:
             gols_time1, gols_time2 = resultados_dict[(time1, time2)]
-
+            
             if (gols_time1 > gols_time2 and aposta_escolhida == time1) or \
                (gols_time2 > gols_time1 and aposta_escolhida == time2) or \
                (gols_time1 == gols_time2 and aposta_escolhida == "empate"):
-                resultado = "ganhou"
-                fichas_usuario += fichas_apostadas
+                resultado = "GANHOU" if idioma_selecionado == 'Português' else "WON" if idioma_selecionado == 'Inglês' else "GEWONNEN"
+                ganho_real = ganho_potencial
+                total_ganho += ganho_real
+                fichas_usuario += ganho_real
+                usuario_logado.apostas_ganhas += 1
             else:
-                resultado = "perdeu"
-                fichas_usuario -= fichas_apostadas
-
-            resultados.append(f"{time1} {gols_time1} x {gols_time2} {time2} - Você {resultado} {fichas_apostadas} fichas.")
+                resultado = "PERDEU" if idioma_selecionado == 'Português' else "LOST" if idioma_selecionado == 'Inglês' else "VERLOREN"
+                ganho_real = 0
+                usuario_logado.apostas_perdidas += 1
+            
+            usuario_logado.vezes_apostadas += 1
+            
+            if idioma_selecionado == 'Português':
+                resultados.append(
+                    f"{time1} {gols_time1} x {gols_time2} {time2}\n"
+                    f"Aposta: {aposta_escolhida} (Odd: {aposta['odd']})\n"
+                    f"Valor: {fichas_apostadas} fichas → {resultado} {ganho_real if ganho_real > 0 else 0} fichas\n"
+                )
+            elif idioma_selecionado == 'Inglês':
+                resultados.append(
+                    f"{time1} {gols_time1} x {gols_time2} {time2}\n"
+                    f"Bet: {aposta_escolhida} (Odd: {aposta['odd']})\n"
+                    f"Amount: {fichas_apostadas} chips → {resultado} {ganho_real if ganho_real > 0 else 0} chips\n"
+                )
+            elif idioma_selecionado == 'Alemão':
+                resultados.append(
+                    f"{time1} {gols_time1} x {gols_time2} {time2}\n"
+                    f"Wette: {aposta_escolhida} (Quote: {aposta['odd']})\n"
+                    f"Einsatz: {fichas_apostadas} Chips → {resultado} {ganho_real if ganho_real > 0 else 0} Chips\n"
+                )
         else:
-            resultados.append(f"{time1} x {time2} - Resultado não encontrado.")
+            if idioma_selecionado == 'Português':
+                resultados.append(f"{time1} x {time2} - Resultado não encontrado\n")
+            elif idioma_selecionado == 'Inglês':
+                resultados.append(f"{time1} x {time2} - Result not found\n")
+            elif idioma_selecionado == 'Alemão':
+                resultados.append(f"{time1} x {time2} - Ergebnis nicht gefunden\n")
 
-    messagebox.showinfo("Resultados das Apostas", "\n".join(resultados) if resultados else "Nenhuma aposta foi processada.")
+    usuario_logado.fichas = fichas_usuario
+    usuario_logado.atualizar()
 
-    atualizar_fichas_usuario()
-    label_pontos.config(text=f"Fichas: {fichas_usuario}")
+    if idioma_selecionado == 'Português':
+        titulo = "Resultado das Apostas"
+        resumo = f"Total ganho: {total_ganho} fichas\nSaldo atual: {fichas_usuario} fichas"
+    elif idioma_selecionado == 'Inglês':
+        titulo = "Bet Results"
+        resumo = f"Total won: {total_ganho} chips\nCurrent balance: {fichas_usuario} chips"
+    elif idioma_selecionado == 'Alemão':
+        titulo = "Wettergebnisse"
+        resumo = f"Gesamtgewinn: {total_ganho} Chips\nAktueller Kontostand: {fichas_usuario} Chips"
+
+    messagebox.showinfo(titulo, "\n".join(resultados) + "\n\n" + resumo)
 
     apostas_usuario.clear()
-    messagebox.showinfo("Saldo Atual", f"Seu saldo atual é de {fichas_usuario} fichas.")
+    if 'label_pontos' in globals():
+        if idioma_selecionado == 'Português':
+            label_pontos.config(text=f"Fichas: {fichas_usuario}")
+        elif idioma_selecionado == 'Inglês':
+            label_pontos.config(text=f"Chips: {fichas_usuario}")
+        elif idioma_selecionado == 'Alemão':
+            label_pontos.config(text=f"Chips: {fichas_usuario}")
 
 
 
@@ -1549,7 +1733,12 @@ def simular_rodada():
         if bet_mode == 1 and apostas_usuario:
             comparar_apostas_com_resultados()
     else:
-        messagebox.showinfo("Fim do Campeonato", "O campeonato chegou ao fim!")
+        if idioma_selecionado == 'Português':
+            messagebox.showinfo("Fim do Campeonato", "O campeonato chegou ao fim!")
+        elif idioma_selecionado == 'Inglês':
+            messagebox.showinfo("Championship Over", "The championship has ended!")
+        elif idioma_selecionado == 'Alemão':
+            messagebox.showinfo("Meisterschaft beendet", "Die Meisterschaft ist zu Ende!")
         
 
 
@@ -1595,16 +1784,26 @@ def confirmar_selecao(selecoes, tela_escolha):
 
     jogos_selecionados = []
     for time1, time2, var in selecoes:
-        if var.get():  # Se o jogo foi selecionado
+        if var.get():  
             jogos_selecionados.append((time1, time2))
 
     if not jogos_selecionados:
-        messagebox.showinfo("Aviso", "Nenhum jogo selecionado. Você pode apostar depois.")
+        if idioma_selecionado == 'Português':
+            messagebox.showinfo("Aviso", "Nenhum jogo selecionado. Você pode apostar depois.")
+        elif idioma_selecionado == 'Inglês':
+            messagebox.showinfo("Warning", "No matches selected. You can bet later.")
+        elif idioma_selecionado == 'Alemão':
+            messagebox.showinfo("Warnung", "Keine Spiele ausgewählt. Sie können später wetten.")
     else:
-        messagebox.showinfo("Sucesso", f"{len(jogos_selecionados)} jogos selecionados para apostar.")
+        if idioma_selecionado == 'Português':
+            messagebox.showinfo("Sucesso", f"{len(jogos_selecionados)} jogos selecionados para apostar.")
+        elif idioma_selecionado == 'Inglês':
+            messagebox.showinfo("Success", f"{len(jogos_selecionados)} matches selected for betting.")
+        elif idioma_selecionado == 'Alemão':
+            messagebox.showinfo("Erfolg", f"{len(jogos_selecionados)} Spiele zum Wetten ausgewählt.")
 
     tela_escolha.destroy()
-    tela_apostas_rodada()  # Abre a tela de apostas
+    tela_apostas_rodada()
 
 
 def tela_apostas_rodada():
@@ -1618,7 +1817,13 @@ def tela_apostas_rodada():
     font_label = tkFont.Font(family="Arial", size=12)
     font_btn = tkFont.Font(family="Arial", size=14, weight="bold")
     
-    tk.Label(tela_apostas, text="Faça suas apostas:", bg="#2c3e50", fg="#ecf0f1", font=("Arial", 16, "bold")).pack(pady=15)
+    # Título traduzido
+    if idioma_selecionado == 'Português':
+        tk.Label(tela_apostas, text="Faça suas apostas:", bg="#2c3e50", fg="#ecf0f1", font=("Arial", 16, "bold")).pack(pady=15)
+    elif idioma_selecionado == 'Inglês':
+        tk.Label(tela_apostas, text="Place your bets:", bg="#2c3e50", fg="#ecf0f1", font=("Arial", 16, "bold")).pack(pady=15)
+    elif idioma_selecionado == 'Alemão':
+        tk.Label(tela_apostas, text="Platzieren Sie Ihre Wetten:", bg="#2c3e50", fg="#ecf0f1", font=("Arial", 16, "bold")).pack(pady=15)
     
     canvas = tk.Canvas(tela_apostas, bg="#2c3e50", highlightthickness=0)
     canvas.pack(side="left", fill="both", expand=True)
@@ -1641,9 +1846,20 @@ def tela_apostas_rodada():
         odds = calcular_odd(time1, time2)
         
         tk.Label(frame_jogo, text=f"{time1} x {time2}", bg="#1f2e3e", fg="#ecf0f1", font=("Arial", 13, "bold")).pack(pady=5)
-        tk.Label(frame_jogo, 
-                text=f"Odds: {time1} ({odds[0]}) | Empate ({odds[1]}) | {time2} ({odds[2]})",
-                bg="#1f2e3e", fg="#bdc3c7", font=font_label).pack(pady=5)
+        
+        # Label de odds traduzido
+        if idioma_selecionado == 'Português':
+            tk.Label(frame_jogo, 
+                    text=f"Odds: {time1} ({odds[0]}) | Empate ({odds[1]}) | {time2} ({odds[2]})",
+                    bg="#1f2e3e", fg="#bdc3c7", font=font_label).pack(pady=5)
+        elif idioma_selecionado == 'Inglês':
+            tk.Label(frame_jogo, 
+                    text=f"Odds: {time1} ({odds[0]}) | Draw ({odds[1]}) | {time2} ({odds[2]})",
+                    bg="#1f2e3e", fg="#bdc3c7", font=font_label).pack(pady=5)
+        elif idioma_selecionado == 'Alemão':
+            tk.Label(frame_jogo, 
+                    text=f"Quoten: {time1} ({odds[0]}) | Unentschieden ({odds[1]}) | {time2} ({odds[2]})",
+                    bg="#1f2e3e", fg="#bdc3c7", font=font_label).pack(pady=5)
         
         var_aposta = tk.StringVar(value="nenhuma")
         
@@ -1653,29 +1869,46 @@ def tela_apostas_rodada():
         estilos_radio = {"bg": "#1f2e3e", "fg": "#ecf0f1", "font": font_label, "selectcolor": "#2c3e50"}
         
         tk.Radiobutton(aposta_frame, text=time1, variable=var_aposta, value=time1, **estilos_radio).pack(side="left", padx=10)
-        tk.Radiobutton(aposta_frame, text="Empate", variable=var_aposta, value="empate", **estilos_radio).pack(side="left", padx=10)
+        
+        # Texto do empate traduzido
+        if idioma_selecionado == 'Português':
+            tk.Radiobutton(aposta_frame, text="Empate", variable=var_aposta, value="empate", **estilos_radio).pack(side="left", padx=10)
+        elif idioma_selecionado == 'Inglês':
+            tk.Radiobutton(aposta_frame, text="Draw", variable=var_aposta, value="empate", **estilos_radio).pack(side="left", padx=10)
+        elif idioma_selecionado == 'Alemão':
+            tk.Radiobutton(aposta_frame, text="Unentschieden", variable=var_aposta, value="empate", **estilos_radio).pack(side="left", padx=10)
+        
         tk.Radiobutton(aposta_frame, text=time2, variable=var_aposta, value=time2, **estilos_radio).pack(side="left", padx=10)
         
         frame_fichas = tk.Frame(frame_jogo, bg="#1f2e3e")
         frame_fichas.pack(pady=5)
         
-        tk.Label(frame_fichas, text="Fichas:", bg="#1f2e3e", fg="#ecf0f1", font=font_label).pack(side="left", padx=5)
+        # Label de fichas traduzido
+        if idioma_selecionado == 'Português':
+            tk.Label(frame_fichas, text="Fichas:", bg="#1f2e3e", fg="#ecf0f1", font=font_label).pack(side="left", padx=5)
+        elif idioma_selecionado == 'Inglês':
+            tk.Label(frame_fichas, text="Chips:", bg="#1f2e3e", fg="#ecf0f1", font=font_label).pack(side="left", padx=5)
+        elif idioma_selecionado == 'Alemão':
+            tk.Label(frame_fichas, text="Chips:", bg="#1f2e3e", fg="#ecf0f1", font=font_label).pack(side="left", padx=5)
+        
         entry_fichas = tk.Entry(frame_fichas, font=font_label, width=10, relief="solid", bd=2)
         entry_fichas.pack(side="left", padx=5)
         
         apostas.append((time1, time2, var_aposta, entry_fichas, odds))
+    
+    # Botão de confirmação traduzido
     if idioma_selecionado == 'Português':
-     btn_confirmar = tk.Button(tela_apostas, text="Confirmar Apostas", bg="#27ae60", fg="white", 
-                            font=font_btn, relief="raised", bd=3, padx=10, pady=5, 
-                            command=lambda: processar_apostas(apostas, tela_apostas))
+        btn_confirmar = tk.Button(tela_apostas, text="Confirmar Apostas", bg="#27ae60", fg="white", 
+                                font=font_btn, relief="raised", bd=3, padx=10, pady=5, 
+                                command=lambda: processar_apostas(apostas, tela_apostas))
     elif idioma_selecionado == 'Inglês':
-     btn_confirmar = tk.Button(tela_apostas, text="Confirm bets", bg="#27ae60", fg="white", 
-                            font=font_btn, relief="raised", bd=3, padx=10, pady=5, 
-                            command=lambda: processar_apostas(apostas, tela_apostas))
+        btn_confirmar = tk.Button(tela_apostas, text="Confirm Bets", bg="#27ae60", fg="white", 
+                                font=font_btn, relief="raised", bd=3, padx=10, pady=5, 
+                                command=lambda: processar_apostas(apostas, tela_apostas))
     elif idioma_selecionado == 'Alemão':
-     btn_confirmar = tk.Button(tela_apostas, text="Wette bestätigen", bg="#27ae60", fg="white", 
-                            font=font_btn, relief="raised", bd=3, padx=10, pady=5, 
-                            command=lambda: processar_apostas(apostas, tela_apostas))
+        btn_confirmar = tk.Button(tela_apostas, text="Wetten bestätigen", bg="#27ae60", fg="white", 
+                                font=font_btn, relief="raised", bd=3, padx=10, pady=5, 
+                                command=lambda: processar_apostas(apostas, tela_apostas))
     btn_confirmar.pack(pady=25)
 
 
@@ -1687,12 +1920,10 @@ def processar_apostas(apostas, tela_apostas):
     apostas_validas = []
 
     for aposta in apostas:
-        # Agora podemos desempacotar os 5 valores corretamente
         time1, time2, var_aposta, entry_fichas, odds = aposta
         escolha = var_aposta.get()
         fichas_texto = entry_fichas.get().strip()
 
-        # Pular apostas não selecionadas ou sem valor
         if escolha == "nenhuma" or not fichas_texto:
             continue
 
@@ -1701,10 +1932,17 @@ def processar_apostas(apostas, tela_apostas):
             if fichas_apostadas <= 0:
                 raise ValueError
         except ValueError:
-            messagebox.showerror("Erro", f"Valor inválido para {time1} x {time2}. Insira um número positivo.")
+            # Mensagem de erro traduzida
+            if idioma_selecionado == 'Português':
+                messagebox.showerror("Erro", f"Valor inválido para {time1} x {time2}. Insira um número positivo.")
+            elif idioma_selecionado == 'Inglês':
+                messagebox.showerror("Error", f"Invalid value for {time1} x {time2}. Enter a positive number.")
+            elif idioma_selecionado == 'Alemão':
+                messagebox.showerror("Fehler", f"Ungültiger Wert für {time1} x {time2}. Geben Sie eine positive Zahl ein.")
             return
 
-        # Determinar a odd correta baseada na escolha
+        total_apostado += fichas_apostadas
+
         if escolha == time1:
             odd = odds[0]
         elif escolha == time2:
@@ -1712,9 +1950,6 @@ def processar_apostas(apostas, tela_apostas):
         else:  # empate
             odd = odds[1]
 
-        total_apostado += fichas_apostadas
-
-        # Armazenar aposta com informações completas
         apostas_validas.append({
             "time1": time1,
             "time2": time2,
@@ -1724,32 +1959,60 @@ def processar_apostas(apostas, tela_apostas):
             "odd": odd
         })
 
-    # Verificar se há apostas válidas
     if not apostas_validas:
-        messagebox.showinfo("Aviso", "Nenhuma aposta válida foi selecionada.")
+        # Mensagem de aviso traduzida
+        if idioma_selecionado == 'Português':
+            messagebox.showinfo("Aviso", "Nenhuma aposta válida foi selecionada.")
+        elif idioma_selecionado == 'Inglês':
+            messagebox.showinfo("Warning", "No valid bets were selected.")
+        elif idioma_selecionado == 'Alemão':
+            messagebox.showinfo("Warnung", "Keine gültigen Wetten ausgewählt.")
         return
 
-    # Verificar saldo suficiente
     if total_apostado > fichas_usuario:
-        messagebox.showerror("Erro", f"Saldo insuficiente. Você tem {fichas_usuario} fichas e tentou apostar {total_apostado}.")
+        # Mensagem de erro de saldo traduzida
+        if idioma_selecionado == 'Português':
+            messagebox.showerror("Erro", f"Saldo insuficiente. Você tem {fichas_usuario} fichas e tentou apostar {total_apostado}.")
+        elif idioma_selecionado == 'Inglês':
+            messagebox.showerror("Error", f"Insufficient balance. You have {fichas_usuario} chips and tried to bet {total_apostado}.")
+        elif idioma_selecionado == 'Alemão':
+            messagebox.showerror("Fehler", f"Unzureichender Kontostand. Sie haben {fichas_usuario} Chips und versuchten, {total_apostado} zu wetten.")
         return
 
-    # Confirmar apostas com o usuário
-    mensagem = f"Você está apostando {total_apostado} fichas em {len(apostas_validas)} jogos.\n"
-    mensagem += "\n".join([f"{a['time1']} x {a['time2']}: {a['fichas']} fichas em {a['aposta']} (Odd: {a['odd']})" 
-                          for a in apostas_validas])
-    
-    if not messagebox.askyesno("Confirmar Apostas", mensagem + "\n\nDeseja confirmar?"):
+    # Mensagem de confirmação traduzida
+    if idioma_selecionado == 'Português':
+        mensagem = f"Você está apostando {total_apostado} fichas em {len(apostas_validas)} jogos.\n"
+        mensagem += "\n".join([f"{a['time1']} x {a['time2']}: {a['fichas']} fichas em {a['aposta']} (Odd: {a['odd']})" 
+                      for a in apostas_validas])
+        titulo = "Confirmar Apostas"
+        pergunta = "\n\nDeseja confirmar?"
+    elif idioma_selecionado == 'Inglês':
+        mensagem = f"You are betting {total_apostado} chips on {len(apostas_validas)} matches.\n"
+        mensagem += "\n".join([f"{a['time1']} x {a['time2']}: {a['fichas']} chips on {a['aposta']} (Odd: {a['odd']})" 
+                      for a in apostas_validas])
+        titulo = "Confirm Bets"
+        pergunta = "\n\nDo you want to confirm?"
+    elif idioma_selecionado == 'Alemão':
+        mensagem = f"Sie wetten {total_apostado} Chips auf {len(apostas_validas)} Spiele.\n"
+        mensagem += "\n".join([f"{a['time1']} x {a['time2']}: {a['fichas']} Chips auf {a['aposta']} (Quote: {a['odd']})" 
+                      for a in apostas_validas])
+        titulo = "Wetten bestätigen"
+        pergunta = "\n\nMöchten Sie bestätigen?"
+
+    if not messagebox.askyesno(titulo, mensagem + pergunta):
         return
 
-    # Registrar apostas e debitar fichas
     fichas_usuario -= total_apostado
     apostas_usuario.extend(apostas_validas)
     usuario_logado.atualizar()
 
-    # Atualizar interface
     if 'label_pontos' in globals():
-        label_pontos.config(text=f"Fichas: {fichas_usuario}")
+        if idioma_selecionado == 'Português':
+            label_pontos.config(text=f"Fichas: {fichas_usuario}")
+        elif idioma_selecionado == 'Inglês':
+            label_pontos.config(text=f"Chips: {fichas_usuario}")
+        elif idioma_selecionado == 'Alemão':
+            label_pontos.config(text=f"Chips: {fichas_usuario}")
 
     tela_apostas.destroy()
 
@@ -1892,11 +2155,6 @@ def comparar_apostas_com_resultados():
     apostas_usuario.clear()
     label_pontos.config(text=f"Fichas: {fichas_usuario}")
     
-
-# Relatório (telas e funções)
-
-def criar_tela_relatorio():
-    tela_relatorio = tk.tk()
 
 
 
