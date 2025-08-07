@@ -2,4 +2,4 @@ This Code is one Simulator of Brazil Soccer Championship, in this code we have s
 
 This code have also three language, which are english, portuguese and german, change the language is very easy, just need go to settings and choose the language desired, if someone look some wrong translate, please, send for 'nagatofx3@hotmail.com', thank you.
 
-The onlys thing you will need for run this code is the python and vscode or other python compiler, you only need download the brasileirao.py, if you want test a beta update, go to 1.0.5 branches.
+For run this code you will need download somethings like: VScode or other a app kinda this, Pillow library (command: pip install Pillow) and download python too, you can download the code in github or in the official website of this application
