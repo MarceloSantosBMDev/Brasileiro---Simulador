@@ -3,6 +3,7 @@ import random as rm
 from tkinter import messagebox
 import os
 from tkinter import font as tkFont
+from tkinter import filedialog
 from PIL import Image, ImageTk
 import sqlite3  # Biblioteca para trabalhar com SQLite
 import atexit
@@ -92,8 +93,6 @@ class Usuario:
             return Usuario(resultado[0], resultado[1], resultado[2], resultado[3], resultado[4], resultado[5], resultado[6], resultado[7])
         return None
 
-from tkinter import filedialog
-from PIL import Image, ImageTk
 
         
         
@@ -537,9 +536,9 @@ def tela_inicial():
 
     btn_config = tk.Button(frame_cabecalho, text="⚙️", command=config_tela, bg="#ffba08", fg="black", font=font_btn, relief="flat")
     btn_config.pack(side="right", padx=10)
-
-    btn_perfil = tk.Button(frame_cabecalho, text="👤", command=Abrir_Perfil, bg="#3498db", fg="white", font=font_btn, relief="flat")
-    btn_perfil.pack(side="right", padx=10)
+    if bet_mode == 1:
+        btn_perfil = tk.Button(frame_cabecalho, text="👤", command=Abrir_Perfil, bg="#3498db", fg="white", font=font_btn, relief="flat")
+        btn_perfil.pack(side="right", padx=10)
 
     frame_principal = tk.Frame(tela_inicial, bg="#1c1c1c")
     frame_principal.pack(fill="both", expand=True, padx=20, pady=10)
@@ -607,15 +606,32 @@ def tela_inicial():
     if bet_mode == 1:
         # this part create the button with the language which the user choose.
         if idioma_selecionado == 'Português':
-            btn_apostar = tk.Button(frame_botoes, text="Apostar em Jogos", bg="#2980b9", fg="white", font=font_btn, command=tela_escolher_jogos)
+            btn_apostar = tk.Button(frame_botoes, text="Apostar em Jogos", bg="#2980b9", fg="white", font=font_btn, command=tela_escolher_jogos, bd=0, padx=20, pady=5)
         elif idioma_selecionado == 'Inglês':
-            btn_apostar = tk.Button(frame_botoes, text="Bet on Matches", bg="#2980b9", fg="white", font=font_btn, command=tela_escolher_jogos)
+            btn_apostar = tk.Button(frame_botoes, text="Bet on Matches", bg="#2980b9", fg="white", font=font_btn, command=tela_escolher_jogos, bd=0, padx=20, pady=5)
         elif idioma_selecionado == 'Alemão':
-            btn_apostar = tk.Button(frame_botoes, text="Auf Spiele wetten", bg="#2980b9", fg="white", font=font_btn, command=tela_escolher_jogos)
+            btn_apostar = tk.Button(frame_botoes, text="Auf Spiele wetten", bg="#2980b9", fg="white", font=font_btn, command=tela_escolher_jogos,bd=0, padx=20, pady=5)
      
         btn_apostar.pack(side="left", padx=10, fill="x", expand=True)
         
-  
+    
+    if idioma_selecionado == "Portugues":
+       btn_relatorio = tk.Button(frame_botoes, text="Ver Relátorio", bg="#A020F0", fg="white", font=font_btn, command=criar_tela_relatorio, bd=0, padx=20, pady=5)
+       btn_relatorio.pack(side="left", padx=10, fill="x", expand=True)
+
+    elif idioma_selecionado == "Inglês":
+       btn_relatorio = tk.Button(frame_botoes, text="See report", bg="#A020F0", fg="white", font=font_btn, command=criar_tela_relatorio, bd=0, padx=20, pady=5)
+       btn_relatorio.pack(side="left", padx=10, fill="x", expand=True)
+
+    elif idioma_selecionado == "Alemão":
+       btn_relatorio = tk.Button(frame_botoes, text="Bericht sehen", bg="#A020F0", fg="white", font=font_btn, command=criar_tela_relatorio, bd=0, padx=20, pady=5)
+       btn_relatorio.pack(side="left", padx=10, fill="x", expand=True)
+
+   
+    btn_relatorio = tk.Button(frame_botoes, text="Bericht sehen", bg="#A020F0", fg="white", font=font_btn, command=criar_tela_relatorio, bd=0, padx=20, pady=5)
+
+    btn_relatorio.pack(side="left", padx=10, fill="x", expand=True)
+
 
     frame_rodape = tk.Frame(tela_inicial, bg="#2c3e50")
     frame_rodape.pack(fill="x", pady=10)
@@ -700,13 +716,7 @@ def parabenizar_campeao():
                 message=f"🎉 Parabéns! O campeão foi **{time}**! 🎉",
                 icon='info'
             )
-        btn_simular.config(
-        text="Informações do campeonato",
-        command=lambda: Informar(),
-        bg='red',
-        fg='white',  
-        font=('Arial', 12, 'bold')
-    )
+
     elif idioma_selecionado == 'Inglês':
       for posicao, (time, stats) in enumerate(sorted_times, start=1):
         stats[4] = posicao
@@ -716,13 +726,6 @@ def parabenizar_campeao():
                 message=f"🎉 Congratiulation! The Champion is **{time}**! 🎉",
                 icon='info'
             )
-        btn_simular.config(
-        text="Champioship infomations",
-        command=lambda: Informar(),
-        bg='red',
-        fg='white',  
-        font=('Arial', 12, 'bold')
-    )
     elif idioma_selecionado == 'Alemão':
      for posicao, (time, stats) in enumerate(sorted_times, start=1):
         stats[4] = posicao
@@ -732,13 +735,6 @@ def parabenizar_campeao():
                 message=f"🎉 Glückwunsch! Der Meister ist **{time}**! 🎉",
                 icon='info'
             )
-        btn_simular.config(
-        text="Meisterschaftsinformationen",
-        command=lambda: Informar(),
-        bg='red',
-        fg='white',  
-        font=('Arial', 12, 'bold')
-    )
 
 def calcular_odd(time1, time2):
 
@@ -748,22 +744,29 @@ def calcular_odd(time1, time2):
     # Diferença entre os stats
     diferenca = abs(stat_time1 - stat_time2)
     
-    # Cálculo base das odds
+    # Fatores ajustados para não gerar odds irreais
+    fator_favorito = 0.25  # quanto a odd do favorito cai por ponto de diferença
+    fator_azarão = 0.30    # quanto a odd do azarão sobe por ponto de diferença
+    
     if stat_time1 > stat_time2:
         # Time 1 é favorito
-        odd_time1 = max(1.2, 2.0 - (diferenca * 0.70))
-        odd_time2 = min(5.0, 2.0 + (diferenca * 0.60))
+        odd_time1 = 2.0 - (diferenca * fator_favorito)
+        odd_time2 = 2.0 + (diferenca * fator_azarão)
     elif stat_time2 > stat_time1:
         # Time 2 é favorito
-        odd_time1 = min(5.0, 2.0 + (diferenca * 0.60))
-        odd_time2 = max(1.2, 2.0 - (diferenca * 0.70))
+        odd_time1 = 2.0 + (diferenca * fator_azarão)
+        odd_time2 = 2.0 - (diferenca * fator_favorito)
     else:
-        odd_time1 = 1.8
-        odd_time2 = 2.0
+        odd_time1 = 1.95
+        odd_time2 = 1.95
     
-    # Odd do empate sempre entre 3.0 e 4.0
-    odd_empate = 2.3 - (diferenca * 0.10)
-    odd_empate = max(2.0, min(4.0, odd_empate))
+    # Evita odds abaixo de 1.2 (muito baixas) ou acima de 10 (absurdas)
+    odd_time1 = max(1.2, min(10.0, odd_time1))
+    odd_time2 = max(1.2, min(10.0, odd_time2))
+    
+    # Odd do empate — mais baixa quando diferença é pequena, mais alta quando é grande
+    odd_empate = 3.2 + (diferenca * 0.10)
+    odd_empate = max(2.5, min(4.0, odd_empate))
     
     # Arredondar para 2 casas decimais
     return (
@@ -772,126 +775,7 @@ def calcular_odd(time1, time2):
         round(odd_time2, 2)
     )
 
-def Informar():
-    tela_informativa = tk.Tk()
-    tela_informativa.configure(bg="#2c3e50")  
-    tela_informativa.title("Informações da Simulação")
-    tela_informativa.geometry('600x600')  
-    titulo = tk.Label(tela_informativa, text="Resultados da Simulação", bg="#2c3e50", fg="#ecf0f1", font=('Arial', 18, 'bold'))
-    titulo.pack(pady=(20, 10))
 
-    sorted_times = sorted(times.items(), key=lambda x: (x[1][2], x[1][1] - x[1][0]), reverse=True)
-    
-    maiortomados = -1
-    Golstomados = ""
-    maior = -1  
-    Artilheiro = ""
-    maiorsaldo = -1
-    saldoo = ""
-    melhor_mandante = ""
-    maior_mandante = -1
-    for posicao, (time, stats) in enumerate(sorted_times, start=1):
-        if stats[1] - stats[0] > maiorsaldo:
-            maiorsaldo = stats[1] - stats[0]
-            saldoo = time
-        if stats[1] > maior: 
-            maior = stats[1]
-            Artilheiro = time  
-        if stats[0] > maiortomados: 
-            maiortomados = stats[0]
-            Golstomados = time  
-        if stats[10] > maior_mandante:
-            maior_mandante = stats[10]
-            melhor_mandante = time
-    if idioma_selecionado == 'Português':
-      for posicao, (time, stats) in enumerate(sorted_times, start=1):
-        if posicao <= 4:
-            label = tk.Label(tela_informativa, text=f"{posicao}° lugar: {time} com {stats[2]} pontos", bg="#27ae60", fg="white", font=('Arial', 12))
-            label.pack(pady=(5, 5))
-        if posicao >= 17:
-            label = tk.Label(tela_informativa, text=f"O time que caiu no Z{(21 - posicao)} foi o {time} com {stats[2]} pontos", bg="#e74c3c", fg="white", font=('Arial', 12))
-            label.pack(pady=(5, 5))
-            
-        
-      stats_title = tk.Label(tela_informativa, text="Estatísticas Finais", bg="#34495e", fg="#ecf0f1", font=('Arial', 16, 'underline'))
-      stats_title.pack(pady=(20, 10))
-      
-      labelArtilheiro = tk.Label(tela_informativa, text=f"O artilheiro do campeonato foi {Artilheiro} com {maior} gols", bg="#f39c12", fg="white", font=('Arial', 12))
-      labelArtilheiro.pack(pady=(5, 5))
-    
-      labelTomados = tk.Label(tela_informativa, text=f"O time que tomou mais gols foi o {Golstomados} com {maiortomados} gols tomados", bg="#e67e22", fg="white", font=('Arial', 12))
-      labelTomados.pack(pady=(5, 5))
-    
-      labelSaldo = tk.Label(tela_informativa, text=f"O time com maior saldo de gols foi {saldoo} com {maiorsaldo} de saldo de gols", bg="#8e44ad", fg="white", font=('Arial', 12))
-      labelSaldo.pack(pady=(5, 5))
-    
-      labelMandante = tk.Label(tela_informativa, text=f"O time que ficou como melhor mandante foi {melhor_mandante} com {maior_mandante} vitórias em casa", bg="#2980b9", fg="white", font=('Arial', 12))
-      labelMandante.pack(pady=(5, 5))
-
-      fechar_btn = tk.Button(tela_informativa, text="Fechar", command=tela_informativa.destroy, bg="#c0392b", fg="white", font=('Arial', 12, 'bold'))
-      fechar_btn.pack(pady=(20, 10))
-
-      tela_informativa.mainloop()
-    elif idioma_selecionado == 'Inglês':
-        for posicao, (time, stats) in enumerate(sorted_times, start=1):
-         if posicao <= 4:
-            label = tk.Label(tela_informativa, text=f"{posicao}° place: {time} with {stats[2]} points", bg="#27ae60", fg="white", font=('Arial', 12))
-            label.pack(pady=(5, 5))
-         if posicao >= 17:
-           label = tk.Label(tela_informativa, text=f"The team that was relegated to Z{(21 - posicao)} was {time} with {stats[2]} points", bg="#e74c3c", fg="white", font=('Arial', 12))
-           label.pack(pady=(5, 5))
-        
-
-        stats_title = tk.Label(tela_informativa, text="Final Statistics", bg="#34495e", fg="#ecf0f1", font=('Arial', 16, 'underline'))
-        stats_title.pack(pady=(20, 10))
-
-        labelArtilheiro = tk.Label(tela_informativa, text=f"The top scorer of the championship was {Artilheiro} with {maior} goals", bg="#f39c12", fg="white", font=('Arial', 12))
-        labelArtilheiro.pack(pady=(5, 5))
-
-        labelTomados = tk.Label(tela_informativa, text=f"The team that conceded the most goals was {Golstomados} with {maiortomados} goals conceded", bg="#e67e22", fg="white", font=('Arial', 12))
-        labelTomados.pack(pady=(5, 5))
-
-        labelSaldo = tk.Label(tela_informativa, text=f"The team with the best goal difference was {saldoo} with {maiorsaldo} goal difference", bg="#8e44ad", fg="white", font=('Arial', 12))
-        labelSaldo.pack(pady=(5, 5))
-
-        labelMandante = tk.Label(tela_informativa, text=f"The best home team was {melhor_mandante} with {maior_mandante} home wins", bg="#2980b9", fg="white", font=('Arial', 12))
-        labelMandante.pack(pady=(5, 5))
-
-        fechar_btn = tk.Button(tela_informativa, text="Close", command=tela_informativa.destroy, bg="#c0392b", fg="white", font=('Arial', 12, 'bold'))
-        fechar_btn.pack(pady=(20, 10))
-
-        tela_informativa.mainloop()
-
-      
-    if idioma_selecionado == 'Alemão':
-          for posicao, (time, stats) in enumerate(sorted_times, start=1):
-           if posicao <= 4:
-            label = tk.Label(tela_informativa, text=f"{posicao}. Platz: {time} mit {stats[2]} Punkten", bg="#27ae60", fg="white", font=('Arial', 12))
-            label.pack(pady=(5, 5))
-
-           if posicao >= 17:
-            label = tk.Label(tela_informativa, text=f"Das Team, das in die Z{(21 - posicao)} abgestiegen ist, war {time} mit {stats[2]} Punkten", bg="#e74c3c", fg="white", font=('Arial', 12))
-            label.pack(pady=(5, 5))
-    
-          stats_title = tk.Label(tela_informativa, text="Endstatistiken", bg="#34495e", fg="#ecf0f1", font=('Arial', 16, 'underline'))
-          stats_title.pack(pady=(20, 10))
-
-          labelArtilheiro = tk.Label(tela_informativa, text=f"Der Torschützenkönig des Turniers war {Artilheiro} mit {maior} Toren", bg="#f39c12", fg="white", font=('Arial', 12))
-          labelArtilheiro.pack(pady=(5, 5))
-    
-          labelTomados = tk.Label(tela_informativa, text=f"Das Team, das die meisten Gegentore kassiert hat, war {Golstomados} mit {maiortomados} Gegentoren", bg="#e67e22", fg="white", font=('Arial', 12))
-          labelTomados.pack(pady=(5, 5))
-    
-          labelSaldo = tk.Label(tela_informativa, text=f"Das Team mit der besten Tordifferenz war {saldoo} mit {maiorsaldo} Toren", bg="#8e44ad", fg="white", font=('Arial', 12))
-          labelSaldo.pack(pady=(5, 5))
-    
-          labelMandante = tk.Label(tela_informativa, text=f"Das beste Heimteam war {melhor_mandante} mit {maior_mandante} Heimsiegen", bg="#2980b9", fg="white", font=('Arial', 12))
-          labelMandante.pack(pady=(5, 5))
-
-          fechar_btn = tk.Button(tela_informativa, text="Schließen", command=tela_informativa.destroy, bg="#c0392b", fg="white", font=('Arial', 12, 'bold'))
-          fechar_btn.pack(pady=(20, 10))
-
-          tela_informativa.mainloop()
 
 from tkinter import ttk
 import tkinter as tk
@@ -1723,12 +1607,6 @@ def simular_rodada():
         
         if rodadas == 0:
             parabenizar_campeao()
-            if idioma_selecionado == 'Português':
-                btn_simular.config(text="Informações do campeonato", command=Informar, bg='red', fg='white', font=('Arial', 12, 'bold'))
-            elif idioma_selecionado == 'Inglês':
-                btn_simular.config(text="Championship information", command=Informar, bg='red', fg='white', font=('Arial', 12, 'bold'))
-            elif idioma_selecionado == 'Alemão':
-                btn_simular.config(text="Meisterschaftsinformationen", command=Informar, bg='red', fg='white', font=('Arial', 12, 'bold'))
 
         if bet_mode == 1 and apostas_usuario:
             comparar_apostas_com_resultados()
@@ -2155,7 +2033,243 @@ def comparar_apostas_com_resultados():
     apostas_usuario.clear()
     label_pontos.config(text=f"Fichas: {fichas_usuario}")
     
+#Parte do relátorio
 
-
-
+def criar_tela_relatorio():
+    tela_informativa = tk.Tk()
+    tela_informativa.configure(bg="#2c3e50")  
+    
+    # Título da janela traduzido
+    if idioma_selecionado == 'Português':
+        tela_informativa.title("Relatório Completo")
+        titulo_texto = "Relatório Completo da Temporada"
+        stats_title_text = "Estatísticas Principais"
+        rodadas_title = "Eventos Marcantes por Rodada"
+    elif idioma_selecionado == 'Inglês':
+        tela_informativa.title("Full Report")
+        titulo_texto = "Season Complete Report"
+        stats_title_text = "Main Statistics"
+        rodadas_title = "Key Events by Round"
+    elif idioma_selecionado == 'Alemão':
+        tela_informativa.title("Vollständiger Bericht")
+        titulo_texto = "Saisonvollständiger Bericht"
+        stats_title_text = "Hauptstatistiken"
+        rodadas_title = "Wichtige Ereignisse nach Runde"
+    
+    tela_informativa.geometry('420x800')  
+    
+    # Frame principal com scrollbar
+    main_frame = tk.Frame(tela_informativa, bg="#2c3e50")
+    main_frame.pack(fill="both", expand=True)
+    
+    canvas = tk.Canvas(main_frame, bg="#2c3e50", highlightthickness=0)
+    scrollbar = tk.Scrollbar(main_frame, orient="vertical", command=canvas.yview)
+    scrollable_frame = tk.Frame(canvas, bg="#2c3e50")
+    
+    scrollable_frame.bind("<Configure>", lambda e: canvas.configure(scrollregion=canvas.bbox("all")))
+    canvas.create_window((0, 0), window=scrollable_frame, anchor="nw")
+    canvas.configure(yscrollcommand=scrollbar.set)
+    
+    canvas.pack(side="left", fill="both", expand=True)
+    scrollbar.pack(side="right", fill="y")
+    
+    # Título
+    titulo = tk.Label(scrollable_frame, text=titulo_texto, bg="#2c3e50", fg="#ecf0f1", 
+                     font=('Arial', 18, 'bold'))
+    titulo.pack(pady=(20, 10))
+    
+    # Classificação
+    frame_classificacao = tk.Frame(scrollable_frame, bg="#34495e", bd=2, relief="ridge")
+    frame_classificacao.pack(pady=10, padx=20, fill="x")
+    
+    sorted_times = sorted(times.items(), key=lambda x: (x[1][2], x[1][1] - x[1][0]), reverse=True)
+    
+    # Título da classificação
+    if idioma_selecionado == 'Português':
+        tk.Label(frame_classificacao, text="Classificação Final", bg="#34495e", fg="#ecf0f1", 
+                font=('Arial', 14, 'bold')).pack(pady=(5, 10))
+    elif idioma_selecionado == 'Inglês':
+        tk.Label(frame_classificacao, text="Final Standings", bg="#34495e", fg="#ecf0f1", 
+                font=('Arial', 14, 'bold')).pack(pady=(5, 10))
+    elif idioma_selecionado == 'Alemão':
+        tk.Label(frame_classificacao, text="Endstand", bg="#34495e", fg="#ecf0f1", 
+                font=('Arial', 14, 'bold')).pack(pady=(5, 10))
+    
+    for posicao, (time, stats) in enumerate(sorted_times, start=1):
+        bg_color = "#27ae60" if posicao <= 4 else \
+                  "#f39c12" if posicao <= 6 else \
+                  "#3498db" if posicao <= 12 else \
+                  "#e74c3c" if posicao >= 17 else "#34495e"
+        
+        if idioma_selecionado == 'Português':
+            texto = f"{posicao}° {time} - {stats[2]} pts | J: {stats[8]} | V: {stats[5]} | E: {stats[6]} | D: {stats[7]} | SG: {stats[1]-stats[0]}"
+        elif idioma_selecionado == 'Inglês':
+            texto = f"{posicao}° {time} - {stats[2]} pts | P: {stats[8]} | W: {stats[5]} | D: {stats[6]} | L: {stats[7]} | GD: {stats[1]-stats[0]}"
+        elif idioma_selecionado == 'Alemão':
+            texto = f"{posicao}° {time} - {stats[2]} Pkt. | S: {stats[8]} | G: {stats[5]} | U: {stats[6]} | V: {stats[7]} | TD: {stats[1]-stats[0]}"
+        
+        tk.Label(frame_classificacao, text=texto, bg=bg_color, fg="white", 
+                font=('Arial', 10), anchor="w").pack(fill="x", padx=5, pady=2)
+    
+    # Estatísticas principais
+    frame_stats = tk.Frame(scrollable_frame, bg="#34495e", bd=2, relief="ridge")
+    frame_stats.pack(pady=10, padx=20, fill="x")
+    
+    tk.Label(frame_stats, text=stats_title_text, bg="#34495e", fg="#ecf0f1", 
+            font=('Arial', 14, 'bold')).pack(pady=(5, 10))
+    
+    # Encontrar estatísticas
+    maiortomados = -1
+    Golstomados = ""
+    maior = -1  
+    Artilheiro = ""
+    maiorsaldo = -1
+    saldoo = ""
+    melhor_mandante = ""
+    maior_mandante = -1
+    pior_mandante = ""
+    menor_mandante = 38
+    
+    for time, stats in times.items():
+        if stats[1] - stats[0] > maiorsaldo:
+            maiorsaldo = stats[1] - stats[0]
+            saldoo = time
+        if stats[1] > maior:
+            maior = stats[1]
+            Artilheiro = time
+        if stats[0] > maiortomados:
+            maiortomados = stats[0]
+            Golstomados = time
+        if stats[10] > maior_mandante:
+            maior_mandante = stats[10]
+            melhor_mandante = time
+        if stats[10] < menor_mandante:
+            menor_mandante = stats[10]
+            pior_mandante = time
+    
+    # Adicionar estatísticas
+    stats_labels = []
+    
+    if idioma_selecionado == 'Português':
+        stats_labels.append(f"Artilheiro: {Artilheiro} com {maior} gols")
+        stats_labels.append(f"Mais gols sofridos: {Golstomados} ({maiortomados} gols)")
+        stats_labels.append(f"Melhor saldo: {saldoo} ({maiorsaldo} gols)")
+        stats_labels.append(f"Melhor mandante: {melhor_mandante} ({maior_mandante} vitórias)")
+        stats_labels.append(f"Pior mandante: {pior_mandante} ({menor_mandante} vitórias)")
+    elif idioma_selecionado == 'Inglês':
+        stats_labels.append(f"Top scorer: {Artilheiro} with {maior} goals")
+        stats_labels.append(f"Most goals conceded: {Golstomados} ({maiortomados} goals)")
+        stats_labels.append(f"Best goal difference: {saldoo} ({maiorsaldo} goals)")
+        stats_labels.append(f"Best home team: {melhor_mandante} ({maior_mandante} wins)")
+        stats_labels.append(f"Worst home team: {pior_mandante} ({menor_mandante} wins)")
+    elif idioma_selecionado == 'Alemão':
+        stats_labels.append(f"Torschützenkönig: {Artilheiro} mit {maior} Toren")
+        stats_labels.append(f"Meiste Gegentore: {Golstomados} ({maiortomados} Tore)")
+        stats_labels.append(f"Beste Tordifferenz: {saldoo} ({maiorsaldo} Tore)")
+        stats_labels.append(f"Beste Heimmannschaft: {melhor_mandante} ({maior_mandante} Siege)")
+        stats_labels.append(f"Schlechteste Heimmannschaft: {pior_mandante} ({menor_mandante} Siege)")
+    
+    for label_text in stats_labels:
+        tk.Label(frame_stats, text=label_text, bg="#34495e", fg="#ecf0f1", 
+                font=('Arial', 11)).pack(anchor="w", padx=10, pady=2)
+    
+    # Eventos marcantes por rodada
+    frame_eventos = tk.Frame(scrollable_frame, bg="#34495e", bd=2, relief="ridge")
+    frame_eventos.pack(pady=10, padx=20, fill="x")
+    
+    tk.Label(frame_eventos, text=rodadas_title, bg="#34495e", fg="#ecf0f1", 
+            font=('Arial', 14, 'bold')).pack(pady=(5, 10))
+    
+    # Ler eventos do arquivo de jogos
+    try:
+        with open("placares_jogos.txt", "r") as arquivo:
+            rodada_atual = 0
+            eventos_rodada = []
+            
+            for linha in arquivo:
+                linha = linha.strip()
+                
+                if linha.startswith("Rodada"):
+                    if eventos_rodada:
+                        # Adicionar eventos da rodada anterior
+                        if idioma_selecionado == 'Português':
+                            tk.Label(frame_eventos, text=f"Rodada {rodada_atual}:", bg="#2c3e50", fg="#f39c12", 
+                                    font=('Arial', 12, 'bold')).pack(anchor="w", padx=5, pady=(10, 2))
+                        elif idioma_selecionado == 'Inglês':
+                            tk.Label(frame_eventos, text=f"Round {rodada_atual}:", bg="#2c3e50", fg="#f39c12", 
+                                    font=('Arial', 12, 'bold')).pack(anchor="w", padx=5, pady=(10, 2))
+                        elif idioma_selecionado == 'Alemão':
+                            tk.Label(frame_eventos, text=f"Runde {rodada_atual}:", bg="#2c3e50", fg="#f39c12", 
+                                    font=('Arial', 12, 'bold')).pack(anchor="w", padx=5, pady=(10, 2))
+                        
+                        for evento in eventos_rodada:
+                            tk.Label(frame_eventos, text=evento, bg="#34495e", fg="#ecf0f1", 
+                                    font=('Arial', 10)).pack(anchor="w", padx=15, pady=1)
+                    
+                    rodada_atual = int(linha.split()[1])
+                    eventos_rodada = []
+                else:
+                    # Analisar placares para encontrar eventos interessantes
+                    if "x" in linha.lower():
+                        partes = linha.split()
+                        try:
+                            indice_x = partes.index("x") if "x" in partes else partes.index("X")
+                            time1 = " ".join(partes[:indice_x - 1]).strip()
+                            gols_time1 = int(partes[indice_x - 1])
+                            gols_time2 = int(partes[indice_x + 1])
+                            time2 = " ".join(partes[indice_x + 2:]).strip()
+                            
+                            # Verificar se foi goleada
+                            if abs(gols_time1 - gols_time2) >= 3:
+                                if idioma_selecionado == 'Português':
+                                    eventos_rodada.append(f"⚽ GOLEADA: {time1} {gols_time1} x {gols_time2} {time2}")
+                                elif idioma_selecionado == 'Inglês':
+                                    eventos_rodada.append(f"⚽ THRASHING: {time1} {gols_time1} x {gols_time2} {time2}")
+                                elif idioma_selecionado == 'Alemão':
+                                    eventos_rodada.append(f"⚽ DEMOLITION: {time1} {gols_time1} x {gols_time2} {time2}")
+                            
+                            # Verificar se algum time se inspirou (precisa ser rastreado durante a simulação)
+                            # (Você precisará modificar a função simular_jogo para registrar isso)
+                            
+                        except (ValueError, IndexError):
+                            continue
+            
+            # Adicionar última rodada
+            if eventos_rodada:
+                if idioma_selecionado == 'Português':
+                    tk.Label(frame_eventos, text=f"Rodada {rodada_atual}:", bg="#2c3e50", fg="#f39c12", 
+                            font=('Arial', 12, 'bold')).pack(anchor="w", padx=5, pady=(10, 2))
+                elif idioma_selecionado == 'Inglês':
+                    tk.Label(frame_eventos, text=f"Round {rodada_atual}:", bg="#2c3e50", fg="#f39c12", 
+                            font=('Arial', 12, 'bold')).pack(anchor="w", padx=5, pady=(10, 2))
+                elif idioma_selecionado == 'Alemão':
+                    tk.Label(frame_eventos, text=f"Runde {rodada_atual}:", bg="#2c3e50", fg="#f39c12", 
+                            font=('Arial', 12, 'bold')).pack(anchor="w", padx=5, pady=(10, 2))
+                
+                for evento in eventos_rodada:
+                    tk.Label(frame_eventos, text=evento, bg="#34495e", fg="#ecf0f1", 
+                            font=('Arial', 10)).pack(anchor="w", padx=15, pady=1)
+    
+    except FileNotFoundError:
+        if idioma_selecionado == 'Português':
+            tk.Label(frame_eventos, text="Arquivo de resultados não encontrado", bg="#34495e", fg="#e74c3c").pack()
+        elif idioma_selecionado == 'Inglês':
+            tk.Label(frame_eventos, text="Results file not found", bg="#34495e", fg="#e74c3c").pack()
+        elif idioma_selecionado == 'Alemão':
+            tk.Label(frame_eventos, text="Ergebnisdatei nicht gefunden", bg="#34495e", fg="#e74c3c").pack()
+    
+    # Botão de fechar
+    if idioma_selecionado == 'Português':
+        fechar_btn = tk.Button(scrollable_frame, text="Fechar", command=tela_informativa.destroy, 
+                              bg="#c0392b", fg="white", font=('Arial', 12, 'bold'))
+    elif idioma_selecionado == 'Inglês':
+        fechar_btn = tk.Button(scrollable_frame, text="Close", command=tela_informativa.destroy, 
+                              bg="#c0392b", fg="white", font=('Arial', 12, 'bold'))
+    elif idioma_selecionado == 'Alemão':
+        fechar_btn = tk.Button(scrollable_frame, text="Schließen", command=tela_informativa.destroy, 
+                              bg="#c0392b", fg="white", font=('Arial', 12, 'bold'))
+    
+    fechar_btn.pack(pady=(20, 10))
+    
+    tela_informativa.mainloop() 
 tela_selecao_edicao()
