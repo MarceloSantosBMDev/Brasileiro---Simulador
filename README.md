@@ -1,5 +1,39 @@
-This Code is one Simulator of Brazil Soccer Championship, in this code we have some interesting things, like the goal method, all teams have a number in dictionary, this number represent the goal chances of this team, like, see the team 'Botafogo', he have 6 chance of goal, but, chance of goal dont mean is goal, is just a chance, in function 'Simular_Jogo', the team is placed in situation of goal, and one command random with 30% of chance of goal decide it, if True = goal of team, if False = the team lose the goal.
+<h1 align="center">⚽ Brazil Soccer Championship Simulator</h1>
+<h3 align="center">
+  Soccer Championship Simulator | Multi-Language | Python
+</h3>
 
-This code have also three language, which are english, portuguese and german, change the language is very easy, just need go to settings and choose the language desired, if someone look some wrong translate, please, send for 'nagatofx3@hotmail.com', thank you.
+---
 
-For run this code you will need download somethings like: VScode or other a app kinda this, Pillow library (command: pip install Pillow) and download python too, you can download the code in github or in the official website of this application
+## 📝 About the Project
+
+This project is a **Brazil Soccer Championship Simulator** with some interesting features:
+
+- Each team has a number representing its **goal chances**.  
+- **Goal chance does not guarantee a goal**, it just represents the possibility of scoring.  
+- The function `Simular_Jogo` places the team in a goal situation, and a **30% random chance** decides if the goal is scored.  
+  - If `True` → team scores a goal.  
+  - If `False` → the team misses the goal.  
+- Supports **three languages**: English, Portuguese, and German.  
+  - To change the language, just go to **Settings** and choose your desired language.
+
+> If you notice any translation errors, please send an email to: `marcelosantosbm06@hotmail.com`.
+
+---
+
+## 🛠️ Technologies
+
+<p align="center">
+  <img src="https://img.shields.io/badge/Python-3776AB?style=for-the-badge&logo=python&logoColor=white" alt="Python"/>
+  <img src="https://img.shields.io/badge/Pillow-FFD43B?style=for-the-badge&logo=python&logoColor=black" alt="Pillow"/>
+</p>
+
+---
+
+## 🚀 How to Run
+
+1. Download the code from [GitHub](https://github.com/MarceloSantosBMDev/Brasileiro---Simulador) or from the official website.  
+2. Install Python: [Python.org](https://www.python.org/downloads/)  
+3. Install the Pillow library:  
+   ```bash
+   pip install Pillow
