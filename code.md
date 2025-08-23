@@ -108,3 +108,72 @@ and the backend of this login method is
           tela_login.destroy()
           tela_inicial()
         
+# How the matchs are simlated?
+First of all, have a dictionary with 2024 teams and 2025 teams also in the code, in this dictionary, all teams have some numbers and some of those numbers are stats of atack and defense, look a exemple:
+  		
+	  "Corinthians": [0, 0, 0, 4, 0,0,0,0,0,3, 0, 0, 7],
+In this exemple, the 3º number of the vector related a this team is the atack stats of Corinthians, and the 9º number is the defense stats.
+Here is the dictionary of teams:
+
+				def select_edition(edition):
+				    global edicao, times, confrontos, rodadas, rodada_atual, jogos_por_time
+				    edicao = edition
+				#vitorias em casa = 10
+				#derrotas em casa = 11
+				#vitorias como visitante = 12
+				#o stats de valor 12, é a odd que o time paga se ganhar o campeonato
+				    if edicao == 2024:
+				      times = {
+				    "Atlético-GO":  [0, 0, 0, 2, 0, 0, 0, 0, 0, 3, 0, 0 ,5],
+				    "Athletico-PR": [0, 0, 0, 4, 0, 0, 0, 0, 0, 3, 0, 0, 7],
+				    "Atlético-MG":  [0, 0, 0, 5, 0, 0, 0, 0, 0, 3, 0, 0, 8],
+				    "Bahia":        [0, 0, 0, 5, 0, 0, 0, 0, 0, 4, 0, 0, 9],
+				    "Botafogo":     [0, 0, 0, 7, 0, 0, 0, 0, 0, 6, 0, 0, 13],
+				    "Corinthians": [0, 0, 0, 4, 0,0,0,0,0,3, 0, 0, 7],
+				    "Vitória": [0, 0, 0, 3, 0,0,0,0,0,2, 0, 0, 5],
+				    "Cruzeiro": [0, 0, 0, 4, 0,0,0,0,0,5, 0, 0, 9],
+				    "Cuiabá": [0, 0, 0, 2, 0,0,0,0,0,4, 0, 0, 6],
+				    "Flamengo": [0, 0, 0, 6, 0,0,0,0,0,5, 0, 0, 11],
+				    "Fluminense": [0, 0, 0, 3, 0,0,0,0,0,5, 0, 0, 8],
+				    "Fortaleza": [0, 0, 0, 5, 0,0,0,0,0,4, 0, 0, 9],
+				    "Juventude": [0, 0, 0, 4, 0,0,0,0,0,4, 0, 0, 8],
+				    "Grêmio": [0, 0, 0, 4, 0,0,0,0,0,4, 0, 0, 8],
+				    "Internacional": [0, 0, 0, 5, 0,0,0,0,0,6, 0, 0, 11],
+				    "Palmeiras": [0, 0, 0, 6, 0,0,0,0,0,7, 0, 0, 13],
+				    "RB Bragantino": [0, 0, 0, 4, 0,0,0,0,0,4, 0, 0, 8],
+				    "Criciúma": [0, 0, 0, 5, 0,0,0,0,0,2, 0, 0, 7],
+				    "São Paulo": [0, 0, 0, 5, 0,0,0,0,0,3, 0, 0, 8],
+				    "Vasco da Gama": [0, 0, 0, 4, 0,0,0,0,0,2, 0, 0, 6]
+				}
+				    elif edicao == 2025:
+				         times = {
+				    "Ceará-SC":  [0, 0, 0, 5, 0, 0, 0, 0, 0, 4, 0, 0, 9],
+				    "Sport-Recife": [0, 0, 0, 2, 0, 0, 0, 0, 0, 3, 0, 0, 5],
+				    "Atlético-MG":  [0, 0, 0, 5, 0, 0, 0, 0, 0, 4, 0, 0, 9],
+				    "Bahia":        [0, 0, 0, 5, 0, 0, 0, 0, 0, 5, 0, 0, 10],
+				    "Botafogo":     [0, 0, 0, 5, 0, 0, 0, 0, 0, 4, 0, 0, 9],
+				    "Corinthians": [0, 0, 0, 4, 0,0,0,0,0,4, 0, 0, 8],
+				    "Vitória": [0, 0, 0, 4, 0,0,0,0,0,3, 0, 0, 7],
+				    "Cruzeiro": [0, 0, 0, 6, 0,0,0,0,0,5, 0, 0, 11],
+				    "Mirassol": [0, 0, 0, 5, 0,0,0,0,0,4, 0, 0, 9],
+				    "Flamengo": [0, 0, 0, 6, 0,0,0,0,0,6, 0, 0, 12],
+				    "Fluminense": [0, 0, 0, 4, 0,0,0,0,0,4, 0, 0, 8],
+				    "Fortaleza": [0, 0, 0, 4, 0,0,0,0,0,3, 0, 0, 7],
+				    "Juventude": [0, 0, 0, 3, 0,0,0,0,0,2, 0, 0, 5],
+				    "Grêmio": [0, 0, 0, 4, 0,0,0,0,0,3, 0, 0, 7],
+				    "Internacional": [0, 0, 0, 4, 0,0,0,0,0,4, 0, 0, 8],
+				    "Palmeiras": [0, 0, 0, 4, 0,0,0,0,0,7, 0, 0, 11],
+				    "RB Bragantino": [0, 0, 0, 5, 0,0,0,0,0,4, 0, 0, 9],
+				    "Santos": [0, 0, 0, 4, 0,0,0,0,0,4, 0, 0, 8],
+				    "São Paulo": [0, 0, 0, 5, 0,0,0,0,0,4, 0, 0, 9],
+				    "Vasco da Gama": [0, 0, 0, 4, 0,0,0,0,0,3, 0, 0, 7]
+				}    
+				    
+				    jogos_por_time = {time: [] for time in times.keys()} 
+				    confrontos = criar_jogos()     
+				    rodadas = total_rodadas
+				    rodada_atual = 0 
+				    root.destroy()
+				    start_simulation() 
+
+note that this teams have also in them vector, a last number, this number is the some of the atack stats and the defense stats, and will be use for make a odd function
