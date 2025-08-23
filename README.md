@@ -5,6 +5,25 @@
 
 ---
 
+## 🏷️ Badges
+
+<p align="center">
+  <!-- Language Badge -->
+  <img src="https://img.shields.io/badge/Python-3776AB?style=for-the-badge&logo=python&logoColor=white" alt="Python"/>
+  <!-- Pillow -->
+  <img src="https://img.shields.io/badge/Pillow-FFD43B?style=for-the-badge&logo=python&logoColor=black" alt="Pillow"/>
+  <!-- GitHub stars -->
+  <img src="https://img.shields.io/github/stars/2pacdevv/Brasileiro---Simulador?style=for-the-badge&logo=github&logoColor=white" alt="GitHub stars"/>
+  <!-- Forks -->
+  <img src="https://img.shields.io/github/forks/2pacdevv/Brasileiro---Simulador?style=for-the-badge&logo=github&logoColor=white" alt="GitHub forks"/>
+  <!-- Issues -->
+  <img src="https://img.shields.io/github/issues/2pacdevv/Brasileiro---Simulador?style=for-the-badge&logo=github&logoColor=white" alt="GitHub issues"/>
+  <!-- Profile Views -->
+  <img src="https://komarev.com/ghpvc/?username=2pacdevv&label=Profile%20views&color=0e75b6&style=for-the-badge" alt="Profile views"/>
+</p>
+
+---
+
 ## 📝 About the Project
 
 This project is a **Brazil Soccer Championship Simulator** with some interesting features:
@@ -21,18 +40,9 @@ This project is a **Brazil Soccer Championship Simulator** with some interesting
 
 ---
 
-## 🛠️ Technologies
-
-<p align="center">
-  <img src="https://img.shields.io/badge/Python-3776AB?style=for-the-badge&logo=python&logoColor=white" alt="Python"/>
-  <img src="https://img.shields.io/badge/Pillow-FFD43B?style=for-the-badge&logo=python&logoColor=black" alt="Pillow"/>
-</p>
-
----
-
 ## 🚀 How to Run
 
-1. Download the code from [GitHub](https://github.com/MarceloSantosBMDev/Brasileiro---Simulador) or from the official website.  
+1. Download the code from [GitHub](https://github.com/2pacdevv/Brasileiro---Simulador).  
 2. Install Python: [Python.org](https://www.python.org/downloads/)  
 3. Install the Pillow library:  
    ```bash
