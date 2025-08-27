@@ -10,6 +10,7 @@ import atexit
 
 
 # Variáveis globais
+tela_times = None
 apostas_usuario = []
 idioma_selecionado = 'Português'
 bet_mode = 0
@@ -203,6 +204,7 @@ def select_edition(edition):
     start_simulation() 
     
     
+
 total_rodadas = 38
 def carregar_jogos(nome_arquivo="placares_jogos.txt"):
   
@@ -603,19 +605,23 @@ def tela_inicial():
 
     
     
-    if bet_mode == 1:
-        # this part create the button with the language which the user choose.
-        if idioma_selecionado == 'Português':
+        
+    if idioma_selecionado == 'Português' and bet_mode == 1:
             btn_apostar = tk.Button(frame_botoes, text="Apostar em Jogos", bg="#2980b9", fg="white", font=font_btn, command=tela_escolher_jogos, bd=0, padx=20, pady=5)
-        elif idioma_selecionado == 'Inglês':
+            btn_apostar.pack(side="left", padx=10, fill="x", expand=True)
+
+    elif idioma_selecionado == 'Inglês' and bet_mode == 1:
             btn_apostar = tk.Button(frame_botoes, text="Bet on Matches", bg="#2980b9", fg="white", font=font_btn, command=tela_escolher_jogos, bd=0, padx=20, pady=5)
-        elif idioma_selecionado == 'Alemão':
+            btn_apostar.pack(side="left", padx=10, fill="x", expand=True)
+
+    elif idioma_selecionado == 'Alemão' and bet_mode == 1:
             btn_apostar = tk.Button(frame_botoes, text="Auf Spiele wetten", bg="#2980b9", fg="white", font=font_btn, command=tela_escolher_jogos,bd=0, padx=20, pady=5)
-     
-        btn_apostar.pack(side="left", padx=10, fill="x", expand=True)
+            btn_apostar.pack(side="left", padx=10, fill="x", expand=True)
+
+    
         
     
-    if idioma_selecionado == "Portugues":
+    if idioma_selecionado == "Português":
        btn_relatorio = tk.Button(frame_botoes, text="Ver Relátorio", bg="#A020F0", fg="white", font=font_btn, command=criar_tela_relatorio, bd=0, padx=20, pady=5)
        btn_relatorio.pack(side="left", padx=10, fill="x", expand=True)
 
@@ -628,9 +634,7 @@ def tela_inicial():
        btn_relatorio.pack(side="left", padx=10, fill="x", expand=True)
 
    
-    btn_relatorio = tk.Button(frame_botoes, text="Bericht sehen", bg="#A020F0", fg="white", font=font_btn, command=criar_tela_relatorio, bd=0, padx=20, pady=5)
 
-    btn_relatorio.pack(side="left", padx=10, fill="x", expand=True)
 
 
     frame_rodape = tk.Frame(tela_inicial, bg="#2c3e50")
@@ -674,10 +678,6 @@ def organizar_tabela():
         else:
             bg_color = "#c0392b"  
 
-        
-        
-
-       
         if idioma_selecionado == 'Inglês':
             texto_base = f"{posicao}º {time} | Games: {stats[8]} | Points: {stats[2]} | Wins: {stats[5]} | Draws: {stats[6]} | Loses: {stats[7]} | Goal difference: {saldo_gols} | Goals For: {stats[1]} | Goals Against: {stats[0]}"
         elif idioma_selecionado == 'Alemão':
@@ -1073,7 +1073,8 @@ def selecionar_linguagem():
             btn_config_teams.config(text="Change team status")
             btn_colocar_time_5.config(text="Status 5 in teams")
             btn_colocar_time_6.config(text="Randomize Status")
-            btn_apostar.config(text="Bet on Matches")
+            if bet_mode == 1:
+             btn_apostar.config(text="Bet on Matches")
             btn_colocar_time_7.config(text="Language")
             labelconfig1.config(text="Settings")
             label_introducao.config(text="Welcome to Brasileirão Simulator")
@@ -1091,7 +1092,8 @@ def selecionar_linguagem():
             btn_colocar_time_7.config(text="Sprache")
             labelconfig1.config(text="Einstellungen")
             label_introducao.config(text="Willkommen im Brasileirão-Simulator")
-            btn_apostar.config(text="Auf Spiele wetten")
+            if bet_mode == 1:   
+             btn_apostar.config(text="Auf Spiele wetten")
 
             if rodada_atual == 38:
               btn_simular.config(text="Meisterschaftsinformationen")
@@ -1102,7 +1104,8 @@ def selecionar_linguagem():
             organizar_tabela()
         elif idioma == "Português":
             btn_config_teams.config(text="Mudar status dos times")
-            btn_apostar.config(text="Apostar em Jogos")
+            if bet_mode == 1:
+                 btn_apostar.config(text="Apostar em Jogos")
             btn_colocar_time_5.config(text="Status 5 em times")
             btn_colocar_time_6.config(text="Randomizar Status")
             btn_colocar_time_7.config(text="Linguagem")
