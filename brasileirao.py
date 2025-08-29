@@ -1469,120 +1469,6 @@ def atualizar_fichas_usuario():
         usuario_logado.fichas = fichas_usuario
         usuario_logado.atualizar()
 
-def comparar_apostas_com_resultados():
-    """Compara as apostas com os resultados reais e calcula os ganhos."""
-    global apostas_usuario, fichas_usuario, usuario_logado
-
-    if not apostas_usuario:
-        if idioma_selecionado == 'Português':
-            messagebox.showinfo("Aviso", "Nenhuma aposta para comparar.")
-        elif idioma_selecionado == 'Inglês':
-            messagebox.showinfo("Notice", "No bets to compare.")
-        elif idioma_selecionado == 'Alemão':
-            messagebox.showinfo("Hinweis", "Keine Wetten zum Vergleichen.")
-        return
-
-    resultados_dict = {}
-    try:
-        with open("placares_jogos.txt", "r") as arquivo:
-            for linha in arquivo:
-                if "x" in linha.lower():
-                    partes = linha.strip().split()
-                    try:
-                        indice_x = partes.index("x") if "x" in partes else partes.index("X")
-                        time1 = " ".join(partes[:indice_x - 1]).strip()
-                        gols_time1 = int(partes[indice_x - 1])
-                        gols_time2 = int(partes[indice_x + 1])
-                        time2 = " ".join(partes[indice_x + 2:]).strip()
-                        resultados_dict[(time1, time2)] = (gols_time1, gols_time2)
-                    except (ValueError, IndexError):
-                        continue
-    except FileNotFoundError:
-        if idioma_selecionado == 'Português':
-            messagebox.showerror("Erro", "Arquivo de resultados não encontrado.")
-        elif idioma_selecionado == 'Inglês':
-            messagebox.showerror("Error", "Results file not found.")
-        elif idioma_selecionado == 'Alemão':
-            messagebox.showerror("Fehler", "Ergebnisdatei nicht gefunden.")
-        return
-
-    resultados = []
-    total_ganho = 0
-
-    for aposta in apostas_usuario:
-        time1 = aposta["time1"]
-        time2 = aposta["time2"]
-        aposta_escolhida = aposta["aposta"]
-        fichas_apostadas = aposta["fichas"]
-        ganho_potencial = aposta["ganho_potencial"]
-
-        if (time1, time2) in resultados_dict:
-            gols_time1, gols_time2 = resultados_dict[(time1, time2)]
-            
-            if (gols_time1 > gols_time2 and aposta_escolhida == time1) or \
-               (gols_time2 > gols_time1 and aposta_escolhida == time2) or \
-               (gols_time1 == gols_time2 and aposta_escolhida == "empate"):
-                resultado = "GANHOU" if idioma_selecionado == 'Português' else "WON" if idioma_selecionado == 'Inglês' else "GEWONNEN"
-                ganho_real = ganho_potencial
-                total_ganho += ganho_real
-                fichas_usuario += ganho_real
-                usuario_logado.apostas_ganhas += 1
-            else:
-                resultado = "PERDEU" if idioma_selecionado == 'Português' else "LOST" if idioma_selecionado == 'Inglês' else "VERLOREN"
-                ganho_real = 0
-                usuario_logado.apostas_perdidas += 1
-            
-            usuario_logado.vezes_apostadas += 1
-            
-            if idioma_selecionado == 'Português':
-                resultados.append(
-                    f"{time1} {gols_time1} x {gols_time2} {time2}\n"
-                    f"Aposta: {aposta_escolhida} (Odd: {aposta['odd']})\n"
-                    f"Valor: {fichas_apostadas} fichas → {resultado} {ganho_real if ganho_real > 0 else 0} fichas\n"
-                )
-            elif idioma_selecionado == 'Inglês':
-                resultados.append(
-                    f"{time1} {gols_time1} x {gols_time2} {time2}\n"
-                    f"Bet: {aposta_escolhida} (Odd: {aposta['odd']})\n"
-                    f"Amount: {fichas_apostadas} chips → {resultado} {ganho_real if ganho_real > 0 else 0} chips\n"
-                )
-            elif idioma_selecionado == 'Alemão':
-                resultados.append(
-                    f"{time1} {gols_time1} x {gols_time2} {time2}\n"
-                    f"Wette: {aposta_escolhida} (Quote: {aposta['odd']})\n"
-                    f"Einsatz: {fichas_apostadas} Chips → {resultado} {ganho_real if ganho_real > 0 else 0} Chips\n"
-                )
-        else:
-            if idioma_selecionado == 'Português':
-                resultados.append(f"{time1} x {time2} - Resultado não encontrado\n")
-            elif idioma_selecionado == 'Inglês':
-                resultados.append(f"{time1} x {time2} - Result not found\n")
-            elif idioma_selecionado == 'Alemão':
-                resultados.append(f"{time1} x {time2} - Ergebnis nicht gefunden\n")
-
-    usuario_logado.fichas = fichas_usuario
-    usuario_logado.atualizar()
-
-    if idioma_selecionado == 'Português':
-        titulo = "Resultado das Apostas"
-        resumo = f"Total ganho: {total_ganho} fichas\nSaldo atual: {fichas_usuario} fichas"
-    elif idioma_selecionado == 'Inglês':
-        titulo = "Bet Results"
-        resumo = f"Total won: {total_ganho} chips\nCurrent balance: {fichas_usuario} chips"
-    elif idioma_selecionado == 'Alemão':
-        titulo = "Wettergebnisse"
-        resumo = f"Gesamtgewinn: {total_ganho} Chips\nAktueller Kontostand: {fichas_usuario} Chips"
-
-    messagebox.showinfo(titulo, "\n".join(resultados) + "\n\n" + resumo)
-
-    apostas_usuario.clear()
-    if 'label_pontos' in globals():
-        if idioma_selecionado == 'Português':
-            label_pontos.config(text=f"Fichas: {fichas_usuario}")
-        elif idioma_selecionado == 'Inglês':
-            label_pontos.config(text=f"Chips: {fichas_usuario}")
-        elif idioma_selecionado == 'Alemão':
-            label_pontos.config(text=f"Chips: {fichas_usuario}")
 
 
 
@@ -1937,7 +1823,6 @@ def fazer_login():
         
         
 def comparar_apostas_com_resultados():
-    """Compara as apostas com os resultados reais e calcula os ganhos com base nas odds."""
     global apostas_usuario, fichas_usuario, usuario_logado
 
     if not apostas_usuario:
