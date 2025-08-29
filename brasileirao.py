@@ -1882,26 +1882,45 @@ def comparar_apostas_com_resultados():
             usuario_logado.vezes_apostadas += 1
             
             # Formatar mensagem do resultado
-            if idioma_selecionado == 'Português':
+            # se usuario ganhou, mostrar ganho real, se perdeu, mostrar fichas apostadas.
+            if resultado == "GANHOU":
+             if idioma_selecionado == 'Português':
                 resultados.append(
                     f"{time1} {gols_time1} x {gols_time2} {time2}\n"
                     f"Aposta: {aposta_escolhida} (Odd: {aposta['odd']})\n"
                     f"Valor: {fichas_apostadas} fichas → {resultado} {ganho_real if ganho_real > 0 else 0} fichas\n"
                 )
-            elif idioma_selecionado == 'Inglês':
+             elif idioma_selecionado == 'Inglês':
                 resultados.append(
                     f"{time1} {gols_time1} x {gols_time2} {time2}\n"
                     f"Bet: {aposta_escolhida} (Odd: {aposta['odd']})\n"
                     f"Value: {fichas_apostadas} chips → {resultado} {ganho_real if ganho_real > 0 else 0} chips\n"
                 )
-            elif idioma_selecionado == 'Alemão':
+             elif idioma_selecionado == 'Alemão':
                 resultados.append(
                     f"{time1} {gols_time1} x {gols_time2} {time2}\n"
                     f"Wette: {aposta_escolhida} (Odd: {aposta['odd']})\n"
                     f"Wert: {fichas_apostadas} Chips → {resultado} {ganho_real if ganho_real > 0 else 0} Chips\n"
                 )
-        else:
-            resultados.append(f"{time1} x {time2} - Resultado não encontrado\n")
+            else:
+             if idioma_selecionado == 'Português':
+                resultados.append(
+                    f"{time1} {gols_time1} x {gols_time2} {time2}\n"
+                    f"Aposta: {aposta_escolhida} (Odd: {aposta['odd']})\n"
+                    f"Valor: {fichas_apostadas} fichas → {resultado} {fichas_apostadas} fichas\n"
+                )
+             elif idioma_selecionado == 'Inglês':
+                resultados.append(
+                    f"{time1} {gols_time1} x {gols_time2} {time2}\n"
+                    f"Bet: {aposta_escolhida} (Odd: {aposta['odd']})\n"
+                    f"Value: {fichas_apostadas} chips → {resultado} {fichas_apostadas} chips\n"
+                )
+             elif idioma_selecionado == 'Alemão':
+                resultados.append(
+                    f"{time1} {gols_time1} x {gols_time2} {time2}\n"
+                    f"Wette: {aposta_escolhida} (Odd: {aposta['odd']})\n"
+                    f"Wert: {fichas_apostadas} Chips → {resultado} {fichas_apostadas} Chips\n"
+                )
 
     # Atualizar saldo do usuário
     usuario_logado.fichas = fichas_usuario
