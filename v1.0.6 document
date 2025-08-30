@@ -1,0 +1,2 @@
+# v1.0.6 possible features
+> Possible I will change the datebase who I use, currently, I use SQLite, but this database is a local database and now, I want change for a server database, probaly, I will use the firebase database, because over there I can put authentication in login, and make a site with a score board
