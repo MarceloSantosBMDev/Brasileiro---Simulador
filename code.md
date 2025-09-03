@@ -177,3 +177,6 @@ Here is the dictionary of teams:
 				    start_simulation() 
 
 note that this teams have also in them vector, a last number, this number is the some of the atack stats and the defense stats, and will be use for make a odd function
+
+
+
